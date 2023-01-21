@@ -57,10 +57,25 @@ func (i *InteractiveView) toggleVisualMode() {
 
 func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 	vr := i.vrange
+	check := func() {
+		if vr.Start <= -1 {
+			vr.Start = 0
+		}
+		if vr.End <= -1 {
+			vr.End = 0
+		}
+		if vr.End >= i.View.GetRowCount() {
+			vr.End = i.View.GetRowCount() - 1
+		}
+		if vr.Start >= i.View.GetRowCount() {
+			vr.Start = i.View.GetRowCount() - 1
+		}
+	}
 	switch e.Key() {
 	case tcell.KeyUp:
 		{
 			if i.visual {
+				check()
 				if vr.End > i.baseSel {
 					vr.End--
 				} else if vr.Start <= i.baseSel {
@@ -74,6 +89,7 @@ func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 	case tcell.KeyDown:
 		{
 			if i.visual {
+				check()
 				if vr.Start < i.baseSel {
 					vr.Start++
 				} else if vr.Start == i.baseSel {
