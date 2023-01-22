@@ -132,9 +132,9 @@ func (i *InteractiveView) GetHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			return e
 		},
 		"top": func(e *tcell.EventKey) *tcell.EventKey {
-			// TODO: Add Scroll to top when at bottom
 			if i.visual {
 				i.vrange.Start = 0
+				i.View.ScrollToBeginning()
 				return nil
 			}
 			return e
@@ -142,6 +142,7 @@ func (i *InteractiveView) GetHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 		"bottom": func(e *tcell.EventKey) *tcell.EventKey {
 			if i.visual {
 				i.vrange.End = i.View.GetRowCount() - 1
+				i.View.ScrollToEnd()
 				return nil
 			}
 			return e
