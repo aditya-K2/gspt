@@ -12,7 +12,7 @@ var (
 	berr       = errors.New("Couldn't Get Base Selection in Interactive View")
 	defaultfg  = tcell.ColorGreen
 	defaultbg  = tcell.ColorDefault
-	selfg      = tcell.ColorYellow
+	selfg      = tcell.ColorGreen
 	seldefault = tcell.StyleDefault.
 			Foreground(defaultbg).
 			Background(defaultfg)
@@ -22,8 +22,7 @@ var (
 	selStyle = tcell.StyleDefault.
 			Foreground(selfg).
 			Background(tcell.ColorDefault).
-			Bold(true).
-			Italic(true)
+			Bold(true)
 )
 
 type _range struct {
@@ -132,6 +131,21 @@ func (i *InteractiveView) GetHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			}
 			return e
 		},
+		"top": func(e *tcell.EventKey) *tcell.EventKey {
+			// TODO: Add Scroll to top when at bottom
+			if i.visual {
+				i.vrange.Start = 0
+				return nil
+			}
+			return e
+		},
+		"bottom": func(e *tcell.EventKey) *tcell.EventKey {
+			if i.visual {
+				i.vrange.End = i.View.GetRowCount() - 1
+				return nil
+			}
+			return e
+		},
 	}
 	if val, ok := funcMap[s]; ok {
 		return val
@@ -155,6 +169,14 @@ func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 			i.toggleVisualMode()
 			return nil
 		}
+	case 'g':
+		{
+			return i.GetHandler("top")(e)
+		}
+	case 'G':
+		{
+			return i.GetHandler("bottom")(e)
+		}
 	default:
 		{
 			if e.Key() == tcell.KeyEscape {
@@ -175,11 +197,15 @@ func (i *InteractiveView) Update() {
 	s := strings.Split("orem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec leo a tellus gravida convallis. Curabitur tempus purus nisi. Proin non enim convallis augue porta aliquet. Aliquam sed sem eget mauris faucibus ultricies. Ut at tortor elit. Pellentesque tincidunt leo dolor, sed pulvinar mauris mattis quis. Integer ut magna in nulla eleifend gravida non id est. Etiam vehicula dui nec orci porttitor condimentum ac nec lectus. Nam imperdiet sit amet ipsum at sollicitudin. Fusce ac odio condimentum, aliquam neque et, pretium tellus. Ut suscipit libero sed leo accumsan sagittis. Maecenas leo lacus, maximus id lacinia non, imperdiet non dolor. Sed consectetur ipsum et turpis tristique, accumsan volutpat diam placerat. Etiam quis arcu dignissim, mollis nunc at, ultrices mi. Fusce vitae magna ligula. Donec sit amet placerat dui. Nulla tempus vestibulum felis, volutpat congue ipsum. Suspendisse rutrum orci eget diam pretium cursus id efficitur tortor. Donec lobortis odio ac massa tempus, eu pretium massa iaculis. Suspendisse tempor nisl a ullamcorper faucibus. Curabitur sollicitudin, erat et feugiat consectetur, nunc enim gravida dolor, a rutrum magna ante vitae felis. Nullam ligula risus, varius nec laoreet ut, malesuada a mi. Ut et eleifend leo. Etiam ac mi dui. Curabitur commodo felis non congue pharetra. Ut eu odio felis. Nullam eu mollis arcu. Nulla ut massa lorem. Vivamus pellentesque id ex sit amet pharetra. Aliquam at urna in nisl bibendum hendrerit. Donec suscipit tortor eu magna suscipit, vitae consequat metus imperdiet. Cras dui elit, luctus vel feugiat vitae, faucibus in enim. Aliquam neque ex, lacinia id nisi nec, euismod porta dolor. Morbi imperdiet sapien at nisl suscipit tempor. In hac habitasse platea dictumst. Etiam lobortis blandit nunc et sodales. Aliquam feugiat enim auctor, posuere tellus quis, fermentum massa. Quisque nec gravida leo. Aenean molestie mi sed felis porta luctus. Nulla pulvinar est in ultricies consectetur.", " ")
 	i.View.Clear()
 	for j := range s {
+		b := ""
 		st := defaultstyle
 		if i.visual && (j >= i.vrange.Start && j <= i.vrange.End) {
+			b = "[blue::]█[::]"
 			st = selStyle
 		}
 		i.View.SetCell(j, 0,
+			GetCell(b, st))
+		i.View.SetCell(j, 1,
 			GetCell(s[j], st))
 	}
 }
