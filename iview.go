@@ -9,7 +9,21 @@ import (
 )
 
 var (
-	berr = errors.New("Couldn't Get Base Selection in Interactive View")
+	berr       = errors.New("Couldn't Get Base Selection in Interactive View")
+	defaultfg  = tcell.ColorGreen
+	defaultbg  = tcell.ColorDefault
+	selfg      = tcell.ColorYellow
+	seldefault = tcell.StyleDefault.
+			Foreground(defaultbg).
+			Background(defaultfg)
+	defaultstyle = tcell.StyleDefault.
+			Foreground(defaultfg).
+			Background(defaultbg)
+	selStyle = tcell.StyleDefault.
+			Foreground(selfg).
+			Background(tcell.ColorDefault).
+			Bold(true).
+			Italic(true)
 )
 
 type _range struct {
@@ -22,13 +36,6 @@ type InteractiveView struct {
 	vrange  *_range
 	baseSel int
 	View    *tview.Table
-}
-
-type Color struct {
-	Foreground tcell.Color `mapstructure:"foreground"`
-	Background tcell.Color
-	Bold       bool `mapstructure:"bold"`
-	Italic     bool `mapstructure:"italic"`
 }
 
 func NewInteractiveView() *InteractiveView {
@@ -44,18 +51,33 @@ func NewInteractiveView() *InteractiveView {
 	return i
 }
 
+func (i *InteractiveView) exitVisualMode() {
+	if i.vrange.Start < i.baseSel {
+		i.View.Select(i.vrange.Start, -1)
+	} else if i.vrange.End > i.baseSel {
+		i.View.Select(i.vrange.End, -1)
+	}
+	i.baseSel = -1
+	i.View.SetSelectedStyle(seldefault)
+}
+
+func (i *InteractiveView) enterVisualMode() {
+	row, _ := i.View.GetSelection()
+	i.baseSel = row
+	i.vrange.Start, i.vrange.End = row, row
+	i.View.SetSelectedStyle(selStyle)
+}
+
 func (i *InteractiveView) toggleVisualMode() {
 	if i.visual {
-		i.baseSel = -1
+		i.exitVisualMode()
 	} else if !i.visual {
-		row, _ := i.View.GetSelection()
-		i.baseSel = row
-		i.vrange.Start, i.vrange.End = row, row
+		i.enterVisualMode()
 	}
 	i.visual = !i.visual
 }
 
-func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
+func (i *InteractiveView) GetHandler(s string) func(e *tcell.EventKey) *tcell.EventKey {
 	vr := i.vrange
 	check := func() {
 		if vr.Start <= -1 {
@@ -71,9 +93,8 @@ func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 			vr.Start = i.View.GetRowCount() - 1
 		}
 	}
-	switch e.Key() {
-	case tcell.KeyUp:
-		{
+	funcMap := map[string]func(e *tcell.EventKey) *tcell.EventKey{
+		"up": func(e *tcell.EventKey) *tcell.EventKey {
 			if i.visual {
 				check()
 				if vr.End > i.baseSel {
@@ -84,10 +105,11 @@ func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 				if i.baseSel == -1 {
 					panic(berr)
 				}
+				return nil
 			}
-		}
-	case tcell.KeyDown:
-		{
+			return e
+		},
+		"down": func(e *tcell.EventKey) *tcell.EventKey {
 			if i.visual {
 				check()
 				if vr.Start < i.baseSel {
@@ -98,41 +120,66 @@ func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 				if i.baseSel == -1 {
 					panic(berr)
 				}
+				return nil
 			}
+			return e
+		},
+		"exitvisual": func(e *tcell.EventKey) *tcell.EventKey {
+			if i.visual {
+				i.exitVisualMode()
+				i.visual = false
+				return nil
+			}
+			return e
+		},
+	}
+	if val, ok := funcMap[s]; ok {
+		return val
+	} else {
+		return nil
+	}
+}
+
+func (i *InteractiveView) capture(e *tcell.EventKey) *tcell.EventKey {
+	switch e.Rune() {
+	case 'j':
+		{
+			return i.GetHandler("down")(e)
 		}
-	case tcell.KeyEnter:
+	case 'k':
+		{
+			return i.GetHandler("up")(e)
+		}
+	case 'v':
 		{
 			i.toggleVisualMode()
 			return nil
 		}
+	default:
+		{
+			if e.Key() == tcell.KeyEscape {
+				return i.GetHandler("exitvisual")(e)
+			}
+			return e
+		}
 	}
-	return e
 }
 
-func GetCell(text string, color Color) *tview.TableCell {
+func GetCell(text string, st tcell.Style) *tview.TableCell {
 	return tview.NewTableCell(text).
 		SetAlign(tview.AlignLeft).
-		SetStyle(tcell.StyleDefault.
-			Foreground(color.Foreground).
-			Background(color.Background).
-			Bold(color.Bold).
-			Italic(color.Italic))
+		SetStyle(st)
 }
 
 func (i *InteractiveView) Update() {
 	s := strings.Split("orem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec leo a tellus gravida convallis. Curabitur tempus purus nisi. Proin non enim convallis augue porta aliquet. Aliquam sed sem eget mauris faucibus ultricies. Ut at tortor elit. Pellentesque tincidunt leo dolor, sed pulvinar mauris mattis quis. Integer ut magna in nulla eleifend gravida non id est. Etiam vehicula dui nec orci porttitor condimentum ac nec lectus. Nam imperdiet sit amet ipsum at sollicitudin. Fusce ac odio condimentum, aliquam neque et, pretium tellus. Ut suscipit libero sed leo accumsan sagittis. Maecenas leo lacus, maximus id lacinia non, imperdiet non dolor. Sed consectetur ipsum et turpis tristique, accumsan volutpat diam placerat. Etiam quis arcu dignissim, mollis nunc at, ultrices mi. Fusce vitae magna ligula. Donec sit amet placerat dui. Nulla tempus vestibulum felis, volutpat congue ipsum. Suspendisse rutrum orci eget diam pretium cursus id efficitur tortor. Donec lobortis odio ac massa tempus, eu pretium massa iaculis. Suspendisse tempor nisl a ullamcorper faucibus. Curabitur sollicitudin, erat et feugiat consectetur, nunc enim gravida dolor, a rutrum magna ante vitae felis. Nullam ligula risus, varius nec laoreet ut, malesuada a mi. Ut et eleifend leo. Etiam ac mi dui. Curabitur commodo felis non congue pharetra. Ut eu odio felis. Nullam eu mollis arcu. Nulla ut massa lorem. Vivamus pellentesque id ex sit amet pharetra. Aliquam at urna in nisl bibendum hendrerit. Donec suscipit tortor eu magna suscipit, vitae consequat metus imperdiet. Cras dui elit, luctus vel feugiat vitae, faucibus in enim. Aliquam neque ex, lacinia id nisi nec, euismod porta dolor. Morbi imperdiet sapien at nisl suscipit tempor. In hac habitasse platea dictumst. Etiam lobortis blandit nunc et sodales. Aliquam feugiat enim auctor, posuere tellus quis, fermentum massa. Quisque nec gravida leo. Aenean molestie mi sed felis porta luctus. Nulla pulvinar est in ultricies consectetur.", " ")
 	i.View.Clear()
 	for j := range s {
-		cl := tcell.ColorGreen
-		bcl := tcell.ColorDefault
+		st := defaultstyle
 		if i.visual && (j >= i.vrange.Start && j <= i.vrange.End) {
-			cl = tcell.ColorDefault
-			bcl = tcell.ColorYellow
+			st = selStyle
 		}
 		i.View.SetCell(j, 0,
-			GetCell(s[j], Color{
-				Foreground: cl,
-				Background: bcl,
-			}))
+			GetCell(s[j], st))
 	}
 }
