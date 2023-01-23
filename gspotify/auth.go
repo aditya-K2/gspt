@@ -10,7 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
-	spotifyauth "github.com/zmb3/spotify/v2/auth"
+	sptauth "github.com/zmb3/spotify/v2/auth"
 	"golang.org/x/oauth2"
 
 	"github.com/aditya-K2/gspot/utils"
@@ -20,9 +20,23 @@ import (
 const redirectURI = "http://localhost:8080/callback"
 
 var (
-	auth = spotifyauth.New(
-		spotifyauth.WithRedirectURL(redirectURI),
-		spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate))
+	scopes = []string{
+		sptauth.ScopeUserLibraryRead,
+		sptauth.ScopePlaylistModifyPublic,
+		sptauth.ScopePlaylistModifyPrivate,
+		sptauth.ScopePlaylistReadCollaborative,
+		sptauth.ScopeUserLibraryModify,
+		sptauth.ScopeUserLibraryRead,
+		sptauth.ScopeUserReadPrivate,
+		sptauth.ScopeUserReadCurrentlyPlaying,
+		sptauth.ScopeUserModifyPlaybackState,
+		sptauth.ScopeUserReadRecentlyPlayed,
+		sptauth.ScopeUserTopRead,
+		sptauth.ScopeStreaming,
+	}
+	auth = sptauth.New(
+		sptauth.WithRedirectURL(redirectURI),
+		sptauth.WithScopes(scopes...))
 	ch                           = make(chan *payload)
 	state                        = "__GSPOT_AUTH__"
 	userConfigDir, userConfigErr = os.UserConfigDir()
