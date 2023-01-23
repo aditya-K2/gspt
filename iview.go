@@ -47,7 +47,8 @@ func NewInteractiveView() *interactiveView {
 		visual: false,
 	}
 
-	view.SetDrawFunc(func(s tcell.Screen, x, y, width, height int) (int, int, int, int) {
+	view.SetDrawFunc(func(s tcell.Screen,
+		x, y, width, height int) (int, int, int, int) {
 		i.update()
 		return i.view.GetInnerRect()
 	})
@@ -216,34 +217,73 @@ func (i *interactiveView) setCtxSelectHandler(f func(s string)) {
 }
 
 func (i *interactiveView) openContextMenu() {
+	ctxMenu := tview.NewTable()
+
 	iv := i.view
-	r, c := iv.GetSelection()
+	_, _, w, h := iv.GetRect()
 	cslice := i.ctxContentHandler()
 	cwidth := 30
 	cheight := len(cslice) + 2
-	cpaddingx := 2
-	cpaddingy := 1
 	currentTime := time.Now().String()
+	epx := 4
+	closec := make(chan bool)
 
-	if i.visual {
-		r, c = i.baseSel, 1
+	closeCtx := func() {
+		i.Pages.RemovePage(currentTime)
 	}
 
-	ctxMenu := tview.NewTable()
+	drawCtx := func() {
+		i.Pages.AddPage(currentTime, ctxMenu, false, true)
+		ctxMenu.SetRect(w/2-(cwidth/2+epx), (h/2 - (cheight/2 + epx)), cwidth, cheight)
+	}
+
+	redraw := func() {
+		closeCtx()
+		drawCtx()
+	}
+
+	deleteCtx := func() {
+		closeCtx()
+		closec <- true
+	}
+
+	resizeHandler := func() {
+		dur := 500
+		tck := time.NewTicker(time.Duration(dur) * time.Millisecond)
+		go func() {
+			for {
+				select {
+				case <-tck.C:
+					{
+						_, _, _w, _h := iv.GetRect()
+						if _w != w || _h != h {
+							w = _w
+							h = _h
+							redraw()
+						}
+					}
+				case <-closec:
+					{
+						return
+					}
+				}
+			}
+		}()
+	}
+
+	resizeHandler()
+
 	ctxMenu.SetBorder(true)
 	ctxMenu.SetSelectable(true, false)
 	capture := func(e *tcell.EventKey) *tcell.EventKey {
-		closeCtx := func() {
-			i.Pages.RemovePage(currentTime)
-		}
 		if e.Key() == tcell.KeyEscape {
-			closeCtx()
+			deleteCtx()
 			return nil
 		} else if e.Key() == tcell.KeyEnter {
 			i.ctxSelectHandler(
 				ctxMenu.GetCell(
 					ctxMenu.GetSelection()).Text)
-			closeCtx()
+			deleteCtx()
 			return nil
 		}
 		return e
@@ -256,8 +296,7 @@ func (i *interactiveView) openContextMenu() {
 			GetCell(cslice[k], defaultstyle))
 	}
 
-	i.Pages.AddPage(currentTime, ctxMenu, false, true)
-	ctxMenu.SetRect(c+cpaddingx, r+cpaddingy, cwidth, cheight)
+	drawCtx()
 }
 
 func (i *interactiveView) update() {
