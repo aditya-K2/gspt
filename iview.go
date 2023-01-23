@@ -9,12 +9,9 @@ import (
 )
 
 var (
-	berr      = errors.New("Couldn't Get Base Selection in Interactive View")
-	defaultfg = tcell.ColorGreen
-	defaultbg = tcell.ColorDefault
-	invertsel = tcell.StyleDefault.
-			Foreground(defaultbg).
-			Background(defaultfg)
+	berr         = errors.New("Couldn't Get Base Selection in Interactive View")
+	defaultfg    = tcell.ColorGreen
+	defaultbg    = tcell.ColorDefault
 	defaultstyle = tcell.StyleDefault.
 			Foreground(defaultfg).
 			Background(defaultbg)
@@ -52,14 +49,12 @@ func (i *InteractiveView) exitVisualMode() {
 		i.View.Select(i.vrange.End, -1)
 	}
 	i.baseSel = -1
-	i.View.SetSelectedStyle(invertsel)
 }
 
 func (i *InteractiveView) enterVisualMode() {
 	row, _ := i.View.GetSelection()
 	i.baseSel = row
 	i.vrange.Start, i.vrange.End = row, row
-	i.View.SetSelectedStyle(defaultstyle)
 }
 
 func (i *InteractiveView) toggleVisualMode() {
@@ -203,5 +198,9 @@ func (i *InteractiveView) Update() {
 			GetCell(b, defaultstyle))
 		i.View.SetCell(j, 1,
 			GetCell(s[j], defaultstyle))
+		i.View.SetCell(j, 2,
+			GetCell(s[j], defaultstyle.Foreground(tcell.ColorBlue)))
+		i.View.SetCell(j, 3,
+			GetCell(s[j], defaultstyle.Foreground(tcell.ColorYellow)))
 	}
 }
