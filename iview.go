@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -24,25 +23,19 @@ type _range struct {
 }
 
 type interactiveView struct {
-	visual            bool
-	vrange            *_range
-	baseSel           int
-	Pages             *tview.Pages
-	view              *tview.Table
-	ctxContentHandler func() []string
-	ctxSelectHandler  func(s string)
+	visual  bool
+	vrange  *_range
+	baseSel int
+	View    *tview.Table
 }
 
 func NewInteractiveView() *interactiveView {
 	view := tview.NewTable()
 	view.SetSelectable(true, false)
 	view.SetBackgroundColor(tcell.ColorDefault)
-	pages := tview.NewPages()
-	pages.AddPage("IView", view, true, true)
 
 	i := &interactiveView{
-		view:   view,
-		Pages:  pages,
+		View:   view,
 		vrange: &_range{},
 		visual: false,
 	}
@@ -50,7 +43,7 @@ func NewInteractiveView() *interactiveView {
 	view.SetDrawFunc(func(s tcell.Screen,
 		x, y, width, height int) (int, int, int, int) {
 		i.update()
-		return i.view.GetInnerRect()
+		return i.View.GetInnerRect()
 	})
 	view.SetInputCapture(i.capture)
 	return i
@@ -58,15 +51,15 @@ func NewInteractiveView() *interactiveView {
 
 func (i *interactiveView) exitVisualMode() {
 	if i.vrange.Start < i.baseSel {
-		i.view.Select(i.vrange.Start, -1)
+		i.View.Select(i.vrange.Start, -1)
 	} else if i.vrange.End > i.baseSel {
-		i.view.Select(i.vrange.End, -1)
+		i.View.Select(i.vrange.End, -1)
 	}
 	i.baseSel = -1
 }
 
 func (i *interactiveView) enterVisualMode() {
-	row, _ := i.view.GetSelection()
+	row, _ := i.View.GetSelection()
 	i.baseSel = row
 	i.vrange.Start, i.vrange.End = row, row
 }
@@ -89,11 +82,11 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 		if vr.End <= -1 {
 			vr.End = 0
 		}
-		if vr.End >= i.view.GetRowCount() {
-			vr.End = i.view.GetRowCount() - 1
+		if vr.End >= i.View.GetRowCount() {
+			vr.End = i.View.GetRowCount() - 1
 		}
-		if vr.Start >= i.view.GetRowCount() {
-			vr.Start = i.view.GetRowCount() - 1
+		if vr.Start >= i.View.GetRowCount() {
+			vr.Start = i.View.GetRowCount() - 1
 		}
 	}
 	funcMap := map[string]func(e *tcell.EventKey) *tcell.EventKey{
@@ -139,7 +132,7 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			if i.visual {
 				i.vrange.Start = 0
 				i.vrange.End = i.baseSel
-				i.view.ScrollToBeginning()
+				i.View.ScrollToBeginning()
 				return nil
 			}
 			return e
@@ -147,15 +140,11 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 		"bottom": func(e *tcell.EventKey) *tcell.EventKey {
 			if i.visual {
 				i.vrange.Start = i.baseSel
-				i.vrange.End = i.view.GetRowCount() - 1
-				i.view.ScrollToEnd()
+				i.vrange.End = i.View.GetRowCount() - 1
+				i.View.ScrollToEnd()
 				return nil
 			}
 			return e
-		},
-		"openContextMenu": func(e *tcell.EventKey) *tcell.EventKey {
-			i.openContextMenu()
-			return nil
 		},
 	}
 	if val, ok := funcMap[s]; ok {
@@ -208,112 +197,21 @@ func GetCell(text string, st tcell.Style) *tview.TableCell {
 		SetStyle(st)
 }
 
-func (i *interactiveView) setCtxContentHandler(f func() []string) {
-	i.ctxContentHandler = f
-}
-
-func (i *interactiveView) setCtxSelectHandler(f func(s string)) {
-	i.ctxSelectHandler = f
-}
-
-func (i *interactiveView) openContextMenu() {
-	ctxMenu := tview.NewTable()
-
-	iv := i.view
-	_, _, w, h := iv.GetRect()
-	cslice := i.ctxContentHandler()
-	cwidth := 30
-	cheight := len(cslice) + 2
-	currentTime := time.Now().String()
-	epx := 4
-	closec := make(chan bool)
-
-	closeCtx := func() {
-		i.Pages.RemovePage(currentTime)
-	}
-
-	drawCtx := func() {
-		i.Pages.AddPage(currentTime, ctxMenu, false, true)
-		ctxMenu.SetRect(w/2-(cwidth/2+epx), (h/2 - (cheight/2 + epx)), cwidth, cheight)
-	}
-
-	redraw := func() {
-		closeCtx()
-		drawCtx()
-	}
-
-	deleteCtx := func() {
-		closeCtx()
-		closec <- true
-	}
-
-	resizeHandler := func() {
-		dur := 500
-		tck := time.NewTicker(time.Duration(dur) * time.Millisecond)
-		go func() {
-			for {
-				select {
-				case <-tck.C:
-					{
-						_, _, _w, _h := iv.GetRect()
-						if _w != w || _h != h {
-							w = _w
-							h = _h
-							redraw()
-						}
-					}
-				case <-closec:
-					{
-						return
-					}
-				}
-			}
-		}()
-	}
-
-	resizeHandler()
-
-	ctxMenu.SetBorder(true)
-	ctxMenu.SetSelectable(true, false)
-	capture := func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEscape {
-			deleteCtx()
-			return nil
-		} else if e.Key() == tcell.KeyEnter {
-			i.ctxSelectHandler(
-				ctxMenu.GetCell(
-					ctxMenu.GetSelection()).Text)
-			deleteCtx()
-			return nil
-		}
-		return e
-	}
-
-	ctxMenu.SetInputCapture(capture)
-
-	for k := range cslice {
-		ctxMenu.SetCell(k, 0,
-			GetCell(cslice[k], defaultstyle))
-	}
-
-	drawCtx()
-}
-
 func (i *interactiveView) update() {
 	s := strings.Split("orem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec leo a tellus gravida convallis. Curabitur tempus purus nisi. Proin non enim convallis augue porta aliquet.", " ")
-	i.view.Clear()
+	i.View.Clear()
 	for j := range s {
 		b := ""
 		if i.visual && (j >= i.vrange.Start && j <= i.vrange.End) {
 			b = "[blue::]█[::]"
 		}
-		i.view.SetCell(j, 0,
+		i.View.SetCell(j, 0,
 			GetCell(b, defaultstyle))
-		i.view.SetCell(j, 1,
+		i.View.SetCell(j, 1,
 			GetCell(s[j], defaultstyle))
-		i.view.SetCell(j, 2,
+		i.View.SetCell(j, 2,
 			GetCell(s[j], defaultstyle.Foreground(tcell.ColorBlue)))
-		i.view.SetCell(j, 3,
+		i.View.SetCell(j, 3,
 			GetCell(s[j], defaultstyle.Foreground(tcell.ColorYellow)))
 	}
 }
