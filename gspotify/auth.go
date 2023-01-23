@@ -17,10 +17,9 @@ import (
 	"github.com/zmb3/spotify/v2"
 )
 
-const redirectURI = "http://localhost:8080/callback"
-
 var (
-	scopes = []string{
+	redirectURI = "http://localhost:8080/callback"
+	scopes      = []string{
 		sptauth.ScopeUserLibraryRead,
 		sptauth.ScopePlaylistModifyPublic,
 		sptauth.ScopePlaylistModifyPrivate,

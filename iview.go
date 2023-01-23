@@ -36,6 +36,7 @@ type interactiveView struct {
 func NewInteractiveView() *interactiveView {
 	view := tview.NewTable()
 	view.SetSelectable(true, false)
+	view.SetBackgroundColor(tcell.ColorDefault)
 	pages := tview.NewPages()
 	pages.AddPage("IView", view, true, true)
 
@@ -46,6 +47,10 @@ func NewInteractiveView() *interactiveView {
 		visual: false,
 	}
 
+	view.SetDrawFunc(func(s tcell.Screen, x, y, width, height int) (int, int, int, int) {
+		i.update()
+		return i.view.GetInnerRect()
+	})
 	view.SetInputCapture(i.capture)
 	return i
 }
@@ -74,7 +79,7 @@ func (i *interactiveView) toggleVisualMode() {
 	i.visual = !i.visual
 }
 
-func (i *interactiveView) GetHandler(s string) func(e *tcell.EventKey) *tcell.EventKey {
+func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.EventKey {
 	vr := i.vrange
 	check := func() {
 		if vr.Start <= -1 {
@@ -163,11 +168,11 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 	switch e.Rune() {
 	case 'j':
 		{
-			return i.GetHandler("down")(e)
+			return i.getHandler("down")(e)
 		}
 	case 'k':
 		{
-			return i.GetHandler("up")(e)
+			return i.getHandler("up")(e)
 		}
 	case 'v':
 		{
@@ -176,20 +181,20 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		}
 	case 'g':
 		{
-			return i.GetHandler("top")(e)
+			return i.getHandler("top")(e)
 		}
 	case 'G':
 		{
-			return i.GetHandler("bottom")(e)
+			return i.getHandler("bottom")(e)
 		}
 	case 'C':
 		{
-			return i.GetHandler("openContextMenu")(e)
+			return i.getHandler("openContextMenu")(e)
 		}
 	default:
 		{
 			if e.Key() == tcell.KeyEscape {
-				return i.GetHandler("exitvisual")(e)
+				return i.getHandler("exitvisual")(e)
 			}
 			return e
 		}
@@ -255,7 +260,7 @@ func (i *interactiveView) openContextMenu() {
 	ctxMenu.SetRect(c+cpaddingx, r+cpaddingy, cwidth, cheight)
 }
 
-func (i *interactiveView) Update() {
+func (i *interactiveView) update() {
 	s := strings.Split("orem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec leo a tellus gravida convallis. Curabitur tempus purus nisi. Proin non enim convallis augue porta aliquet.", " ")
 	i.view.Clear()
 	for j := range s {
