@@ -22,35 +22,61 @@ func NewMain() *Main {
 	return m
 }
 
-func (m *Main) OpenContextMenu(title string,
-	ctxContentHandler func() []string, ctxSelectHandler func(s string)) {
-	ctxMenu := tview.NewTable()
+type CenteredWidget interface {
+	Primitive() *tview.Table
+	ContentHandler() []string
+	SelectionHandler(s string)
+	Title() string
+	Size(mw, mh, ch int) (int, int, int, int)
+}
 
-	_, _, w, h := m.Root.GetRect()
-	cslice := ctxContentHandler()
-	cwidth := 30
-	cheight := len(cslice) + 3
-	currentTime := time.Now().String()
-	epx := 4
+func (m *Main) addCenteredWidget(t CenteredWidget) {
+	cslice := t.ContentHandler()
+	p := *(t.Primitive())
 	closec := make(chan bool)
+	currentTime := time.Now().String()
+	_, _, w, h := m.Root.GetRect()
 
 	closeCtx := func() {
 		m.Root.RemovePage(currentTime)
 	}
-
 	drawCtx := func() {
-		m.Root.AddPage(currentTime, ctxMenu, false, true)
-		ctxMenu.SetRect(w/2-(cwidth/2+epx), (h/2 - (cheight/2 + epx)), cwidth, cheight)
+		m.Root.AddPage(currentTime, t.Primitive(), false, true)
+		p.SetRect(t.Size(w, h, len(cslice)))
 	}
-
 	redraw := func() {
 		closeCtx()
 		drawCtx()
 	}
-
 	deleteCtx := func() {
 		closeCtx()
 		closec <- true
+	}
+
+	capture := func(e *tcell.EventKey) *tcell.EventKey {
+		if e.Key() == tcell.KeyEscape {
+			deleteCtx()
+			return nil
+		} else if e.Key() == tcell.KeyEnter {
+			t.SelectionHandler(
+				p.GetCell(
+					p.GetSelection()).Text)
+			closeCtx()
+			return nil
+		}
+		return e
+	}
+	p.SetInputCapture(capture)
+
+	if t.Title() != "" {
+		p.SetCell(0, 0,
+			GetCell(t.Title(), tcell.StyleDefault.
+				Foreground(tcell.ColorWhite).
+				Bold(true)).SetSelectable(false))
+	}
+	for k := range cslice {
+		p.SetCell(k+1, 0,
+			GetCell(cslice[k], defaultstyle))
 	}
 
 	resizeHandler := func() {
@@ -76,35 +102,12 @@ func (m *Main) OpenContextMenu(title string,
 			}
 		}()
 	}
-
 	resizeHandler()
 
-	ctxMenu.SetBorder(true)
-	ctxMenu.SetSelectable(true, false)
-	capture := func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEscape {
-			deleteCtx()
-			return nil
-		} else if e.Key() == tcell.KeyEnter {
-			ctxSelectHandler(
-				ctxMenu.GetCell(
-					ctxMenu.GetSelection()).Text)
-			deleteCtx()
-			return nil
-		}
-		return e
-	}
-
-	ctxMenu.SetInputCapture(capture)
-
-	ctxMenu.SetCell(0, 0,
-		GetCell(title, tcell.StyleDefault.
-			Foreground(tcell.ColorWhite).
-			Bold(true)).SetSelectable(false))
-	for k := range cslice {
-		ctxMenu.SetCell(k+1, 0,
-			GetCell(cslice[k], defaultstyle))
-	}
-
 	drawCtx()
+}
+
+func (m *Main) OpenContextMenu() {
+	c := NewContextMenu()
+	m.addCenteredWidget(c)
 }
