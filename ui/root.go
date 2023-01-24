@@ -108,6 +108,6 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 }
 
 func (m *Main) OpenContextMenu() {
-	c := NewContextMenu()
+	c := newMenu()
 	m.addCenteredWidget(c)
 }

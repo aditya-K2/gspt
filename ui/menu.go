@@ -4,13 +4,13 @@ import (
 	"github.com/rivo/tview"
 )
 
-type ContextMenu struct {
+type menu struct {
 	Menu *tview.Table
 	_s   []string
 }
 
-func NewContextMenu() *ContextMenu {
-	c := &ContextMenu{}
+func newMenu() *menu {
+	c := &menu{}
 
 	ctxMenu := tview.NewTable()
 	ctxMenu.SetBorder(true)
@@ -21,7 +21,7 @@ func NewContextMenu() *ContextMenu {
 	return c
 }
 
-func (c *ContextMenu) Size(mw, mh int) (int, int, int, int) {
+func (c *menu) Size(mw, mh int) (int, int, int, int) {
 	cslice := c.ContentHandler()
 	cheight := len(cslice) + 3
 	cwidth := 30
@@ -30,16 +30,16 @@ func (c *ContextMenu) Size(mw, mh int) (int, int, int, int) {
 	return mw/2 - (cwidth/2 + epx), (mh/2 - (cheight/2 + epx)), cwidth, cheight
 }
 
-func (c *ContextMenu) ContentHandler() []string {
+func (c *menu) ContentHandler() []string {
 	return []string{
 		"Hello",
 		"Bye",
 	}
 }
 
-func (c *ContextMenu) SelectionHandler(s string) {
+func (c *menu) SelectionHandler(s string) {
 	c._s = append(c._s, s)
 }
 
-func (c ContextMenu) Title() string            { return "Add to Playlist: " }
-func (c *ContextMenu) Primitive() *tview.Table { return c.Menu }
+func (c menu) Title() string            { return "Add to Playlist: " }
+func (c *menu) Primitive() *tview.Table { return c.Menu }
