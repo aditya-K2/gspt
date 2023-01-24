@@ -7,14 +7,14 @@ import (
 	"github.com/rivo/tview"
 )
 
-func OpenContextMenu(root *tview.Pages,
+func OpenContextMenu(root *tview.Pages, title string,
 	ctxContentHandler func() []string, ctxSelectHandler func(s string)) {
 	ctxMenu := tview.NewTable()
 
 	_, _, w, h := root.GetRect()
 	cslice := ctxContentHandler()
 	cwidth := 30
-	cheight := len(cslice) + 2
+	cheight := len(cslice) + 3
 	currentTime := time.Now().String()
 	epx := 4
 	closec := make(chan bool)
@@ -82,8 +82,12 @@ func OpenContextMenu(root *tview.Pages,
 
 	ctxMenu.SetInputCapture(capture)
 
+	ctxMenu.SetCell(0, 0,
+		GetCell(title, tcell.StyleDefault.
+			Foreground(tcell.ColorWhite).
+			Bold(true)).SetSelectable(false))
 	for k := range cslice {
-		ctxMenu.SetCell(k, 0,
+		ctxMenu.SetCell(k+1, 0,
 			GetCell(cslice[k], defaultstyle))
 	}
 
