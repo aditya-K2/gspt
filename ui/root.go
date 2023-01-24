@@ -27,7 +27,7 @@ type CenteredWidget interface {
 	ContentHandler() []string
 	SelectionHandler(s string)
 	Title() string
-	Size(mw, mh, ch int) (int, int, int, int)
+	Size(mw, mh int) (int, int, int, int)
 }
 
 func (m *Main) addCenteredWidget(t CenteredWidget) {
@@ -42,7 +42,7 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 	}
 	drawCtx := func() {
 		m.Root.AddPage(currentTime, t.Primitive(), false, true)
-		p.SetRect(t.Size(w, h, len(cslice)))
+		p.SetRect(t.Size(w, h))
 	}
 	redraw := func() {
 		closeCtx()

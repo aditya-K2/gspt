@@ -21,12 +21,13 @@ func NewContextMenu() *ContextMenu {
 	return c
 }
 
-func (c *ContextMenu) Size(mw, mh, ch int) (int, int, int, int) {
+func (c *ContextMenu) Size(mw, mh int) (int, int, int, int) {
+	cslice := c.ContentHandler()
+	cheight := len(cslice) + 3
 	cwidth := 30
 	epx := 4
-	ch += 3
 
-	return mw/2 - (cwidth/2 + epx), (mh/2 - (ch/2 + epx)), cwidth, ch
+	return mw/2 - (cwidth/2 + epx), (mh/2 - (cheight/2 + epx)), cwidth, cheight
 }
 
 func (c *ContextMenu) ContentHandler() []string {
