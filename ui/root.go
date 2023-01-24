@@ -1,4 +1,4 @@
-package main
+package ui
 
 import (
 	"time"
@@ -7,11 +7,26 @@ import (
 	"github.com/rivo/tview"
 )
 
-func OpenContextMenu(root *tview.Pages, title string,
+type Main struct {
+	Root *tview.Pages
+}
+
+func NewMain() *Main {
+	m := &Main{}
+
+	iv := NewInteractiveView()
+	Root := tview.NewPages()
+	Root.AddPage("iview", iv.View, true, true)
+
+	m.Root = Root
+	return m
+}
+
+func (m *Main) OpenContextMenu(title string,
 	ctxContentHandler func() []string, ctxSelectHandler func(s string)) {
 	ctxMenu := tview.NewTable()
 
-	_, _, w, h := root.GetRect()
+	_, _, w, h := m.Root.GetRect()
 	cslice := ctxContentHandler()
 	cwidth := 30
 	cheight := len(cslice) + 3
@@ -20,11 +35,11 @@ func OpenContextMenu(root *tview.Pages, title string,
 	closec := make(chan bool)
 
 	closeCtx := func() {
-		root.RemovePage(currentTime)
+		m.Root.RemovePage(currentTime)
 	}
 
 	drawCtx := func() {
-		root.AddPage(currentTime, ctxMenu, false, true)
+		m.Root.AddPage(currentTime, ctxMenu, false, true)
 		ctxMenu.SetRect(w/2-(cwidth/2+epx), (h/2 - (cheight/2 + epx)), cwidth, cheight)
 	}
 
@@ -46,7 +61,7 @@ func OpenContextMenu(root *tview.Pages, title string,
 				select {
 				case <-tck.C:
 					{
-						_, _, _w, _h := root.GetRect()
+						_, _, _w, _h := m.Root.GetRect()
 						if _w != w || _h != h {
 							w = _w
 							h = _h
