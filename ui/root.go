@@ -24,14 +24,12 @@ func NewMain() *Main {
 
 type CenteredWidget interface {
 	Primitive() *tview.Table
-	ContentHandler() []string
+	ContentHandler()
 	SelectionHandler(s string)
-	Title() string
 	Size(mw, mh int) (int, int, int, int)
 }
 
 func (m *Main) addCenteredWidget(t CenteredWidget) {
-	cslice := t.ContentHandler()
 	p := *(t.Primitive())
 	closec := make(chan bool)
 	currentTime := time.Now().String()
@@ -68,16 +66,7 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 	}
 	p.SetInputCapture(capture)
 
-	if t.Title() != "" {
-		p.SetCell(0, 0,
-			GetCell(t.Title(), tcell.StyleDefault.
-				Foreground(tcell.ColorWhite).
-				Bold(true)).SetSelectable(false))
-	}
-	for k := range cslice {
-		p.SetCell(k+1, 0,
-			GetCell(cslice[k], defaultstyle))
-	}
+	t.ContentHandler()
 
 	resizeHandler := func() {
 		dur := 500
@@ -109,5 +98,10 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 
 func (m *Main) OpenContextMenu() {
 	c := newMenu()
+	c.Content([]string{
+		"Hello",
+		"Bitches",
+		"whatisup"})
+	c.Title("Add to Playlist")
 	m.addCenteredWidget(c)
 }

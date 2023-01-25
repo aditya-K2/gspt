@@ -1,45 +1,54 @@
 package ui
 
 import (
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
 type menu struct {
-	Menu *tview.Table
-	_s   []string
+	Menu    *tview.Table
+	title   string
+	content []string
 }
 
 func newMenu() *menu {
 	c := &menu{}
 
-	ctxMenu := tview.NewTable()
-	ctxMenu.SetBorder(true)
-	ctxMenu.SetSelectable(true, false)
-
-	c.Menu = ctxMenu
+	menu := tview.NewTable()
+	menu.SetBorder(true)
+	menu.SetSelectable(true, false)
+	c.Menu = menu
 
 	return c
 }
 
 func (c *menu) Size(mw, mh int) (int, int, int, int) {
-	cslice := c.ContentHandler()
-	cheight := len(cslice) + 3
+	cheight := len(c.content) + 3
 	cwidth := 30
 	epx := 4
 
 	return mw/2 - (cwidth/2 + epx), (mh/2 - (cheight/2 + epx)), cwidth, cheight
 }
 
-func (c *menu) ContentHandler() []string {
-	return []string{
-		"Hello",
-		"Bye",
+func (c *menu) ContentHandler() {
+	if c.title != "" {
+		c.Menu.SetCell(0, 0,
+			GetCell(c.title, tcell.StyleDefault.
+				Foreground(tcell.ColorWhite).
+				Bold(true)).SetSelectable(false))
+	}
+	for k := range c.content {
+		c.Menu.SetCell(k+1, 0,
+			GetCell(c.content[k], defaultstyle))
 	}
 }
 
 func (c *menu) SelectionHandler(s string) {
-	c._s = append(c._s, s)
+	c.content = append(c.content, s)
 }
 
-func (c menu) Title() string            { return "Add to Playlist: " }
 func (c *menu) Primitive() *tview.Table { return c.Menu }
+
+func (c *menu) Content(s []string) { c.content = s }
+
+func (c *menu) Title(s string) { c.title = s }
