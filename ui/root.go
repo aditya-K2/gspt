@@ -25,7 +25,7 @@ func NewMain() *Main {
 type CenteredWidget interface {
 	Primitive() *tview.Table
 	ContentHandler()
-	SelectionHandler(s string)
+	SelectionHandler() func(s string)
 	Size(mw, mh int) (int, int, int, int)
 }
 
@@ -33,6 +33,7 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 	p := *(t.Primitive())
 	closec := make(chan bool)
 	currentTime := time.Now().String()
+	sHandler := t.SelectionHandler()
 	_, _, w, h := m.Root.GetRect()
 
 	closeCtx := func() {
@@ -56,7 +57,7 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 			deleteCtx()
 			return nil
 		} else if e.Key() == tcell.KeyEnter {
-			t.SelectionHandler(
+			sHandler(
 				p.GetCell(
 					p.GetSelection()).Text)
 			closeCtx()
@@ -98,10 +99,15 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 
 func (m *Main) OpenContextMenu() {
 	c := newMenu()
+	content := []string{}
 	c.Content([]string{
 		"Hello",
 		"Bitches",
 		"whatisup"})
 	c.Title("Add to Playlist")
+	sHandler := func(s string) {
+		content = append(content, s)
+	}
+	c.SetSelectionHandler(sHandler)
 	m.addCenteredWidget(c)
 }

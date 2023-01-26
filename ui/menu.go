@@ -6,9 +6,10 @@ import (
 )
 
 type menu struct {
-	Menu    *tview.Table
-	title   string
-	content []string
+	Menu     *tview.Table
+	title    string
+	content  []string
+	sHandler func(s string)
 }
 
 func newMenu() *menu {
@@ -43,8 +44,12 @@ func (c *menu) ContentHandler() {
 	}
 }
 
-func (c *menu) SelectionHandler(s string) {
-	c.content = append(c.content, s)
+func (c *menu) SelectionHandler() func(s string) {
+	return c.sHandler
+}
+
+func (c *menu) SetSelectionHandler(f func(s string)) {
+	c.sHandler = f
 }
 
 func (c *menu) Primitive() *tview.Table { return c.Menu }
