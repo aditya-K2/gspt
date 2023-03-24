@@ -13,7 +13,7 @@ import (
 	sptauth "github.com/zmb3/spotify/v2/auth"
 	"golang.org/x/oauth2"
 
-	"github.com/aditya-K2/gspot/utils"
+	"github.com/aditya-K2/utils"
 	"github.com/zmb3/spotify/v2"
 )
 
