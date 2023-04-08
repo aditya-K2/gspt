@@ -23,6 +23,7 @@ var (
 		sptauth.ScopeUserLibraryRead,
 		sptauth.ScopePlaylistModifyPublic,
 		sptauth.ScopePlaylistModifyPrivate,
+		sptauth.ScopePlaylistReadPrivate,
 		sptauth.ScopePlaylistReadCollaborative,
 		sptauth.ScopeUserLibraryModify,
 		sptauth.ScopeUserLibraryRead,
