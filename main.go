@@ -11,6 +11,7 @@ import (
 
 func main() {
 	i := ui.NewInteractiveView()
+	m := ui.NewMain(i.View)
 	var err error
 	gspotify.Client, err = gspotify.NewClient()
 	if err != nil {
@@ -35,6 +36,34 @@ func main() {
 		return c
 	}
 	i.SetContentFunc(content)
+	playlists, err := gspotify.CurrentUserPlaylists(func(status bool, err error) {
+		fmt.Println("Done")
+	})
+	contextOpener := func() {
+		c := ui.NewMenu()
+		if err != nil {
+			panic(err)
+		}
+
+		cc := []string{}
+		for _, v := range *playlists {
+			cc = append(cc, v.Name)
+		}
+		c.Content(cc)
+		c.Title("Add to Playlist")
+		c.SetSelectionHandler(i.SelectionHandler)
+		m.AddCenteredWidget(c)
+	}
+	i.SetContextKey('a')
+	i.SetContextOpener(contextOpener)
+	contextHandler := func(start, end, sel int) {
+		for k := start; k <= end; k++ {
+			if err := gspotify.AddAlbumToPlaylist((*albs)[k].ID, (*playlists)[sel].ID); err != nil {
+				panic(err)
+			}
+		}
+	}
+	i.SetContextHandler(contextHandler)
 	i.SetExternalCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
 			r, _ := i.View.GetSelection()
@@ -44,7 +73,7 @@ func main() {
 		}
 		return e
 	})
-	if err := tview.NewApplication().SetRoot(i.View, true).Run(); err != nil {
+	if err := tview.NewApplication().SetRoot(m.Root, true).Run(); err != nil {
 		panic(err)
 	}
 }
