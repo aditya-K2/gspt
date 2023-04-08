@@ -29,7 +29,7 @@ type CenteredWidget interface {
 }
 
 func (m *Main) AddCenteredWidget(t CenteredWidget) {
-	p := *(t.Primitive())
+	p := (t.Primitive())
 	closec := make(chan bool)
 	currentTime := time.Now().String()
 	sHandler := t.SelectionHandler()
