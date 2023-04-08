@@ -2,7 +2,6 @@ package ui
 
 import (
 	"errors"
-	"strings"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -12,10 +11,15 @@ var (
 	berr         = errors.New("Couldn't Get Base Selection in Interactive View")
 	defaultfg    = tcell.ColorGreen
 	defaultbg    = tcell.ColorDefault
-	defaultstyle = tcell.StyleDefault.
+	Defaultstyle = tcell.StyleDefault.
 			Foreground(defaultfg).
 			Background(defaultbg)
 )
+
+type Content struct {
+	Content string
+	Style   tcell.Style
+}
 
 type _range struct {
 	Start int
@@ -23,10 +27,12 @@ type _range struct {
 }
 
 type interactiveView struct {
-	visual  bool
-	vrange  *_range
-	baseSel int
-	View    *tview.Table
+	visual          bool
+	vrange          *_range
+	baseSel         int
+	content         func() [][]Content
+	externalCapture func(e *tcell.EventKey) *tcell.EventKey
+	View            *tview.Table
 }
 
 func NewInteractiveView() *interactiveView {
@@ -47,6 +53,14 @@ func NewInteractiveView() *interactiveView {
 	})
 	view.SetInputCapture(i.capture)
 	return i
+}
+
+func (i *interactiveView) SetContentFunc(f func() [][]Content) {
+	i.content = f
+}
+
+func (i *interactiveView) SetExternalCapture(f func(e *tcell.EventKey) *tcell.EventKey) {
+	i.externalCapture = f
 }
 
 func (i *interactiveView) exitVisualMode() {
@@ -185,6 +199,8 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		{
 			if e.Key() == tcell.KeyEscape {
 				return i.getHandler("exitvisual")(e)
+			} else if i.externalCapture != nil {
+				return i.externalCapture(e)
 			}
 			return e
 		}
@@ -198,20 +214,18 @@ func GetCell(text string, st tcell.Style) *tview.TableCell {
 }
 
 func (i *interactiveView) update() {
-	s := strings.Split("orem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec leo a tellus gravida convallis. Curabitur tempus purus nisi. Proin non enim convallis augue porta aliquet.", " ")
 	i.View.Clear()
-	for j := range s {
+	s := i.content()
+	for x := range s {
 		b := ""
-		if i.visual && (j >= i.vrange.Start && j <= i.vrange.End) {
+		if i.visual && (x >= i.vrange.Start && x <= i.vrange.End) {
 			b = "[blue::]█[::]"
 		}
-		i.View.SetCell(j, 0,
-			GetCell(b, defaultstyle))
-		i.View.SetCell(j, 1,
-			GetCell(s[j], defaultstyle))
-		i.View.SetCell(j, 2,
-			GetCell(s[j], defaultstyle.Foreground(tcell.ColorBlue)))
-		i.View.SetCell(j, 3,
-			GetCell(s[j], defaultstyle.Foreground(tcell.ColorYellow)))
+		i.View.SetCell(x, 0,
+			GetCell(b, Defaultstyle))
+		for y := range s[x] {
+			i.View.SetCell(x, y+1,
+				GetCell(s[x][y].Content, s[x][y].Style))
+		}
 	}
 }

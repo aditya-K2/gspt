@@ -40,7 +40,7 @@ func (c *menu) ContentHandler() {
 	}
 	for k := range c.content {
 		c.Menu.SetCell(k+1, 0,
-			GetCell(c.content[k], defaultstyle))
+			GetCell(c.content[k], Defaultstyle))
 	}
 }
 
