@@ -5,6 +5,10 @@ import (
 	"github.com/rivo/tview"
 )
 
+var (
+	minheight = 7
+)
+
 type menu struct {
 	Menu     *tview.Table
 	title    string
@@ -17,6 +21,8 @@ func newMenu() *menu {
 
 	menu := tview.NewTable()
 	menu.SetBorder(true)
+	menu.SetBorderPadding(1, 1, 1, 1)
+	menu.SetBorderStyle(tcell.StyleDefault.Foreground(tcell.ColorBlack))
 	menu.SetSelectable(true, false)
 	c.Menu = menu
 
@@ -24,7 +30,10 @@ func newMenu() *menu {
 }
 
 func (c *menu) Size(mw, mh int) (int, int, int, int) {
-	cheight := len(c.content) + 3
+	cheight := mh / 5
+	if cheight < minheight {
+		cheight = minheight
+	}
 	cwidth := 30
 	epx := 4
 
@@ -32,14 +41,8 @@ func (c *menu) Size(mw, mh int) (int, int, int, int) {
 }
 
 func (c *menu) ContentHandler() {
-	if c.title != "" {
-		c.Menu.SetCell(0, 0,
-			GetCell(c.title, tcell.StyleDefault.
-				Foreground(tcell.ColorWhite).
-				Bold(true)).SetSelectable(false))
-	}
 	for k := range c.content {
-		c.Menu.SetCell(k+1, 0,
+		c.Menu.SetCell(k, 0,
 			GetCell(c.content[k], Defaultstyle))
 	}
 }
@@ -56,4 +59,4 @@ func (c *menu) Primitive() *tview.Table { return c.Menu }
 
 func (c *menu) Content(s []string) { c.content = s }
 
-func (c *menu) Title(s string) { c.title = s }
+func (c *menu) Title(s string) { c.Menu.SetTitle(s) }
