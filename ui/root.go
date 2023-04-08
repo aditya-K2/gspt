@@ -11,12 +11,11 @@ type Main struct {
 	Root *tview.Pages
 }
 
-func NewMain() *Main {
+func NewMain(t tview.Primitive) *Main {
 	m := &Main{}
 
-	iv := NewInteractiveView()
 	Root := tview.NewPages()
-	Root.AddPage("iview", iv.View, true, true)
+	Root.AddPage("iview", t, true, true)
 
 	m.Root = Root
 	return m
@@ -25,11 +24,11 @@ func NewMain() *Main {
 type CenteredWidget interface {
 	Primitive() *tview.Table
 	ContentHandler()
-	SelectionHandler() func(s string)
+	SelectionHandler() func(s int)
 	Size(mw, mh int) (int, int, int, int)
 }
 
-func (m *Main) addCenteredWidget(t CenteredWidget) {
+func (m *Main) AddCenteredWidget(t CenteredWidget) {
 	p := *(t.Primitive())
 	closec := make(chan bool)
 	currentTime := time.Now().String()
@@ -57,9 +56,8 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 			deleteCtx()
 			return nil
 		} else if e.Key() == tcell.KeyEnter {
-			sHandler(
-				p.GetCell(
-					p.GetSelection()).Text)
+			r, _ := p.GetSelection()
+			sHandler(r)
 			closeCtx()
 			return nil
 		}
@@ -95,19 +93,4 @@ func (m *Main) addCenteredWidget(t CenteredWidget) {
 	resizeHandler()
 
 	drawCtx()
-}
-
-func (m *Main) OpenContextMenu() {
-	c := newMenu()
-	content := []string{}
-	c.Content([]string{
-		"Hello",
-		"Bitches",
-		"whatisup"})
-	c.Title("Add to Playlist")
-	sHandler := func(s string) {
-		content = append(content, s)
-	}
-	c.SetSelectionHandler(sHandler)
-	m.addCenteredWidget(c)
 }

@@ -30,6 +30,9 @@ type interactiveView struct {
 	visual          bool
 	vrange          *_range
 	baseSel         int
+	contextKey      rune
+	contextHandler  func(start, end, selrow int)
+	contextOpener   func()
 	content         func() [][]Content
 	externalCapture func(e *tcell.EventKey) *tcell.EventKey
 	View            *tview.Table
@@ -61,6 +64,25 @@ func (i *interactiveView) SetContentFunc(f func() [][]Content) {
 
 func (i *interactiveView) SetExternalCapture(f func(e *tcell.EventKey) *tcell.EventKey) {
 	i.externalCapture = f
+}
+
+func (i *interactiveView) SetContextKey(contextKey rune) {
+	i.contextKey = contextKey
+}
+
+func (i *interactiveView) SetContextOpener(f func()) {
+	i.contextOpener = f
+}
+
+func (i *interactiveView) SetContextHandler(f func(start, end, selrow int)) {
+	i.contextHandler = f
+}
+
+func (i *interactiveView) SelectionHandler(selrow int) {
+	if i.visual {
+		i.toggleVisualMode()
+	}
+	i.contextHandler(i.vrange.Start, i.vrange.End, selrow)
 }
 
 func (i *interactiveView) exitVisualMode() {
@@ -160,6 +182,10 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			}
 			return e
 		},
+		"openCtx": func(e *tcell.EventKey) *tcell.EventKey {
+			i.contextOpener()
+			return nil
+		},
 	}
 	if val, ok := funcMap[s]; ok {
 		return val
@@ -191,9 +217,9 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		{
 			return i.getHandler("bottom")(e)
 		}
-	case 'C':
+	case i.contextKey:
 		{
-			return i.getHandler("openContextMenu")(e)
+			return i.getHandler("openCtx")(e)
 		}
 	default:
 		{

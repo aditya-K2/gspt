@@ -13,10 +13,10 @@ type menu struct {
 	Menu     *tview.Table
 	title    string
 	content  []string
-	sHandler func(s string)
+	sHandler func(s int)
 }
 
-func newMenu() *menu {
+func NewMenu() *menu {
 	c := &menu{}
 
 	menu := tview.NewTable()
@@ -47,11 +47,11 @@ func (c *menu) ContentHandler() {
 	}
 }
 
-func (c *menu) SelectionHandler() func(s string) {
+func (c *menu) SelectionHandler() func(s int) {
 	return c.sHandler
 }
 
-func (c *menu) SetSelectionHandler(f func(s string)) {
+func (c *menu) SetSelectionHandler(f func(s int)) {
 	c.sHandler = f
 }
 
