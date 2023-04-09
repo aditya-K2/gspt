@@ -1,4 +1,4 @@
-package gspotify
+package spt
 
 import (
 	"context"

@@ -9,6 +9,7 @@ var (
 	minheight = 7
 )
 
+// Menu implements the CenteredWidget interface for the Main Screen.
 type menu struct {
 	Menu     *tview.Table
 	title    string

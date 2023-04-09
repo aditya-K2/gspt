@@ -1,4 +1,4 @@
-package gspotify
+package spt
 
 import "github.com/zmb3/spotify/v2"
 

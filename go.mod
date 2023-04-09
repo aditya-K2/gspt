@@ -1,4 +1,4 @@
-module github.com/aditya-K2/gspot
+module github.com/aditya-K2/gspt
 
 go 1.19
 

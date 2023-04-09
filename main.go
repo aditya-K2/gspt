@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/aditya-K2/gspot/gspotify"
-	"github.com/aditya-K2/gspot/ui"
+	"github.com/aditya-K2/gspt/spt"
+	"github.com/aditya-K2/gspt/ui"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -13,11 +13,11 @@ func main() {
 	i := ui.NewInteractiveView()
 	m := ui.NewMain(i.View)
 	var err error
-	gspotify.Client, err = gspotify.NewClient()
+	spt.Client, err = spt.NewClient()
 	if err != nil {
 		panic(err)
 	}
-	albs, err := gspotify.CurrentUserSavedAlbums(func(status bool, err error) {
+	albs, err := spt.CurrentUserSavedAlbums(func(status bool, err error) {
 		fmt.Println("Done")
 	})
 	if err != nil {
@@ -36,7 +36,7 @@ func main() {
 		return c
 	}
 	i.SetContentFunc(content)
-	playlists, err := gspotify.CurrentUserPlaylists(func(status bool, err error) {
+	playlists, err := spt.CurrentUserPlaylists(func(status bool, err error) {
 		fmt.Println("Done")
 	})
 	contextOpener := func() {
@@ -58,7 +58,7 @@ func main() {
 	i.SetContextOpener(contextOpener)
 	contextHandler := func(start, end, sel int) {
 		for k := start; k <= end; k++ {
-			if err := gspotify.AddAlbumToPlaylist((*albs)[k].ID, (*playlists)[sel].ID); err != nil {
+			if err := spt.AddAlbumToPlaylist((*albs)[k].ID, (*playlists)[sel].ID); err != nil {
 				panic(err)
 			}
 		}
@@ -67,13 +67,17 @@ func main() {
 	i.SetExternalCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
 			r, _ := i.View.GetSelection()
-			if err := gspotify.PlayContext(&(*albs)[r].URI); err != nil {
+			if err := spt.PlayContext(&(*albs)[r].URI); err != nil {
 				panic(err)
 			}
 		}
 		return e
 	})
-	if err := tview.NewApplication().SetRoot(m.Root, true).Run(); err != nil {
+	p, err := ui.NewPlaylistsView()
+	if err != nil {
+		panic(err)
+	}
+	if err := tview.NewApplication().SetRoot(p.Table, true).Run(); err != nil {
 		panic(err)
 	}
 }
