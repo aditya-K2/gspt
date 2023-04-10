@@ -49,7 +49,7 @@ type payload struct {
 	Err   error
 }
 
-func NewClient() (*spotify.Client, error) {
+func InitClient() error {
 	token := &oauth2.Token{}
 
 	// shouldn't be nil if the file doesn't exist.
@@ -83,13 +83,14 @@ func NewClient() (*spotify.Client, error) {
 		payload := <-ch
 
 		if payload.Err != nil {
-			return nil, payload.Err
+			return payload.Err
 		}
 
 		token = payload.Token
 	}
 
-	return spotify.New(auth.Client(context.Background(), token)), nil
+	Client = spotify.New(auth.Client(context.Background(), token))
+	return nil
 }
 
 func completeAuth(w http.ResponseWriter, r *http.Request) {
