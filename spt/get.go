@@ -10,12 +10,12 @@ import (
 type Playlist struct {
 	SnapshotID string
 	ID         spotify.ID
-	Tracks     []spotify.PlaylistTrack
+	Tracks     *[]spotify.PlaylistTrack
 }
 
 type Album struct {
 	spotify.FullAlbum
-	Tracks []spotify.SimpleTrack
+	Tracks *[]spotify.SimpleTrack
 }
 
 type SavedAlbums []spotify.SavedAlbum
@@ -34,81 +34,86 @@ var (
 	PageContinue                           = errors.New("CONTINUE")
 )
 
-func getPlaylistTracks(trackPage *spotify.PlaylistTrackPage) ([]spotify.PlaylistTrack, error) {
-	tracks := make([]spotify.PlaylistTrack, 0)
-	addTracks := func() {
-		tracks = append(tracks, trackPage.Tracks...)
-	}
-	addTracks()
-	for page := 1; ; page++ {
-		if perr := Client.NextPage(ctx(), trackPage); perr == spotify.ErrNoMorePages {
-			break
-		} else if perr != nil {
-			return nil, perr
-		}
-		addTracks()
-	}
-	return tracks, nil
-}
-
-func getAlbumTracks(trackPage *spotify.SimpleTrackPage) ([]spotify.SimpleTrack, error) {
-	tracks := make([]spotify.SimpleTrack, 0)
-	addTracks := func() {
-		tracks = append(tracks, trackPage.Tracks...)
-	}
-	addTracks()
-	for page := 1; ; page++ {
-		if perr := Client.NextPage(ctx(), trackPage); perr == spotify.ErrNoMorePages {
-			break
-		} else if perr != nil {
-			return nil, perr
-		}
-		addTracks()
-	}
-	return tracks, nil
-}
-
-func GetPlaylist(playlistId spotify.ID) (*Playlist, error) {
+// GetPlaylist retrieves a Spotify playlist by its ID and returns a Playlist object.
+// If the playlist is already cached, it returns the cached object.
+// If not cached or if the snapshotID for the playlist changes, it retrieves the playlist from Spotify API and caches it.
+// It uses a background go routine to fetch all pages of tracks for the playlist
+// and appends them to the tracks list in the Playlist object.
+// When done, it sends a true value to the done callback if successful, otherwise an error.
+func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, error) {
 	if fp, err := Client.GetPlaylist(ctx(), playlistId); err != nil {
 		return nil, err
 	} else {
 		if _, ok := playlistCache[fp.ID]; !ok || playlistCache[fp.ID].SnapshotID != fp.SnapshotID {
-			if tracks, err := getPlaylistTracks(&fp.Tracks); err != nil {
-				return nil, err
-			} else {
-				p := &Playlist{
-					fp.SnapshotID,
-					fp.ID,
-					tracks,
-				}
-				playlistCache[fp.ID] = p
-				return p, nil
+			tracks := &[]spotify.PlaylistTrack{}
+			addTracks := func() {
+				*tracks = append(*tracks, fp.Tracks.Tracks...)
 			}
+			addTracks()
+			go func() {
+				for page := 1; ; page++ {
+					if perr := Client.NextPage(ctx(), &fp.Tracks); perr == spotify.ErrNoMorePages {
+						done(true, nil)
+						break
+					} else if perr != nil {
+						done(false, perr)
+						return
+					}
+					addTracks()
+				}
+			}()
+			p := &Playlist{
+				fp.SnapshotID,
+				fp.ID,
+				tracks,
+			}
+			playlistCache[fp.ID] = p
+			return p, nil
 		} else {
 			return playlistCache[fp.ID], nil
 		}
 	}
 }
 
-func GetAlbum(albumID spotify.ID) (*Album, error) {
-	if fa, err := Client.GetAlbum(ctx(), albumID); err != nil {
-		return nil, err
-	} else {
-		if _, ok := albumCache[fa.ID]; !ok {
-			if tracks, err := getAlbumTracks(&fa.Tracks); err != nil {
-				return nil, err
-			} else {
-				p := &Album{
-					*fa,
-					tracks,
-				}
-				albumCache[fa.ID] = p
-				return p, nil
-			}
-		} else {
-			return albumCache[fa.ID], nil
+// GetAlbum retrieves a Spotify album by its ID and returns an Album object.
+// If the album is already cached, it returns the cached object.
+// If not, it retrieves the album from the Spotify API and caches it.
+// It uses a background go routine to fetch all pages of tracks for the album
+// and appends them to the tracks list in the Album object.
+// When done, it sends a true value to the done callback if successful, otherwise an error.
+func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
+	if _, ok := albumCache[albumID]; !ok {
+		fa, err := Client.GetAlbum(ctx(), albumID)
+		if err != nil {
+			return nil, err
 		}
+		tracks := &[]spotify.SimpleTrack{}
+		addTracks := func() {
+			*tracks = append(*tracks, fa.Tracks.Tracks...)
+		}
+		addTracks()
+		go func() {
+			for page := 1; ; page++ {
+				if perr := Client.NextPage(ctx(), &fa.Tracks); perr == spotify.ErrNoMorePages {
+					done(true, nil)
+					break
+				} else if perr != nil {
+					done(false, perr)
+					return
+				}
+				addTracks()
+			}
+		}()
+		p := &Album{
+			*fa,
+			tracks,
+		}
+		albumCache[fa.ID] = p
+		return p, nil
+	} else {
+		return albumCache[albumID], nil
 	}
+
 }
 
 // CurrentUserSavedAlbums Returns the SavedAlbums in a very specific manner.
@@ -132,7 +137,7 @@ func CurrentUserSavedAlbums(done func(status bool, err error)) (*SavedAlbums, er
 					break
 				} else if perr != nil {
 					done(false, perr)
-					break
+					return
 				}
 				addAlbums()
 			}
@@ -162,7 +167,7 @@ func CurrentUserPlaylists(done func(status bool, err error)) (*UserPlaylists, er
 					break
 				} else if perr != nil {
 					done(false, perr)
-					break
+					return
 				}
 				addPlaylists()
 			}
