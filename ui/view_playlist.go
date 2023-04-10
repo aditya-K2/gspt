@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -21,14 +23,15 @@ func (p *PlaylistView) Content() [][]Content {
 	c := make([][]Content, 0)
 	if p.currentPlaylist != nil {
 		if p.currentUserFullPlaylist == nil {
-			c := SendNotificationWithChan("Loading Playlist....")
+			c := SendNotificationWithChan(fmt.Sprintf("Loading %s....", p.currentPlaylist.Name))
 			pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(s bool, e error) {
-				c <- true
-				if !s {
-					SendNotification(e.Error())
-				} else {
-					SendNotification("Playlist Loaded Succesfully")
-				}
+				go func() {
+					if !s {
+						c <- e.Error()
+					} else {
+						c <- "Playlist Loaded Succesfully"
+					}
+				}()
 			})
 			if err != nil {
 				panic(err)
