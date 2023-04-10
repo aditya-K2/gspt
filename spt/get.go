@@ -34,12 +34,13 @@ var (
 	PageContinue                           = errors.New("CONTINUE")
 )
 
-// GetPlaylist retrieves a Spotify playlist by its ID and returns a Playlist object.
-// If the playlist is already cached, it returns the cached object.
-// If not cached or if the snapshotID for the playlist changes, it retrieves the playlist from Spotify API and caches it.
-// It uses a background go routine to fetch all pages of tracks for the playlist
-// and appends them to the tracks list in the Playlist object.
-// When done, it sends a true value to the done callback if successful, otherwise an error.
+// GetPlaylist retrieves a Spotify playlist by its ID and returns a
+// Playlist object. If the playlist is already cached, it returns cached object.
+// If not cached or if the snapshotID for the playlist changes, it retrieves
+// the playlist from Spotify API and caches it. It uses a background go routine
+// to fetch all pages of tracks for the playlist and appends them to the tracks
+// list in the Playlist object. When done, it sends a true value to the done
+// callback if successful, otherwise an error.
 func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, error) {
 	if fp, err := Client.GetPlaylist(ctx(), playlistId); err != nil {
 		return nil, err
@@ -80,7 +81,7 @@ func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, erro
 // If not, it retrieves the album from the Spotify API and caches it.
 // It uses a background go routine to fetch all pages of tracks for the album
 // and appends them to the tracks list in the Album object.
-// When done, it sends a true value to the done callback if successful, otherwise an error.
+// When done, it sends a true value to the done callback if successful
 func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
 	if _, ok := albumCache[albumID]; !ok {
 		fa, err := Client.GetAlbum(ctx(), albumID)
@@ -116,10 +117,11 @@ func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
 
 }
 
-// CurrentUserSavedAlbums Returns the SavedAlbums in a very specific manner.
-// It returns the first page and then starts a go routine in the background
-// and keeps updating the SavedAlbums and sends nil to the provided channel
-// if successful else sends the corresponding error.
+// CurrentUserSavedAlbums returns the SavedAlbums of the current user in a
+// specific manner. It returns the first page and then starts a go routine
+// in the background and keeps updating the SavedAlbums and calls the done
+// function with a status of true and nil error if successful else calls the
+// done function with a status of false and the corresponding error.
 func CurrentUserSavedAlbums(done func(status bool, err error)) (*SavedAlbums, error) {
 	_a := make(SavedAlbums, 0)
 	albums := &_a
@@ -146,10 +148,11 @@ func CurrentUserSavedAlbums(done func(status bool, err error)) (*SavedAlbums, er
 	}
 }
 
-// CurrentUserPlaylists Returns the UserPlaylists in a very specific manner.
-// It returns the first page and then starts a go routine in the background
-// and keeps updating the UserPlaylists and sends nil to the provided channel
-// if successful else sends the corresponding error.
+// CurrentUserPlaylists returns the UserPlaylists of the current user in a
+// specific manner. It returns the first page and then starts a go routine in
+// the background and keeps updating the UserPlaylists and calls the done
+// function with a status of true and nil error if successful else calls the
+// done function with a status of false and the corresponding error.
 func CurrentUserPlaylists(done func(status bool, err error)) (*UserPlaylists, error) {
 	_p := make(UserPlaylists, 0)
 	playlists := &_p
