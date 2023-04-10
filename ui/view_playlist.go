@@ -45,7 +45,7 @@ func (p *PlaylistView) Content() [][]Content {
 	return c
 }
 
-func (p *PlaylistView) ContextOpener(m *Main, s func(s int)) {
+func (p *PlaylistView) ContextOpener(m *Root, s func(s int)) {
 	c := NewMenu()
 	cc := []string{}
 	plist, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
@@ -81,7 +81,7 @@ func (p *PlaylistView) ContextHandler(start, end, sel int) {
 
 func (p *PlaylistView) ExternalInputCapture(e *tcell.EventKey) *tcell.EventKey {
 	if e.Key() == tcell.KeyEnter {
-		r, _ := Ui.MainS.View.GetSelection()
+		r, _ := Ui.Main.View.GetSelection()
 		if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
 			panic(err)
 		}

@@ -7,13 +7,13 @@ import (
 	"github.com/rivo/tview"
 )
 
-type Main struct {
+type Root struct {
 	Root  *tview.Pages
 	after func()
 }
 
-func NewMain() *Main {
-	m := &Main{}
+func NewMain() *Root {
+	m := &Root{}
 
 	Root := tview.NewPages()
 
@@ -21,11 +21,11 @@ func NewMain() *Main {
 	return m
 }
 
-func (m *Main) Primitive(name string, t tview.Primitive) {
+func (m *Root) Primitive(name string, t tview.Primitive) {
 	m.Root.AddPage(name, t, true, true)
 }
 
-func (m *Main) AfterContextClose(f func()) {
+func (m *Root) AfterContextClose(f func()) {
 	m.after = f
 }
 
@@ -36,7 +36,7 @@ type CenteredWidget interface {
 	Size(mw, mh int) (int, int, int, int)
 }
 
-func (m *Main) AddCenteredWidget(t CenteredWidget) {
+func (m *Root) AddCenteredWidget(t CenteredWidget) {
 	p := (t.Primitive())
 	closec := make(chan bool)
 	currentTime := time.Now().String()

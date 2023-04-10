@@ -9,7 +9,7 @@ var (
 
 type View interface {
 	Content() [][]Content
-	ContextOpener(*Main, func(int))
+	ContextOpener(*Root, func(int))
 	ContextKey() rune
 	ContextHandler(start, end, sel int)
 	ExternalInputCapture(e *tcell.EventKey) *tcell.EventKey
