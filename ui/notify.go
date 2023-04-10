@@ -30,9 +30,9 @@ func InitNotifier() {
 // notification Primitive
 type notification struct {
 	*tview.Box
-	Text     string
-	Position int
-	close    chan bool
+	text     string
+	position int
+	msg      chan string
 	timer    time.Duration
 }
 
@@ -76,29 +76,30 @@ func (p *positionArray) Free(i int) {
 func newNotificationWithTimer(s string, t time.Duration) *notification {
 	return &notification{
 		Box:   tview.NewBox(),
-		Text:  s,
+		text:  s,
 		timer: t,
-		close: nil,
+		msg:   nil,
 	}
 }
 
 // Get A Pointer to A Notification Struct with a close channel
-func newNotificationWithChan(s string, c chan bool) *notification {
+func newNotificationWithChan(s string, c chan string) *notification {
 	return &notification{
 		Box:   tview.NewBox(),
-		Text:  s,
-		close: c,
+		text:  s,
+		timer: time.Second / 2,
+		msg:   c,
 	}
 }
 
 // Draw Function for the Notification Primitive
 func (self *notification) Draw(screen tcell.Screen) {
 	termDetails := utils.GetWidth()
-	pos := (self.Position*3 + self.Position + 1)
+	pos := (self.position*3 + self.position + 1)
 
 	var (
 		COL          int = int(termDetails.Col)
-		TEXTLENGTH   int = len(self.Text)
+		TEXTLENGTH   int = len(self.text)
 		HEIGHT       int = 3
 		TextPosition int = 1
 	)
@@ -106,7 +107,7 @@ func (self *notification) Draw(screen tcell.Screen) {
 	self.Box.SetBackgroundColor(tcell.ColorBlack)
 	self.SetRect(COL-(TEXTLENGTH+7), pos, TEXTLENGTH+4, HEIGHT)
 	self.DrawForSubclass(screen, self.Box)
-	tview.Print(screen, self.Text,
+	tview.Print(screen, self.text,
 		COL-(TEXTLENGTH+5), pos+TextPosition, TEXTLENGTH,
 		tview.AlignCenter, tcell.ColorWhite)
 }
@@ -136,17 +137,19 @@ func notify(n *notification) {
 			}
 			npos = posArr.GetNextPosition()
 		}
-		n.Position = npos
+		n.position = npos
 		Ui.Root.Root.AddPage(currentTime, n, false, true)
+		Ui.App.Draw()
 		Ui.App.SetFocus(Ui.Main.Table)
-		if n.close != nil {
-			<-n.close
-		} else {
-			time.Sleep(n.timer)
+		if n.msg != nil {
+			n.text = <-n.msg
+			Ui.App.Draw()
 		}
+		time.Sleep(n.timer)
 		Ui.Root.Root.RemovePage(currentTime)
 		posArr.Free(npos)
 		Ui.App.SetFocus(Ui.Main.Table)
+		Ui.App.Draw()
 	}()
 }
 
@@ -160,8 +163,12 @@ func SendNotificationWithTimer(text string, t time.Duration) {
 	}()
 }
 
-func SendNotificationWithChan(text string) chan bool {
-	close := make(chan bool)
+// SendNotificationWithChan sends a notification that won't be closed unless
+// an update message isn't sent over the channel that it returns. The message
+// string received over the channel is then displayed for half a second and the
+// notification is then removed.
+func SendNotificationWithChan(text string) chan string {
+	close := make(chan string)
 	go func() {
 		c <- newNotificationWithChan(text, close)
 	}()
