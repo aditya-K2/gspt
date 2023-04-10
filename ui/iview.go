@@ -82,7 +82,9 @@ func (i *interactiveView) SelectionHandler(selrow int) {
 	if i.visual {
 		i.toggleVisualMode()
 	}
-	i.contextHandler(i.vrange.Start, i.vrange.End, selrow)
+	if i.contextHandler != nil {
+		i.contextHandler(i.vrange.Start, i.vrange.End, selrow)
+	}
 }
 
 func (i *interactiveView) exitVisualMode() {
@@ -183,8 +185,11 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			return e
 		},
 		"openCtx": func(e *tcell.EventKey) *tcell.EventKey {
-			i.contextOpener()
-			return nil
+			if i.contextOpener != nil {
+				i.contextOpener()
+				return nil
+			}
+			return e
 		},
 	}
 	if val, ok := funcMap[s]; ok {
