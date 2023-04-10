@@ -14,3 +14,8 @@ func AddAlbumToPlaylist(albumId, playlistId spotify.ID) error {
 	_, err = Client.AddTracksToPlaylist(ctx(), playlistId, t...)
 	return err
 }
+
+func AddTracksToPlaylist(playlistId spotify.ID, t ...spotify.ID) error {
+	_, err := Client.AddTracksToPlaylist(ctx(), playlistId, t...)
+	return err
+}
