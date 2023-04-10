@@ -8,17 +8,25 @@ import (
 )
 
 type Main struct {
-	Root *tview.Pages
+	Root  *tview.Pages
+	after func()
 }
 
-func NewMain(t tview.Primitive) *Main {
+func NewMain() *Main {
 	m := &Main{}
 
 	Root := tview.NewPages()
-	Root.AddPage("iview", t, true, true)
 
 	m.Root = Root
 	return m
+}
+
+func (m *Main) Primitive(name string, t tview.Primitive) {
+	m.Root.AddPage(name, t, true, true)
+}
+
+func (m *Main) AfterContextClose(f func()) {
+	m.after = f
 }
 
 type CenteredWidget interface {
@@ -37,6 +45,9 @@ func (m *Main) AddCenteredWidget(t CenteredWidget) {
 
 	closeCtx := func() {
 		m.Root.RemovePage(currentTime)
+		if m.after != nil {
+			m.after()
+		}
 	}
 	drawCtx := func() {
 		m.Root.AddPage(currentTime, t.Primitive(), false, true)
