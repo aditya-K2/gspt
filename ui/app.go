@@ -19,7 +19,7 @@ type Application struct {
 	Navbar         *tview.Table
 	SearchBar      *tview.Box
 	ProgressBar    *tview.Box
-	Pages          *tview.Pages
+	Root           *Main
 	ImagePreviewer *tview.Box
 }
 
@@ -95,10 +95,7 @@ func NewApplication() *Application {
 		AddItem(searchBarFlex, 0, 8, false).
 		AddItem(pBar, 5, 1, false)
 
-	rootPages := tview.NewPages()
-	rootPages.AddPage("Main", MainFlex, true, true)
-
-	Main.Primitive("root", rootPages)
+	Main.Primitive("Main", MainFlex)
 	App.EnableMouse(true)
 	App.SetRoot(Main.Root, true).SetFocus(playlistNav.Table)
 
@@ -108,7 +105,7 @@ func NewApplication() *Application {
 		Navbar:         Navbar,
 		SearchBar:      searchbar,
 		ProgressBar:    pBar,
-		Pages:          rootPages,
+		Root:           Main,
 		ImagePreviewer: imagePreviewer,
 	}
 
