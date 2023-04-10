@@ -247,16 +247,18 @@ func GetCell(text string, st tcell.Style) *tview.TableCell {
 func (i *interactiveView) update() {
 	i.Table.Clear()
 	s := i.content()
+	_, _, w, _ := i.Table.GetInnerRect()
 	for x := range s {
 		b := ""
 		if i.visual && (x >= i.vrange.Start && x <= i.vrange.End) {
 			b = "[blue::]█[::]"
 		}
+		n := len(s[x])
 		i.Table.SetCell(x, 0,
 			GetCell(b, Defaultstyle))
 		for y := range s[x] {
 			i.Table.SetCell(x, y+1,
-				GetCell(s[x][y].Content, s[x][y].Style))
+				GetCell(s[x][y].Content, s[x][y].Style).SetMaxWidth(w/n).SetExpansion(1))
 		}
 	}
 }
