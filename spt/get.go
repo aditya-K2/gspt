@@ -71,6 +71,7 @@ func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, erro
 			playlistCache[fp.ID] = p
 			return p, nil
 		} else {
+			done(true, nil)
 			return playlistCache[fp.ID], nil
 		}
 	}
@@ -112,6 +113,7 @@ func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
 		albumCache[fa.ID] = p
 		return p, nil
 	} else {
+		done(true, nil)
 		return albumCache[albumID], nil
 	}
 
