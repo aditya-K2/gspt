@@ -7,27 +7,27 @@ import (
 )
 
 type PlaylistView struct {
-	CurrentPlaylist         *spotify.SimplePlaylist
-	CurrentUserFullPlaylist *spt.Playlist
+	currentPlaylist         *spotify.SimplePlaylist
+	currentUserFullPlaylist *spt.Playlist
 	I                       *interactiveView
 }
 
 func (p *PlaylistView) SetPlaylist(pl *spotify.SimplePlaylist) {
-	p.CurrentPlaylist = pl
-	p.CurrentUserFullPlaylist = nil
+	p.currentPlaylist = pl
+	p.currentUserFullPlaylist = nil
 }
 
 func (p *PlaylistView) Content() [][]Content {
 	c := make([][]Content, 0)
-	if p.CurrentPlaylist != nil {
-		if p.CurrentUserFullPlaylist == nil {
-			pf, err := spt.GetPlaylist(p.CurrentPlaylist.ID, func(bool, error) {})
+	if p.currentPlaylist != nil {
+		if p.currentUserFullPlaylist == nil {
+			pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(bool, error) {})
 			if err != nil {
 				panic(err)
 			}
-			p.CurrentUserFullPlaylist = pf
+			p.currentUserFullPlaylist = pf
 		}
-		for _, v := range *(*p.CurrentUserFullPlaylist).Tracks {
+		for _, v := range *(*p.currentUserFullPlaylist).Tracks {
 			c = append(c, []Content{
 				{Content: v.Track.Name, Style: Defaultstyle.Foreground(tcell.ColorBlue)},
 				{Content: v.Track.Artists[0].Name, Style: Defaultstyle.Foreground(tcell.ColorPink)},
@@ -69,10 +69,10 @@ func (p *PlaylistView) ContextHandler(start, end, sel int) {
 	if err != nil {
 		panic(err)
 	}
-	p.CurrentPlaylist = &(*ap)[sel]
+	p.currentPlaylist = &(*ap)[sel]
 	tracks := make([]spotify.ID, 0)
 	for k := start; k <= end; k++ {
-		tracks = append(tracks, (*(*p.CurrentUserFullPlaylist).Tracks)[k].Track.ID)
+		tracks = append(tracks, (*(*p.currentUserFullPlaylist).Tracks)[k].Track.ID)
 	}
 	if err := spt.AddTracksToPlaylist((*ap)[sel].ID, tracks...); err != nil {
 		panic(err)
@@ -82,7 +82,7 @@ func (p *PlaylistView) ContextHandler(start, end, sel int) {
 func (p *PlaylistView) ExternalInputCapture(e *tcell.EventKey) *tcell.EventKey {
 	if e.Key() == tcell.KeyEnter {
 		r, _ := Ui.MainS.View.GetSelection()
-		if err := spt.PlaySongWithContext(&p.CurrentPlaylist.URI, r); err != nil {
+		if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
 			panic(err)
 		}
 	}
