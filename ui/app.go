@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -16,7 +18,7 @@ var (
 type Application struct {
 	App            *tview.Application
 	Main           *interactiveView
-	Navbar         *tview.Table
+	NavMenu        *NavMenu
 	SearchBar      *tview.Box
 	ProgressBar    *tview.Box
 	Root           *Root
@@ -42,16 +44,21 @@ func NewApplication() *Application {
 	mains.SetContextHandler(GetCurrentView().ContextHandler)
 	mains.SetExternalCapture(GetCurrentView().ExternalInputCapture)
 
-	Navbar := tview.NewTable()
+	NavMenu := newNavMenu([]navItem{
+		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Albums"); return nil }, nil)},
+		{"Artists", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Artists"); return nil }, nil)},
+		{"Liked Songs", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Liked Songs"); return nil }, nil)},
+		{"Recently Played", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Recently Played"); return nil }, nil)},
+	})
 	imagePreviewer := tview.NewBox()
 
 	imagePreviewer.SetBorder(true)
 
-	Navbar.SetBackgroundColor(tcell.ColorDefault)
+	NavMenu.Table.SetBackgroundColor(tcell.ColorDefault)
 	imagePreviewer.SetBackgroundColor(tcell.ColorDefault)
 
-	Navbar.SetBorder(true)
-	Navbar.SetSelectable(true, false)
+	NavMenu.Table.SetBorder(true)
+	NavMenu.Table.SetSelectable(true, false)
 
 	done := func(s bool, err error) {
 		if s {
@@ -76,10 +83,11 @@ func NewApplication() *Application {
 	}
 	playlistNav.MapActions(map[tcell.Key]string{
 		tcell.KeyEnter: "openEntry",
+		tcell.KeyCtrlP: "playEntry",
 	})
 
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(Navbar, 6, 3, false).
+		AddItem(NavMenu.Table, 6, 3, false).
 		AddItem(playlistNav.Table, 0, 6, false).
 		AddItem(imagePreviewer, 9, 3, false)
 
@@ -102,7 +110,7 @@ func NewApplication() *Application {
 	Ui = &Application{
 		App:            App,
 		Main:           mains,
-		Navbar:         Navbar,
+		NavMenu:        NavMenu,
 		SearchBar:      searchbar,
 		ProgressBar:    pBar,
 		Root:           Main,

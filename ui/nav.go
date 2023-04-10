@@ -6,6 +6,38 @@ import (
 	"github.com/rivo/tview"
 )
 
+type NavMenu struct {
+	Table *tview.Table
+	m     []navItem
+}
+
+type navItem struct {
+	name   string
+	action *Action
+}
+
+func newNavMenu(m []navItem) *NavMenu {
+	T := tview.NewTable()
+	n := &NavMenu{T, m}
+	T.SetDrawFunc(func(tcell.Screen, int, int, int, int) (int, int, int, int) {
+		for k := range n.m {
+			T.SetCell(k, 0,
+				GetCell(n.m[k].name, tcell.StyleDefault.Foreground(tcell.ColorRed)))
+		}
+		return T.GetInnerRect()
+	})
+	T.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
+		if e.Key() == tcell.KeyEnter {
+			r, _ := T.GetSelection()
+			if r < len(n.m) {
+				return (*n.m[r].action).Func()(e)
+			}
+		}
+		return e
+	})
+	return n
+}
+
 type PlaylistNav struct {
 	Table     *tview.Table
 	Playlists *spt.UserPlaylists
