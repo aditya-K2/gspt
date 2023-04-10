@@ -99,7 +99,7 @@ func NewApplication() *Application {
 	App.EnableMouse(true)
 	App.SetRoot(Main.Root, true).SetFocus(playlistNav.Table)
 
-	return &Application{
+	Ui = &Application{
 		App:            App,
 		MainS:          mainS,
 		Navbar:         Navbar,
@@ -109,4 +109,5 @@ func NewApplication() *Application {
 		ImagePreviewer: imagePreviewer,
 	}
 
+	return Ui
 }
