@@ -8,6 +8,7 @@ import (
 func main() {
 	var err error
 	spt.InitClient()
+	ui.InitNotifier()
 	if err != nil {
 		panic(err)
 	}

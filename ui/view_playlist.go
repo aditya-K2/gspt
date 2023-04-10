@@ -21,7 +21,15 @@ func (p *PlaylistView) Content() [][]Content {
 	c := make([][]Content, 0)
 	if p.currentPlaylist != nil {
 		if p.currentUserFullPlaylist == nil {
-			pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(bool, error) {})
+			c := SendNotificationWithChan("Loading Playlist....")
+			pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(s bool, e error) {
+				c <- true
+				if !s {
+					SendNotification(e.Error())
+				} else {
+					SendNotification("Playlist Loaded Succesfully")
+				}
+			})
 			if err != nil {
 				panic(err)
 			}
