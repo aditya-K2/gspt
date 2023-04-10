@@ -81,7 +81,7 @@ func (p *PlaylistView) ContextHandler(start, end, sel int) {
 
 func (p *PlaylistView) ExternalInputCapture(e *tcell.EventKey) *tcell.EventKey {
 	if e.Key() == tcell.KeyEnter {
-		r, _ := Ui.Main.View.GetSelection()
+		r, _ := Ui.Main.Table.GetSelection()
 		if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
 			panic(err)
 		}

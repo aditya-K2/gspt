@@ -35,7 +35,7 @@ type interactiveView struct {
 	contextOpener   func()
 	content         func() [][]Content
 	externalCapture func(e *tcell.EventKey) *tcell.EventKey
-	View            *tview.Table
+	Table           *tview.Table
 }
 
 func NewInteractiveView() *interactiveView {
@@ -44,7 +44,7 @@ func NewInteractiveView() *interactiveView {
 	view.SetBackgroundColor(tcell.ColorDefault)
 
 	i := &interactiveView{
-		View:   view,
+		Table:  view,
 		vrange: &_range{},
 		visual: false,
 	}
@@ -52,7 +52,7 @@ func NewInteractiveView() *interactiveView {
 	view.SetDrawFunc(func(s tcell.Screen,
 		x, y, width, height int) (int, int, int, int) {
 		i.update()
-		return i.View.GetInnerRect()
+		return i.Table.GetInnerRect()
 	})
 	view.SetInputCapture(i.capture)
 	return i
@@ -87,15 +87,15 @@ func (i *interactiveView) SelectionHandler(selrow int) {
 
 func (i *interactiveView) exitVisualMode() {
 	if i.vrange.Start < i.baseSel {
-		i.View.Select(i.vrange.Start, -1)
+		i.Table.Select(i.vrange.Start, -1)
 	} else if i.vrange.End > i.baseSel {
-		i.View.Select(i.vrange.End, -1)
+		i.Table.Select(i.vrange.End, -1)
 	}
 	i.baseSel = -1
 }
 
 func (i *interactiveView) enterVisualMode() {
-	row, _ := i.View.GetSelection()
+	row, _ := i.Table.GetSelection()
 	i.baseSel = row
 	i.vrange.Start, i.vrange.End = row, row
 }
@@ -118,11 +118,11 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 		if vr.End <= -1 {
 			vr.End = 0
 		}
-		if vr.End >= i.View.GetRowCount() {
-			vr.End = i.View.GetRowCount() - 1
+		if vr.End >= i.Table.GetRowCount() {
+			vr.End = i.Table.GetRowCount() - 1
 		}
-		if vr.Start >= i.View.GetRowCount() {
-			vr.Start = i.View.GetRowCount() - 1
+		if vr.Start >= i.Table.GetRowCount() {
+			vr.Start = i.Table.GetRowCount() - 1
 		}
 	}
 	funcMap := map[string]func(e *tcell.EventKey) *tcell.EventKey{
@@ -168,7 +168,7 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			if i.visual {
 				i.vrange.Start = 0
 				i.vrange.End = i.baseSel
-				i.View.ScrollToBeginning()
+				i.Table.ScrollToBeginning()
 				return nil
 			}
 			return e
@@ -176,8 +176,8 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 		"bottom": func(e *tcell.EventKey) *tcell.EventKey {
 			if i.visual {
 				i.vrange.Start = i.baseSel
-				i.vrange.End = i.View.GetRowCount() - 1
-				i.View.ScrollToEnd()
+				i.vrange.End = i.Table.GetRowCount() - 1
+				i.Table.ScrollToEnd()
 				return nil
 			}
 			return e
@@ -240,17 +240,17 @@ func GetCell(text string, st tcell.Style) *tview.TableCell {
 }
 
 func (i *interactiveView) update() {
-	i.View.Clear()
+	i.Table.Clear()
 	s := i.content()
 	for x := range s {
 		b := ""
 		if i.visual && (x >= i.vrange.Start && x <= i.vrange.End) {
 			b = "[blue::]█[::]"
 		}
-		i.View.SetCell(x, 0,
+		i.Table.SetCell(x, 0,
 			GetCell(b, Defaultstyle))
 		for y := range s[x] {
-			i.View.SetCell(x, y+1,
+			i.Table.SetCell(x, y+1,
 				GetCell(s[x][y].Content, s[x][y].Style))
 		}
 	}

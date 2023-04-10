@@ -31,7 +31,7 @@ func NewApplication() *Application {
 	searchbar := tview.NewBox().SetBorder(true).SetTitle("SEARCH").SetBackgroundColor(tcell.ColorDefault)
 	SetCurrentView(PView)
 	mains := NewInteractiveView()
-	mains.View.SetBorder(true)
+	mains.Table.SetBorder(true)
 
 	mains.SetContentFunc(GetCurrentView().Content)
 	mains.SetContextKey(GetCurrentView().ContextKey())
@@ -67,10 +67,10 @@ func NewApplication() *Application {
 	PlaylistActions = map[string]*Action{
 		"playEntry": NewAction(playlistNav.PlaySelectEntry, nil),
 		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			Main.AfterContextClose(func() { App.SetFocus(mains.View) })
+			Main.AfterContextClose(func() { App.SetFocus(mains.Table) })
 			r, _ := playlistNav.Table.GetSelection()
 			PView.SetPlaylist(&(*playlistNav.Playlists)[r])
-			App.SetFocus(mains.View)
+			App.SetFocus(mains.Table)
 			return nil
 		}, nil),
 	}
@@ -85,7 +85,7 @@ func NewApplication() *Application {
 
 	sNavExpViewFlex := tview.NewFlex().
 		AddItem(searchNavFlex, 17, 1, false).
-		AddItem(mains.View, 0, 4, false)
+		AddItem(mains.Table, 0, 4, false)
 
 	searchBarFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(searchbar, 3, 1, false).
