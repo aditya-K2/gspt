@@ -23,7 +23,8 @@ func NewMenu() *menu {
 	menu := tview.NewTable()
 	menu.SetBorder(true)
 	menu.SetBorderPadding(1, 1, 1, 1)
-	menu.SetBorderStyle(tcell.StyleDefault.Foreground(tcell.ColorBlack))
+	menu.SetBorderStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite))
+	menu.SetBackgroundColor(tcell.ColorDefault)
 	menu.SetSelectable(true, false)
 	c.Menu = menu
 

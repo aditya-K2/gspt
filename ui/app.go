@@ -22,7 +22,7 @@ var (
 	TimeStyle        = tcell.StyleDefault.Foreground(tcell.ColorOrange)
 	PlaylistNavStyle = tcell.StyleDefault.Foreground(tcell.ColorCoral)
 	NavStyle         = tcell.StyleDefault.Foreground(tcell.ColorPapayaWhip).Background(tcell.ColorBlack)
-	ContextMenuStyle = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
+	ContextMenuStyle = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorDefault).Bold(true)
 )
 
 type Application struct {
