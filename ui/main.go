@@ -27,15 +27,10 @@ type _range struct {
 }
 
 type interactiveView struct {
-	visual          bool
-	vrange          *_range
-	baseSel         int
-	contextKey      rune
-	contextHandler  func(start, end, selrow int)
-	contextOpener   func()
-	content         func() [][]Content
-	externalCapture func(e *tcell.EventKey) *tcell.EventKey
-	Table           *tview.Table
+	visual  bool
+	vrange  *_range
+	baseSel int
+	Table   *tview.Table
 }
 
 func NewInteractiveView() *interactiveView {
@@ -58,32 +53,12 @@ func NewInteractiveView() *interactiveView {
 	return i
 }
 
-func (i *interactiveView) SetContentFunc(f func() [][]Content) {
-	i.content = f
-}
-
-func (i *interactiveView) SetExternalCapture(f func(e *tcell.EventKey) *tcell.EventKey) {
-	i.externalCapture = f
-}
-
-func (i *interactiveView) SetContextKey(contextKey rune) {
-	i.contextKey = contextKey
-}
-
-func (i *interactiveView) SetContextOpener(f func()) {
-	i.contextOpener = f
-}
-
-func (i *interactiveView) SetContextHandler(f func(start, end, selrow int)) {
-	i.contextHandler = f
-}
-
 func (i *interactiveView) SelectionHandler(selrow int) {
 	if i.visual {
 		i.toggleVisualMode()
 	}
-	if i.contextHandler != nil {
-		i.contextHandler(i.vrange.Start, i.vrange.End, selrow)
+	if GetCurrentView().ContextHandler() != nil {
+		GetCurrentView().ContextHandler()(i.vrange.Start, i.vrange.End, selrow)
 	}
 }
 
@@ -185,8 +160,8 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			return e
 		},
 		"openCtx": func(e *tcell.EventKey) *tcell.EventKey {
-			if i.contextOpener != nil {
-				i.contextOpener()
+			if GetCurrentView().ContextOpener() != nil {
+				GetCurrentView().ContextOpener()(Ui.Root, Ui.Main.SelectionHandler)
 				return nil
 			}
 			return e
@@ -222,7 +197,7 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		{
 			return i.getHandler("bottom")(e)
 		}
-	case i.contextKey:
+	case GetCurrentView().ContextKey():
 		{
 			return i.getHandler("openCtx")(e)
 		}
@@ -230,8 +205,8 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		{
 			if e.Key() == tcell.KeyEscape {
 				return i.getHandler("exitvisual")(e)
-			} else if i.externalCapture != nil {
-				return i.externalCapture(e)
+			} else if GetCurrentView().ExternalInputCapture() != nil {
+				return GetCurrentView().ExternalInputCapture()(e)
 			}
 			return e
 		}
@@ -246,21 +221,23 @@ func GetCell(text string, st tcell.Style) *tview.TableCell {
 
 func (i *interactiveView) update() {
 	i.Table.Clear()
-	s := i.content()
-	_, _, w, _ := i.Table.GetInnerRect()
-	for x := range s {
-		b := ""
-		fg := tcell.ColorDefault
-		if i.visual && (x >= i.vrange.Start && x <= i.vrange.End) {
-			b = "[blue::]█[::]"
-			fg = tcell.ColorBlue
-		}
-		n := len(s[x])
-		i.Table.SetCell(x, 0,
-			GetCell(b, tcell.StyleDefault.Foreground(fg).Background(fg)))
-		for y := range s[x] {
-			i.Table.SetCell(x, y+1,
-				GetCell(s[x][y].Content, s[x][y].Style).SetMaxWidth(w/n).SetExpansion(1))
+	if GetCurrentView().Content() != nil {
+		s := GetCurrentView().Content()()
+		_, _, w, _ := i.Table.GetInnerRect()
+		for x := range s {
+			b := ""
+			fg := tcell.ColorDefault
+			if i.visual && (x >= i.vrange.Start && x <= i.vrange.End) {
+				b = "[blue::]█[::]"
+				fg = tcell.ColorBlue
+			}
+			n := len(s[x])
+			i.Table.SetCell(x, 0,
+				GetCell(b, tcell.StyleDefault.Foreground(fg).Background(fg)))
+			for y := range s[x] {
+				i.Table.SetCell(x, y+1,
+					GetCell(s[x][y].Content, s[x][y].Style).SetMaxWidth(w/n).SetExpansion(1))
+			}
 		}
 	}
 }

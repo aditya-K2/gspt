@@ -6,15 +6,15 @@ var (
 	CurrentView  View
 	playlistView = &PlaylistView{}
 	albumView    = &AlbumView{}
-	albumSView   = &AlbumsView{}
+	albumsView   = &AlbumsView{}
 )
 
 type View interface {
-	Content() [][]Content
-	ContextOpener(*Root, func(int))
+	Content() func() [][]Content
+	ContextOpener() func(*Root, func(int))
 	ContextKey() rune
-	ContextHandler(start, end, sel int)
-	ExternalInputCapture(e *tcell.EventKey) *tcell.EventKey
+	ContextHandler() func(start, end, sel int)
+	ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey
 	Name() string
 }
 

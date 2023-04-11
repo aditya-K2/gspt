@@ -19,84 +19,92 @@ func (p *PlaylistView) SetPlaylist(pl *spotify.SimplePlaylist) {
 	p.currentUserFullPlaylist = nil
 }
 
-func (p *PlaylistView) Content() [][]Content {
-	c := make([][]Content, 0)
-	if p.currentPlaylist != nil {
-		if p.currentUserFullPlaylist == nil {
-			msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", p.currentPlaylist.Name))
-			pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(s bool, e error) {
-				go func() {
-					if !s {
-						msg <- e.Error()
-					} else {
-						msg <- "Playlist Loaded Succesfully"
-					}
-				}()
-			})
-			if err != nil {
-				SendNotification(fmt.Sprintf("Error Retrieving %s", p.currentPlaylist.Name))
-				return [][]Content{}
+func (p *PlaylistView) Content() func() [][]Content {
+	return func() [][]Content {
+		c := make([][]Content, 0)
+		if p.currentPlaylist != nil {
+			if p.currentUserFullPlaylist == nil {
+				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", p.currentPlaylist.Name))
+				pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(s bool, e error) {
+					go func() {
+						if !s {
+							msg <- e.Error()
+						} else {
+							msg <- "Playlist Loaded Succesfully"
+						}
+					}()
+				})
+				if err != nil {
+					SendNotification(fmt.Sprintf("Error Retrieving %s", p.currentPlaylist.Name))
+					return [][]Content{}
+				}
+				p.currentUserFullPlaylist = pf
 			}
-			p.currentUserFullPlaylist = pf
+			for _, v := range *(*p.currentUserFullPlaylist).Tracks {
+				c = append(c, []Content{
+					{Content: v.Track.Name, Style: Defaultstyle.Foreground(tcell.ColorBlue)},
+					{Content: v.Track.Artists[0].Name, Style: Defaultstyle.Foreground(tcell.ColorPink)},
+					{Content: v.Track.Album.Name, Style: Defaultstyle.Foreground(tcell.ColorGreen)},
+				})
+			}
 		}
-		for _, v := range *(*p.currentUserFullPlaylist).Tracks {
-			c = append(c, []Content{
-				{Content: v.Track.Name, Style: Defaultstyle.Foreground(tcell.ColorBlue)},
-				{Content: v.Track.Artists[0].Name, Style: Defaultstyle.Foreground(tcell.ColorPink)},
-				{Content: v.Track.Album.Name, Style: Defaultstyle.Foreground(tcell.ColorGreen)},
-			})
-		}
-	}
-	return c
-}
-
-func (p *PlaylistView) ContextOpener(m *Root, s func(s int)) {
-	c := NewMenu()
-	cc := []string{}
-	plist, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
-	if err != nil {
-		SendNotification("Error Retrieving User Playlists")
-		return
-	}
-	for _, v := range *(plist) {
-		cc = append(cc, v.Name)
-	}
-	c.Content(cc)
-	c.Title("Add to Playlist")
-	c.SetSelectionHandler(s)
-	m.AddCenteredWidget(c)
-}
-
-func (p *PlaylistView) ContextHandler(start, end, sel int) {
-	// Assuming that there are no external effects on the user's playlists
-	// (i.e Any Creation or Deletion of Playlists while the context Menu is
-	// open
-	userPlaylists, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
-	if err != nil {
-		SendNotification("Error Retrieving User Playlists")
-		return
-	}
-	tracks := make([]spotify.ID, 0)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, (*(*p.currentUserFullPlaylist).Tracks)[k].Track.ID)
-	}
-	aerr := spt.AddTracksToPlaylist((*userPlaylists)[sel].ID, tracks...)
-	if aerr != nil {
-		SendNotification(aerr.Error())
-		return
-	} else {
-		SendNotification(fmt.Sprintf("Added %d tracks to %s", len(tracks), (*userPlaylists)[sel].Name))
+		return c
 	}
 }
 
-func (p *PlaylistView) ExternalInputCapture(e *tcell.EventKey) *tcell.EventKey {
-	if e.Key() == tcell.KeyEnter {
-		r, _ := Ui.Main.Table.GetSelection()
-		if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
-			SendNotification(err.Error())
+func (p *PlaylistView) ContextOpener() func(m *Root, s func(s int)) {
+	return func(m *Root, s func(s int)) {
+		c := NewMenu()
+		cc := []string{}
+		plist, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
+		if err != nil {
+			SendNotification("Error Retrieving User Playlists")
+			return
+		}
+		for _, v := range *(plist) {
+			cc = append(cc, v.Name)
+		}
+		c.Content(cc)
+		c.Title("Add to Playlist")
+		c.SetSelectionHandler(s)
+		m.AddCenteredWidget(c)
+	}
+}
+
+func (p *PlaylistView) ContextHandler() func(start, end, sel int) {
+	return func(start, end, sel int) {
+		// Assuming that there are no external effects on the user's playlists
+		// (i.e Any Creation or Deletion of Playlists while the context Menu is
+		// open
+		userPlaylists, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
+		if err != nil {
+			SendNotification("Error Retrieving User Playlists")
+			return
+		}
+		tracks := make([]spotify.ID, 0)
+		for k := start; k <= end; k++ {
+			tracks = append(tracks, (*(*p.currentUserFullPlaylist).Tracks)[k].Track.ID)
+		}
+		aerr := spt.AddTracksToPlaylist((*userPlaylists)[sel].ID, tracks...)
+		if aerr != nil {
+			SendNotification(aerr.Error())
+			return
+		} else {
+			SendNotification(fmt.Sprintf("Added %d tracks to %s", len(tracks), (*userPlaylists)[sel].Name))
 		}
 	}
-	return e
+}
+
+func (p *PlaylistView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
+	return func(e *tcell.EventKey) *tcell.EventKey {
+		if e.Key() == tcell.KeyEnter {
+			r, _ := Ui.Main.Table.GetSelection()
+			if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
+				SendNotification(err.Error())
+			}
+		}
+		return e
+	}
 }
 
 func (p *PlaylistView) ContextKey() rune {
