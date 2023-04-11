@@ -35,17 +35,8 @@ func NewApplication() *Application {
 	Main := NewInteractiveView()
 	Main.Table.SetBorder(true)
 
-	Main.SetContentFunc(GetCurrentView().Content)
-	Main.SetContextKey(GetCurrentView().ContextKey())
-	f := func() {
-		GetCurrentView().ContextOpener(Root, Main.SelectionHandler)
-	}
-	Main.SetContextOpener(f)
-	Main.SetContextHandler(GetCurrentView().ContextHandler)
-	Main.SetExternalCapture(GetCurrentView().ExternalInputCapture)
-
 	NavMenu := newNavMenu([]navItem{
-		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Albums"); return nil }, nil)},
+		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey { SetCurrentView(albumsView); return nil }, nil)},
 		{"Artists", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Artists"); return nil }, nil)},
 		{"Liked Songs", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Liked Songs"); return nil }, nil)},
 		{"Recently Played", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Recently Played"); return nil }, nil)},
