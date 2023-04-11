@@ -54,7 +54,12 @@ func NewApplication() *Application {
 			App.SetFocus(Main.Table)
 			return nil
 		}, nil)},
-		{"Recently Played", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Recently Played"); return nil }, nil)},
+		{"Recently Played", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			recentlyPlayedView.RefreshState()
+			SetCurrentView(recentlyPlayedView)
+			App.SetFocus(Main.Table)
+			return nil
+		}, nil)},
 	})
 	imagePreviewer := tview.NewBox()
 

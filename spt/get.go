@@ -212,3 +212,7 @@ func CurrentUserSavedTracks(done func(status bool, err error)) (*LikedSongs, err
 		return playlists, nil
 	}
 }
+
+func RecentlyPlayed() ([]spotify.RecentlyPlayedItem, error) {
+	return Client.PlayerRecentlyPlayed(ctx())
+}
