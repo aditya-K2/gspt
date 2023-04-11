@@ -28,21 +28,21 @@ type Application struct {
 func NewApplication() *Application {
 
 	App := tview.NewApplication()
-	Main := NewMain()
+	Root := NewRoot()
 	pBar := tview.NewBox().SetBorder(true).SetTitle("PROGRESS").SetBackgroundColor(tcell.ColorDefault)
 	searchbar := tview.NewBox().SetBorder(true).SetTitle("SEARCH").SetBackgroundColor(tcell.ColorDefault)
-	SetCurrentView(PView)
-	mains := NewInteractiveView()
-	mains.Table.SetBorder(true)
+	SetCurrentView(playlistView)
+	Main := NewInteractiveView()
+	Main.Table.SetBorder(true)
 
-	mains.SetContentFunc(GetCurrentView().Content)
-	mains.SetContextKey(GetCurrentView().ContextKey())
+	Main.SetContentFunc(GetCurrentView().Content)
+	Main.SetContextKey(GetCurrentView().ContextKey())
 	f := func() {
-		GetCurrentView().ContextOpener(Main, mains.SelectionHandler)
+		GetCurrentView().ContextOpener(Root, Main.SelectionHandler)
 	}
-	mains.SetContextOpener(f)
-	mains.SetContextHandler(GetCurrentView().ContextHandler)
-	mains.SetExternalCapture(GetCurrentView().ExternalInputCapture)
+	Main.SetContextOpener(f)
+	Main.SetContextHandler(GetCurrentView().ContextHandler)
+	Main.SetExternalCapture(GetCurrentView().ExternalInputCapture)
 
 	NavMenu := newNavMenu([]navItem{
 		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Albums"); return nil }, nil)},
@@ -74,10 +74,10 @@ func NewApplication() *Application {
 	PlaylistActions = map[string]*Action{
 		"playEntry": NewAction(playlistNav.PlaySelectEntry, nil),
 		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			Main.AfterContextClose(func() { App.SetFocus(mains.Table) })
+			Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 			r, _ := playlistNav.Table.GetSelection()
-			PView.SetPlaylist(&(*playlistNav.Playlists)[r])
-			App.SetFocus(mains.Table)
+			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
+			App.SetFocus(Main.Table)
 			return nil
 		}, nil),
 	}
@@ -93,7 +93,7 @@ func NewApplication() *Application {
 
 	sNavExpViewFlex := tview.NewFlex().
 		AddItem(searchNavFlex, 17, 1, false).
-		AddItem(mains.Table, 0, 4, false)
+		AddItem(Main.Table, 0, 4, false)
 
 	searchBarFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(searchbar, 3, 1, false).
@@ -103,17 +103,17 @@ func NewApplication() *Application {
 		AddItem(searchBarFlex, 0, 8, false).
 		AddItem(pBar, 5, 1, false)
 
-	Main.Primitive("Main", MainFlex)
+	Root.Primitive("Main", MainFlex)
 	App.EnableMouse(true)
-	App.SetRoot(Main.Root, true).SetFocus(playlistNav.Table)
+	App.SetRoot(Root.Root, true).SetFocus(playlistNav.Table)
 
 	Ui = &Application{
 		App:            App,
-		Main:           mains,
+		Main:           Main,
 		NavMenu:        NavMenu,
 		SearchBar:      searchbar,
 		ProgressBar:    pBar,
-		Root:           Main,
+		Root:           Root,
 		ImagePreviewer: imagePreviewer,
 	}
 

@@ -76,7 +76,6 @@ func (p *PlaylistView) ContextHandler(start, end, sel int) {
 		SendNotification("Error Retrieving User Playlists")
 		return
 	}
-	p.currentPlaylist = &(*userPlaylists)[sel]
 	tracks := make([]spotify.ID, 0)
 	for k := start; k <= end; k++ {
 		tracks = append(tracks, (*(*p.currentUserFullPlaylist).Tracks)[k].Track.ID)
@@ -86,7 +85,7 @@ func (p *PlaylistView) ContextHandler(start, end, sel int) {
 		SendNotification(aerr.Error())
 		return
 	} else {
-		SendNotification(fmt.Sprintf("Added %d tracks to %s", len(tracks), p.currentPlaylist.Name))
+		SendNotification(fmt.Sprintf("Added %d tracks to %s", len(tracks), (*userPlaylists)[sel].Name))
 	}
 }
 

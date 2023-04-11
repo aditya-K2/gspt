@@ -12,7 +12,7 @@ type Root struct {
 	after func()
 }
 
-func NewMain() *Root {
+func NewRoot() *Root {
 	m := &Root{}
 
 	Root := tview.NewPages()
