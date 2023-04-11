@@ -44,7 +44,7 @@ func (c *menu) Size(mw, mh int) (int, int, int, int) {
 func (c *menu) ContentHandler() {
 	for k := range c.content {
 		c.Menu.SetCell(k, 0,
-			GetCell(c.content[k], Defaultstyle))
+			GetCell(c.content[k], ContextMenuStyle))
 	}
 }
 

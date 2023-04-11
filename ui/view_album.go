@@ -33,9 +33,9 @@ func (a *AlbumView) Content() func() [][]Content {
 			}
 			for _, v := range *(*a.currentFullAlbum).Tracks {
 				ca := make([]Content, 0)
-				ca = append(ca, Content{v.Name, tcell.StyleDefault.Foreground(tcell.ColorBlue)})
-				ca = append(ca, Content{v.Artists[0].Name, tcell.StyleDefault.Foreground(tcell.ColorPink)})
-				ca = append(ca, Content{a.currentAlbum.Name, tcell.StyleDefault.Foreground(tcell.ColorGreen)})
+				ca = append(ca, Content{v.Name, TrackStyle})
+				ca = append(ca, Content{v.Artists[0].Name, ArtistStyle})
+				ca = append(ca, Content{a.currentAlbum.Name, AlbumStyle})
 				c = append(c, ca)
 			}
 		}

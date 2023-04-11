@@ -15,6 +15,16 @@ var (
 	Ui   *Application
 )
 
+var (
+	TrackStyle       = tcell.StyleDefault.Foreground(tcell.ColorBlue)
+	AlbumStyle       = tcell.StyleDefault.Foreground(tcell.ColorGreen)
+	ArtistStyle      = tcell.StyleDefault.Foreground(tcell.ColorPink)
+	TimeStyle        = tcell.StyleDefault.Foreground(tcell.ColorOrange)
+	PlaylistNavStyle = tcell.StyleDefault.Foreground(tcell.ColorCoral)
+	NavStyle         = tcell.StyleDefault.Foreground(tcell.ColorPapayaWhip).Background(tcell.ColorBlack)
+	ContextMenuStyle = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
+)
+
 type Application struct {
 	App            *tview.Application
 	Main           *interactiveView

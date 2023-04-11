@@ -22,7 +22,7 @@ func newNavMenu(m []navItem) *NavMenu {
 	T.SetDrawFunc(func(tcell.Screen, int, int, int, int) (int, int, int, int) {
 		for k := range n.m {
 			T.SetCell(k, 0,
-				GetCell(n.m[k].name, tcell.StyleDefault.Foreground(tcell.Color64)))
+				GetCell(n.m[k].name, NavStyle))
 		}
 		return T.GetInnerRect()
 	})
@@ -70,7 +70,7 @@ func NewPlaylistNav(done func(s bool, e error)) (*PlaylistNav, error) {
 func (v *PlaylistNav) Draw() {
 	for k, p := range *v.Playlists {
 		v.Table.SetCell(k, 0,
-			GetCell(p.Name, tcell.StyleDefault.Foreground(tcell.ColorTeal)))
+			GetCell(p.Name, PlaylistNavStyle))
 	}
 }
 

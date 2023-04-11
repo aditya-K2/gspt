@@ -33,9 +33,9 @@ func (p *LikedSongsView) Content() func() [][]Content {
 		}
 		for _, v := range *p.likedSongs {
 			c = append(c, []Content{
-				{Content: v.Name, Style: Defaultstyle.Foreground(tcell.ColorBlue)},
-				{Content: v.Artists[0].Name, Style: Defaultstyle.Foreground(tcell.ColorPink)},
-				{Content: v.Album.Name, Style: Defaultstyle.Foreground(tcell.ColorGreen)},
+				{Content: v.Name, Style: TrackStyle},
+				{Content: v.Artists[0].Name, Style: ArtistStyle},
+				{Content: v.Album.Name, Style: AlbumStyle},
 			})
 		}
 		return c

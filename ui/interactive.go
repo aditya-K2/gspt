@@ -8,12 +8,7 @@ import (
 )
 
 var (
-	berr         = errors.New("Couldn't Get Base Selection in Interactive View")
-	defaultfg    = tcell.ColorGreen
-	defaultbg    = tcell.ColorDefault
-	Defaultstyle = tcell.StyleDefault.
-			Foreground(defaultfg).
-			Background(defaultbg)
+	berr = errors.New("Couldn't Get Base Selection in Interactive View")
 )
 
 type Content struct {
