@@ -13,31 +13,31 @@ type ActionFunc func(e *tcell.EventKey) *tcell.EventKey
 // Refreshable r upon every subsequent call to the function that is being
 // returned by the GetFunc()
 type Action struct {
-	fun ActionFunc
-	r   Refreshable
+	f           ActionFunc
+	refreshable Refreshable
 }
 
-func NewAction(f ActionFunc, r Refreshable) *Action {
+func NewAction(f ActionFunc, refreshes Refreshable) *Action {
 	a := &Action{}
 	a.SetFunc(f)
-	a.SetRefreshable(r)
+	a.SetRefreshable(refreshes)
 	return a
 }
 
 func (a *Action) SetFunc(f ActionFunc) {
-	a.fun = f
+	a.f = f
 }
 
 func (a *Action) SetRefreshable(r Refreshable) {
-	a.r = r
+	a.refreshable = r
 
 }
 
 func (a *Action) Func() ActionFunc {
 	return func(e *tcell.EventKey) *tcell.EventKey {
-		val := a.fun(e)
-		if a.r != nil && val == nil {
-			a.r.RefreshState()
+		val := a.f(e)
+		if a.refreshable != nil && val == nil {
+			a.refreshable.RefreshState()
 		}
 		return val
 	}
