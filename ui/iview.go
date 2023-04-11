@@ -250,12 +250,14 @@ func (i *interactiveView) update() {
 	_, _, w, _ := i.Table.GetInnerRect()
 	for x := range s {
 		b := ""
+		fg := tcell.ColorDefault
 		if i.visual && (x >= i.vrange.Start && x <= i.vrange.End) {
 			b = "[blue::]█[::]"
+			fg = tcell.ColorBlue
 		}
 		n := len(s[x])
 		i.Table.SetCell(x, 0,
-			GetCell(b, Defaultstyle))
+			GetCell(b, tcell.StyleDefault.Foreground(fg).Background(fg)))
 		for y := range s[x] {
 			i.Table.SetCell(x, y+1,
 				GetCell(s[x][y].Content, s[x][y].Style).SetMaxWidth(w/n).SetExpansion(1))
