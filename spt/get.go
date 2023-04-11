@@ -20,6 +20,7 @@ type Album struct {
 
 type SavedAlbums []spotify.SavedAlbum
 type UserPlaylists []spotify.SimplePlaylist
+type LikedSongs []spotify.SavedTrack
 
 type Playable interface {
 	Type() string
@@ -175,6 +176,37 @@ func CurrentUserPlaylists(done func(status bool, err error)) (*UserPlaylists, er
 					return
 				}
 				addPlaylists()
+			}
+		}()
+		return playlists, nil
+	}
+}
+
+// CurrentUserSavedTracks returns the LikedSongs of the current user in a
+// specific manner. It returns the first page and then starts a go routine in
+// the background and keeps updating the LikedSongs and calls the done
+// function with a status of true and nil error if successful else calls the
+// done function with a status of false and the corresponding error.
+func CurrentUserSavedTracks(done func(status bool, err error)) (*LikedSongs, error) {
+	_p := make(LikedSongs, 0)
+	playlists := &_p
+	if ls, err := Client.CurrentUsersTracks(ctx()); err != nil {
+		return nil, err
+	} else {
+		addTracks := func() {
+			_p = append(_p, ls.Tracks...)
+		}
+		addTracks()
+		go func() {
+			for page := 1; ; page++ {
+				if perr := Client.NextPage(ctx(), ls); perr == spotify.ErrNoMorePages {
+					done(true, nil)
+					break
+				} else if perr != nil {
+					done(false, perr)
+					return
+				}
+				addTracks()
 			}
 		}()
 		return playlists, nil

@@ -3,10 +3,11 @@ package ui
 import "github.com/gdamore/tcell/v2"
 
 var (
-	CurrentView  View
-	playlistView = &PlaylistView{}
-	albumView    = &AlbumView{}
-	albumsView   = &AlbumsView{}
+	CurrentView    View
+	playlistView   = &PlaylistView{}
+	albumView      = &AlbumView{}
+	albumsView     = &AlbumsView{}
+	likedSongsView = &LikedSongsView{}
 )
 
 type View interface {

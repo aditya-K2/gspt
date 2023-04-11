@@ -38,7 +38,12 @@ func NewApplication() *Application {
 	NavMenu := newNavMenu([]navItem{
 		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey { SetCurrentView(albumsView); return nil }, nil)},
 		{"Artists", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Artists"); return nil }, nil)},
-		{"Liked Songs", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Liked Songs"); return nil }, nil)},
+		{"Liked Songs", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			likedSongsView.RefreshState()
+			SetCurrentView(likedSongsView)
+			App.SetFocus(Main.Table)
+			return nil
+		}, nil)},
 		{"Recently Played", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Recently Played"); return nil }, nil)},
 	})
 	imagePreviewer := tview.NewBox()
@@ -61,13 +66,14 @@ func NewApplication() *Application {
 		panic(err)
 	}
 
+	Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 	playlistNav.Table.SetBackgroundColor(tcell.ColorDefault)
 	PlaylistActions = map[string]*Action{
 		"playEntry": NewAction(playlistNav.PlaySelectEntry, nil),
 		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 			r, _ := playlistNav.Table.GetSelection()
 			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
+			SetCurrentView(playlistView)
 			App.SetFocus(Main.Table)
 			return nil
 		}, nil),
