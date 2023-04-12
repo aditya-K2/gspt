@@ -21,6 +21,13 @@ func PlaySongWithContext(context *spotify.URI, position int) error {
 	})
 }
 
+func PlaySongWithContextURI(context, uri *spotify.URI) error {
+	return play(&spotify.PlayOptions{
+		PlaybackContext: context,
+		PlaybackOffset:  &spotify.PlaybackOffset{URI: *uri},
+	})
+}
+
 func PlayContext(context *spotify.URI) error {
 	return play(&spotify.PlayOptions{
 		PlaybackContext: context,
