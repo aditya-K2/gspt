@@ -83,16 +83,6 @@ func (v *PlaylistNav) MapActions(f map[tcell.Key]string) {
 	})
 }
 
-// func (v *PlaylistsView) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
-// 	r, _ := v.Table.GetSelection()
-// 	if p, err := spt.GetPlaylist((*v.Playlists)[r].ID); err != nil {
-// 		panic(err)
-// 	} else {
-// 		fmt.Println(p)
-// 	}
-// 	return nil
-// }
-
 func (v *PlaylistNav) PlaySelectEntry(e *tcell.EventKey) *tcell.EventKey {
 	r, _ := v.Table.GetSelection()
 	if err := spt.PlayContext(&(*v.Playlists)[r].URI); err != nil {
