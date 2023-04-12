@@ -26,8 +26,8 @@ func (a *AlbumView) Content() func() [][]Content {
 		if a.currentAlbum != nil {
 			if a.currentFullAlbum == nil {
 				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", a.currentAlbum.Name))
-				al, err := spt.GetAlbum(a.currentAlbum.ID, func(s bool, err error) {
-					if !s {
+				al, err := spt.GetAlbum(a.currentAlbum.ID, func(err error) {
+					if err != nil {
 						msg <- err.Error()
 					} else {
 						msg <- "Album Loaded Succesfully!"
@@ -57,7 +57,8 @@ func (a *AlbumView) ContextHandler() func(start, end, sel int) {
 		// Assuming that there are no external effects on the user's playlists
 		// (i.e Any Creation or Deletion of Playlists while the context Menu is
 		// open
-		userPlaylists, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
+		// TODO: Better Error Handler
+		userPlaylists, err := spt.CurrentUserPlaylists(func(err error) {})
 		if err != nil {
 			SendNotification("Error Retrieving User Playlists")
 			return

@@ -40,9 +40,9 @@ var (
 // If not cached or if the snapshotID for the playlist changes, it retrieves
 // the playlist from Spotify API and caches it. It uses a background go routine
 // to fetch all pages of tracks for the playlist and appends them to the tracks
-// list in the Playlist object. When done, it sends a true value to the done
-// callback if successful, otherwise an error.
-func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, error) {
+// list in the Playlist object. When done, it passes the error value to the
+// error handler.
+func GetPlaylist(playlistId spotify.ID, errHandler func(error)) (*Playlist, error) {
 	if fp, err := Client.GetPlaylist(ctx(), playlistId); err != nil {
 		return nil, err
 	} else {
@@ -55,10 +55,10 @@ func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, erro
 			go func() {
 				for page := 1; ; page++ {
 					if perr := Client.NextPage(ctx(), &fp.Tracks); perr == spotify.ErrNoMorePages {
-						done(true, nil)
+						errHandler(nil)
 						break
 					} else if perr != nil {
-						done(false, perr)
+						errHandler(perr)
 						return
 					}
 					addTracks()
@@ -72,7 +72,7 @@ func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, erro
 			playlistCache[fp.ID] = p
 			return p, nil
 		} else {
-			done(true, nil)
+			errHandler(nil)
 			return playlistCache[fp.ID], nil
 		}
 	}
@@ -83,8 +83,8 @@ func GetPlaylist(playlistId spotify.ID, done func(bool, error)) (*Playlist, erro
 // If not, it retrieves the album from the Spotify API and caches it.
 // It uses a background go routine to fetch all pages of tracks for the album
 // and appends them to the tracks list in the Album object.
-// When done, it sends a true value to the done callback if successful
-func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
+// When done, it passes the error value to the error handler.
+func GetAlbum(albumID spotify.ID, errHandler func(error)) (*Album, error) {
 	if _, ok := albumCache[albumID]; !ok {
 		fa, err := Client.GetAlbum(ctx(), albumID)
 		if err != nil {
@@ -98,10 +98,10 @@ func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
 		go func() {
 			for page := 1; ; page++ {
 				if perr := Client.NextPage(ctx(), &fa.Tracks); perr == spotify.ErrNoMorePages {
-					done(true, nil)
+					errHandler(nil)
 					break
 				} else if perr != nil {
-					done(false, perr)
+					errHandler(perr)
 					return
 				}
 				addTracks()
@@ -114,7 +114,7 @@ func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
 		albumCache[fa.ID] = p
 		return p, nil
 	} else {
-		done(true, nil)
+		errHandler(nil)
 		return albumCache[albumID], nil
 	}
 
@@ -122,10 +122,9 @@ func GetAlbum(albumID spotify.ID, done func(bool, error)) (*Album, error) {
 
 // CurrentUserSavedAlbums returns the SavedAlbums of the current user in a
 // specific manner. It returns the first page and then starts a go routine
-// in the background and keeps updating the SavedAlbums and calls the done
-// function with a status of true and nil error if successful else calls the
-// done function with a status of false and the corresponding error.
-func CurrentUserSavedAlbums(done func(status bool, err error)) (*SavedAlbums, error) {
+// in the background and keeps updating the SavedAlbums
+// When done, it passes the error value to the error handler.
+func CurrentUserSavedAlbums(errHandler func(err error)) (*SavedAlbums, error) {
 	_a := make(SavedAlbums, 0)
 	albums := &_a
 	if sp, err := Client.CurrentUsersAlbums(ctx()); err != nil {
@@ -138,10 +137,10 @@ func CurrentUserSavedAlbums(done func(status bool, err error)) (*SavedAlbums, er
 		go func() {
 			for page := 1; ; page++ {
 				if perr := Client.NextPage(ctx(), sp); perr == spotify.ErrNoMorePages {
-					done(true, nil)
+					errHandler(nil)
 					break
 				} else if perr != nil {
-					done(false, perr)
+					errHandler(perr)
 					return
 				}
 				addAlbums()
@@ -153,10 +152,9 @@ func CurrentUserSavedAlbums(done func(status bool, err error)) (*SavedAlbums, er
 
 // CurrentUserPlaylists returns the UserPlaylists of the current user in a
 // specific manner. It returns the first page and then starts a go routine in
-// the background and keeps updating the UserPlaylists and calls the done
-// function with a status of true and nil error if successful else calls the
-// done function with a status of false and the corresponding error.
-func CurrentUserPlaylists(done func(status bool, err error)) (*UserPlaylists, error) {
+// the background and keeps updating the UserPlaylists
+// When done, it passes the error value to the error handler.
+func CurrentUserPlaylists(errHandler func(err error)) (*UserPlaylists, error) {
 	_p := make(UserPlaylists, 0)
 	playlists := &_p
 	if spp, err := Client.CurrentUsersPlaylists(ctx()); err != nil {
@@ -169,10 +167,10 @@ func CurrentUserPlaylists(done func(status bool, err error)) (*UserPlaylists, er
 		go func() {
 			for page := 1; ; page++ {
 				if perr := Client.NextPage(ctx(), spp); perr == spotify.ErrNoMorePages {
-					done(true, nil)
+					errHandler(nil)
 					break
 				} else if perr != nil {
-					done(false, perr)
+					errHandler(perr)
 					return
 				}
 				addPlaylists()
@@ -184,10 +182,9 @@ func CurrentUserPlaylists(done func(status bool, err error)) (*UserPlaylists, er
 
 // CurrentUserSavedTracks returns the LikedSongs of the current user in a
 // specific manner. It returns the first page and then starts a go routine in
-// the background and keeps updating the LikedSongs and calls the done
-// function with a status of true and nil error if successful else calls the
-// done function with a status of false and the corresponding error.
-func CurrentUserSavedTracks(done func(status bool, err error)) (*LikedSongs, error) {
+// the background and keeps updating the LikedSongs
+// When done, it passes the error value to the error handler.
+func CurrentUserSavedTracks(errHandler func(err error)) (*LikedSongs, error) {
 	_p := make(LikedSongs, 0)
 	playlists := &_p
 	if ls, err := Client.CurrentUsersTracks(ctx()); err != nil {
@@ -200,10 +197,10 @@ func CurrentUserSavedTracks(done func(status bool, err error)) (*LikedSongs, err
 		go func() {
 			for page := 1; ; page++ {
 				if perr := Client.NextPage(ctx(), ls); perr == spotify.ErrNoMorePages {
-					done(true, nil)
+					errHandler(nil)
 					break
 				} else if perr != nil {
-					done(false, perr)
+					errHandler(perr)
 					return
 				}
 				addTracks()

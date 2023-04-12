@@ -74,12 +74,13 @@ func NewApplication() *Application {
 	NavMenu.Table.SetBorder(true)
 	NavMenu.Table.SetSelectable(true, false)
 
-	done := func(s bool, err error) {
-		if s {
-			App.Draw()
+	playlistNav, err := NewPlaylistNav(func(err error) {
+		if err != nil {
+			panic(err)
 		}
-	}
-	playlistNav, err := NewPlaylistNav(done)
+		// Draw the App again after all the user playlists are retrieved.
+		App.Draw()
+	})
 	if err != nil {
 		panic(err)
 	}

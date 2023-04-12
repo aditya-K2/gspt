@@ -26,10 +26,10 @@ func (p *PlaylistView) Content() func() [][]Content {
 		if p.currentPlaylist != nil {
 			if p.currentUserFullPlaylist == nil {
 				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", p.currentPlaylist.Name))
-				pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(s bool, e error) {
+				pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(err error) {
 					go func() {
-						if !s {
-							msg <- e.Error()
+						if err != nil {
+							msg <- err.Error()
 						} else {
 							msg <- "Playlist Loaded Succesfully!"
 						}
@@ -58,7 +58,8 @@ func (p *PlaylistView) ContextHandler() func(start, end, sel int) {
 		// Assuming that there are no external effects on the user's playlists
 		// (i.e Any Creation or Deletion of Playlists while the context Menu is
 		// open
-		userPlaylists, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
+		// TODO: Better Error Handling
+		userPlaylists, err := spt.CurrentUserPlaylists(func(err error) {})
 		if err != nil {
 			SendNotification("Error Retrieving User Playlists")
 			return

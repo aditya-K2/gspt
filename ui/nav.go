@@ -42,12 +42,12 @@ type PlaylistNav struct {
 	Table     *tview.Table
 	Playlists *spt.UserPlaylists
 	c         chan bool
-	done      func(bool, error)
+	done      func(error)
 }
 
 var PlaylistActions map[string]*Action
 
-func NewPlaylistNav(done func(s bool, e error)) (*PlaylistNav, error) {
+func NewPlaylistNav(done func(e error)) (*PlaylistNav, error) {
 	T := tview.NewTable()
 	T.SetSelectable(true, false).SetBorder(true)
 	p, err := spt.CurrentUserPlaylists(done)

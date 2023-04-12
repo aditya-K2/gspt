@@ -18,10 +18,10 @@ func (p *LikedSongsView) Content() func() [][]Content {
 		c := make([][]Content, 0)
 		if p.likedSongs == nil {
 			msg := SendNotificationWithChan("Loading Liked Songs...")
-			if err := p.refreshState(func(s bool, e error) {
+			if err := p.refreshState(func(err error) {
 				go func() {
-					if !s {
-						msg <- e.Error()
+					if err != nil {
+						msg <- err.Error()
 					} else {
 						msg <- "Liked Songs Loaded Succesfully!"
 					}
@@ -47,7 +47,8 @@ func (l *LikedSongsView) ContextHandler() func(start, end, sel int) {
 		// Assuming that there are no external effects on the user's playlists
 		// (i.e Any Creation or Deletion of Playlists while the context Menu is
 		// open
-		userPlaylists, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
+		// TODO: Better Error Handler
+		userPlaylists, err := spt.CurrentUserPlaylists(func(err error) {})
 		if err != nil {
 			SendNotification("Error Retrieving User Playlists")
 			return
@@ -78,7 +79,7 @@ func (l *LikedSongsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.E
 	}
 }
 
-func (l *LikedSongsView) refreshState(f func(bool, error)) error {
+func (l *LikedSongsView) refreshState(f func(error)) error {
 	pf, err := spt.CurrentUserSavedTracks(f)
 	if err == nil {
 		l.likedSongs = pf
@@ -89,7 +90,8 @@ func (l *LikedSongsView) refreshState(f func(bool, error)) error {
 func (l *LikedSongsView) Name() string { return "LikedSongsView" }
 
 func (l *LikedSongsView) RefreshState() {
-	if err := l.refreshState(func(bool, error) {}); err != nil {
+	// TODO: Better Error Handler
+	if err := l.refreshState(func(error) {}); err != nil {
 		SendNotification(err.Error())
 	}
 }

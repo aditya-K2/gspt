@@ -14,9 +14,9 @@ func (a *AlbumsView) Content() func() [][]Content {
 		c := make([][]Content, 0)
 		if a.savedAlbums == nil {
 			msg := SendNotificationWithChan("Loading Albums from your Library...")
-			sa, err := spt.CurrentUserSavedAlbums(func(s bool, err error) {
+			sa, err := spt.CurrentUserSavedAlbums(func(err error) {
 				go func() {
-					if !s {
+					if err != nil {
 						msg <- err.Error()
 					} else {
 						msg <- "Albums loaded Succesfully!"

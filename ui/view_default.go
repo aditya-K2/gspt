@@ -9,9 +9,10 @@ func (d *DefaultView) ContextOpener() func(m *Root, s func(s int)) {
 	return func(m *Root, s func(s int)) {
 		c := NewMenu()
 		cc := []string{}
-		plist, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
+		// TODO: Better Error Handling
+		plist, err := spt.CurrentUserPlaylists(func(err error) {})
 		if err != nil {
-			SendNotification("Error Retrieving User Playlists")
+			SendNotification(err.Error())
 			return
 		}
 		for _, v := range *(plist) {
