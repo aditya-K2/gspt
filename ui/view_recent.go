@@ -61,15 +61,8 @@ func (re *RecentlyPlayedView) ExternalInputCapture() func(e *tcell.EventKey) *tc
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
 			r, _ := Ui.Main.Table.GetSelection()
-			contextUri := re.recentlyPlayed[r].PlaybackContext.URI
-			if string(contextUri) != "" {
-				if err := spt.PlaySongWithContext(&re.recentlyPlayed[r].PlaybackContext.URI, r); err != nil {
-					SendNotification(err.Error())
-				}
-			} else {
-				if err := spt.PlaySong(re.recentlyPlayed[r].Track.URI); err != nil {
-					SendNotification(err.Error())
-				}
+			if err := spt.PlaySong(re.recentlyPlayed[r].Track.URI); err != nil {
+				SendNotification(err.Error())
 			}
 		}
 		return e

@@ -214,5 +214,5 @@ func CurrentUserSavedTracks(done func(status bool, err error)) (*LikedSongs, err
 }
 
 func RecentlyPlayed() ([]spotify.RecentlyPlayedItem, error) {
-	return Client.PlayerRecentlyPlayed(ctx())
+	return Client.PlayerRecentlyPlayedOpt(ctx(), &spotify.RecentlyPlayedOptions{Limit: 50})
 }
