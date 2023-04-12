@@ -22,10 +22,11 @@ type _range struct {
 }
 
 type interactiveView struct {
-	visual  bool
-	vrange  *_range
-	baseSel int
-	Table   *tview.Table
+	visual        bool
+	disableVisual bool
+	vrange        *_range
+	baseSel       int
+	Table         *tview.Table
 }
 
 func NewInteractiveView() *interactiveView {
@@ -46,6 +47,10 @@ func NewInteractiveView() *interactiveView {
 	})
 	view.SetInputCapture(i.capture)
 	return i
+}
+
+func (i *interactiveView) DisableVisualMode(disable bool) {
+	i.disableVisual = disable
 }
 
 func (i *interactiveView) SelectionHandler(selrow int) {
@@ -181,7 +186,9 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		}
 	case 'v':
 		{
-			i.toggleVisualMode()
+			if !i.disableVisual {
+				i.toggleVisualMode()
+			}
 			return nil
 		}
 	case 'g':
@@ -199,7 +206,9 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 	default:
 		{
 			if e.Key() == tcell.KeyEscape {
-				return i.getHandler("exitvisual")(e)
+				if !i.disableVisual {
+					return i.getHandler("exitvisual")(e)
+				}
 			} else if GetCurrentView().ExternalInputCapture() != nil {
 				return GetCurrentView().ExternalInputCapture()(e)
 			}
