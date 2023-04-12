@@ -6,10 +6,7 @@ import (
 )
 
 func main() {
-	var err error
-	spt.InitClient()
-	ui.InitNotifier()
-	if err != nil {
+	if err := spt.InitClient(); err != nil {
 		panic(err)
 	}
 	if err := ui.NewApplication().App.Run(); err != nil {

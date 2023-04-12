@@ -119,6 +119,8 @@ func NewApplication() *Application {
 	App.EnableMouse(true)
 	App.SetRoot(Root.Root, true).SetFocus(playlistNav.Table)
 
+	InitNotifier()
+
 	Ui = &Application{
 		App:            App,
 		Main:           Main,
