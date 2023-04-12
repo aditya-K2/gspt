@@ -23,7 +23,7 @@ func (p *LikedSongsView) Content() func() [][]Content {
 					if !s {
 						msg <- e.Error()
 					} else {
-						msg <- "Done"
+						msg <- "Liked Songs Loaded Succesfully!"
 					}
 				}()
 			}); err != nil {

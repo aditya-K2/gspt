@@ -31,7 +31,7 @@ func (p *PlaylistView) Content() func() [][]Content {
 						if !s {
 							msg <- e.Error()
 						} else {
-							msg <- "Playlist Loaded Succesfully"
+							msg <- "Playlist Loaded Succesfully!"
 						}
 					}()
 				})

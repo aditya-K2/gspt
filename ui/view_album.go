@@ -25,9 +25,17 @@ func (a *AlbumView) Content() func() [][]Content {
 
 		if a.currentAlbum != nil {
 			if a.currentFullAlbum == nil {
-				al, err := spt.GetAlbum(a.currentAlbum.ID, func(bool, error) {})
+				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", a.currentAlbum.Name))
+				al, err := spt.GetAlbum(a.currentAlbum.ID, func(s bool, err error) {
+					if !s {
+						msg <- err.Error()
+					} else {
+						msg <- "Album Loaded Succesfully!"
+					}
+				})
 				if err != nil {
-					panic(err)
+					SendNotification(err.Error())
+					return c
 				}
 				a.currentFullAlbum = al
 			}

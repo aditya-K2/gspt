@@ -15,11 +15,13 @@ func (a *AlbumsView) Content() func() [][]Content {
 		if a.savedAlbums == nil {
 			msg := SendNotificationWithChan("Loading Albums from your Library...")
 			sa, err := spt.CurrentUserSavedAlbums(func(s bool, err error) {
-				if s {
-					msg <- "Done"
-				} else {
-					msg <- err.Error()
-				}
+				go func() {
+					if !s {
+						msg <- err.Error()
+					} else {
+						msg <- "Albums loaded Succesfully!"
+					}
+				}()
 			})
 			if err != nil {
 				SendNotification(err.Error())

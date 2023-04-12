@@ -46,10 +46,13 @@ func NewApplication() *Application {
 	Main.Table.SetBorder(true)
 
 	NavMenu := newNavMenu([]navItem{
-		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey { SetCurrentView(albumsView); return nil }, nil)},
+		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			SetCurrentView(albumsView)
+			App.SetFocus(Main.Table)
+			return nil
+		}, nil)},
 		{"Artists", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Artists"); return nil }, nil)},
 		{"Liked Songs", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			likedSongsView.RefreshState()
 			SetCurrentView(likedSongsView)
 			App.SetFocus(Main.Table)
 			return nil
