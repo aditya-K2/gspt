@@ -9,7 +9,7 @@ import (
 )
 
 type LikedSongsView struct {
-	*PlaylistView
+	*DefaultView
 	likedSongs *spt.LikedSongs
 }
 

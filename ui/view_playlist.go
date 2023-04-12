@@ -9,6 +9,7 @@ import (
 )
 
 type PlaylistView struct {
+	*DefaultView
 	currentPlaylist         *spotify.SimplePlaylist
 	currentUserFullPlaylist *spt.Playlist
 	I                       *interactiveView
@@ -52,25 +53,6 @@ func (p *PlaylistView) Content() func() [][]Content {
 	}
 }
 
-func (p *PlaylistView) ContextOpener() func(m *Root, s func(s int)) {
-	return func(m *Root, s func(s int)) {
-		c := NewMenu()
-		cc := []string{}
-		plist, err := spt.CurrentUserPlaylists(func(s bool, err error) {})
-		if err != nil {
-			SendNotification("Error Retrieving User Playlists")
-			return
-		}
-		for _, v := range *(plist) {
-			cc = append(cc, v.Name)
-		}
-		c.Content(cc)
-		c.Title("Add to Playlist")
-		c.SetSelectionHandler(s)
-		m.AddCenteredWidget(c)
-	}
-}
-
 func (p *PlaylistView) ContextHandler() func(start, end, sel int) {
 	return func(start, end, sel int) {
 		// Assuming that there are no external effects on the user's playlists
@@ -105,10 +87,6 @@ func (p *PlaylistView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.Eve
 		}
 		return e
 	}
-}
-
-func (p *PlaylistView) ContextKey() rune {
-	return 'a'
 }
 
 func (p *PlaylistView) Name() string { return "PlaylistView" }

@@ -9,7 +9,7 @@ import (
 )
 
 type AlbumView struct {
-	*PlaylistView
+	*DefaultView
 	currentAlbum     *spotify.SavedAlbum
 	currentFullAlbum *spt.Album
 }

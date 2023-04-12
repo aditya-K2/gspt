@@ -10,7 +10,7 @@ import (
 )
 
 type RecentlyPlayedView struct {
-	*PlaylistView
+	*DefaultView
 	recentlyPlayed []spotify.RecentlyPlayedItem
 }
 
