@@ -97,7 +97,9 @@ func NewApplication() *Application {
 		tcell.KeyEnter: "openEntry",
 		tcell.KeyCtrlP: "playEntry",
 	})
-
+	recentlyPlayedView.MapActions(map[tcell.Key]string{
+		tcell.KeyEnter: "selectEntry",
+	})
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(NavMenu.Table, 6, 3, false).
 		AddItem(playlistNav.Table, 0, 6, false).

@@ -9,9 +9,16 @@ import (
 	"github.com/zmb3/spotify/v2"
 )
 
+var (
+	RecentlyPlayedViewActions = map[string]*Action{
+		"selectEntry": NewAction(recentlyPlayedView.SelectEntry, nil),
+	}
+)
+
 type RecentlyPlayedView struct {
 	*DefaultView
 	recentlyPlayed []spotify.RecentlyPlayedItem
+	funcMap        map[tcell.Key]string
 }
 
 func format(t time.Duration) string {
@@ -59,19 +66,8 @@ func (r *RecentlyPlayedView) ContextHandler() func(start, end, sel int) {
 
 func (re *RecentlyPlayedView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
 	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
-			r, _ := Ui.Main.Table.GetSelection()
-			contextUri := re.recentlyPlayed[r].PlaybackContext.URI
-			if string(contextUri) != "" {
-				if err := spt.PlaySongWithContextURI(&re.recentlyPlayed[r].PlaybackContext.URI, &re.recentlyPlayed[r].Track.URI); err != nil {
-					SendNotification(err.Error())
-				}
-			} else {
-				if err := spt.PlaySong(re.recentlyPlayed[r].Track.URI); err != nil {
-					SendNotification(err.Error())
-				}
-			}
-			return nil
+		if action, ok := re.funcMap[e.Key()]; ok {
+			RecentlyPlayedViewActions[action].Func()(e)
 		}
 		return e
 	}
@@ -86,4 +82,23 @@ func (r *RecentlyPlayedView) RefreshState() {
 		return
 	}
 	r.recentlyPlayed = _r
+}
+
+func (re *RecentlyPlayedView) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
+	r, _ := Ui.Main.Table.GetSelection()
+	contextUri := re.recentlyPlayed[r].PlaybackContext.URI
+	if string(contextUri) != "" {
+		if err := spt.PlaySongWithContextURI(&re.recentlyPlayed[r].PlaybackContext.URI, &re.recentlyPlayed[r].Track.URI); err != nil {
+			SendNotification(err.Error())
+		}
+	} else {
+		if err := spt.PlaySong(re.recentlyPlayed[r].Track.URI); err != nil {
+			SendNotification(err.Error())
+		}
+	}
+	return nil
+}
+
+func (re *RecentlyPlayedView) MapActions(f map[tcell.Key]string) {
+	re.funcMap = f
 }
