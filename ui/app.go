@@ -149,7 +149,7 @@ func NewApplication() *Application {
 			if draw {
 				go func() {
 					for {
-						_ImgX, _ImgY, _ImgW, _ImgH := Ui.CoverArt.GetInnerRect()
+						_ImgX, _ImgY, _ImgW, _ImgH := Ui.CoverArt.GetRect()
 						if start {
 							RefreshProgress()
 							start = false

@@ -6,10 +6,18 @@ import (
 	"os"
 
 	"github.com/aditya-K2/utils"
+	"github.com/gdamore/tcell/v2"
 	"github.com/nfnt/resize"
 	"github.com/rivo/tview"
 	"github.com/zmb3/spotify/v2"
 	"gitlab.com/diamondburned/ueberzug-go"
+)
+
+var (
+	ax = 5
+	ay = 10
+	ex = -0.47
+	ey = -1.5
 )
 
 type CoverArt struct {
@@ -19,7 +27,7 @@ type CoverArt struct {
 
 func newCoverArt() *CoverArt {
 	return &CoverArt{
-		tview.NewBox(),
+		tview.NewBox().SetBorder(true).SetBackgroundColor(tcell.ColorDefault),
 		nil,
 	}
 }
@@ -37,8 +45,8 @@ func getImg(uri string) (image.Image, error) {
 	}
 	fw, fh := utils.GetFontWidth()
 	img = resize.Resize(
-		uint(float32(ImgW)*(fw+float32(10))),
-		uint(float32(ImgH)*(fh+float32(10))),
+		uint(float32(ImgW)*(fw+float32(ex))),
+		uint(float32(ImgH)*(fh+float32(ey))),
 		img,
 		resize.Bilinear,
 	)
@@ -89,8 +97,8 @@ func (c *CoverArt) RefreshState() {
 					return
 				}
 				im, err := ueberzug.NewImage(uimg,
-					int(float32(ImgX)*fw),
-					int(float32(ImgY)*fh))
+					int(float32(ImgX)*fw)+ax,
+					int(float32(ImgY)*fh)+ay)
 				if err != nil {
 					SendNotification(fmt.Sprintf("Error Rendering Image: %s", err.Error()))
 					return
