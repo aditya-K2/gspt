@@ -18,11 +18,11 @@ var (
 )
 
 var (
-	TrackStyle       = tcell.StyleDefault.Foreground(tcell.ColorBlue)
-	AlbumStyle       = tcell.StyleDefault.Foreground(tcell.ColorGreen)
-	ArtistStyle      = tcell.StyleDefault.Foreground(tcell.ColorPink)
-	TimeStyle        = tcell.StyleDefault.Foreground(tcell.ColorOrange)
-	PlaylistNavStyle = tcell.StyleDefault.Foreground(tcell.ColorCoral)
+	TrackStyle       = tcell.StyleDefault.Foreground(tcell.ColorBlue).Background(tcell.ColorBlack)
+	AlbumStyle       = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
+	ArtistStyle      = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorBlack)
+	TimeStyle        = tcell.StyleDefault.Foreground(tcell.ColorOrange).Background(tcell.ColorBlack)
+	PlaylistNavStyle = tcell.StyleDefault.Foreground(tcell.ColorCoral).Background(tcell.ColorBlack)
 	NavStyle         = tcell.StyleDefault.Foreground(tcell.ColorPapayaWhip).Background(tcell.ColorBlack)
 	ContextMenuStyle = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorDefault).Bold(true)
 )
