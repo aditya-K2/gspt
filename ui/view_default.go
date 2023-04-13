@@ -26,3 +26,5 @@ func (d *DefaultView) ContextOpener() func(m *Root, s func(s int)) {
 }
 
 func (d *DefaultView) ContextKey() rune { return 'a' }
+
+func (d *DefaultView) DisableVisualMode() bool { return false }

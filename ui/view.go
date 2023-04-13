@@ -16,6 +16,7 @@ type View interface {
 	ContextOpener() func(*Root, func(int))
 	ContextKey() rune
 	ContextHandler() func(start, end, sel int)
+	DisableVisualMode() bool
 	ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey
 	Name() string
 }

@@ -6,6 +6,7 @@ import (
 )
 
 type AlbumsView struct {
+	*DefaultView
 	savedAlbums *spt.SavedAlbums
 }
 
@@ -51,5 +52,5 @@ func (a *AlbumsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.Event
 		return e
 	}
 }
-func (a *AlbumsView) ContextKey() rune { return 'a' }
-func (a *AlbumsView) Name() string     { return "AlbumsView" }
+func (a *AlbumsView) DisableVisualMode() bool { return true }
+func (a *AlbumsView) Name() string            { return "AlbumsView" }
