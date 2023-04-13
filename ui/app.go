@@ -32,6 +32,7 @@ type Application struct {
 	CoverArt       *CoverArt
 	Main           *interactiveView
 	NavMenu        *NavMenu
+	PlaylistNav    *PlaylistNav
 	SearchBar      *tview.Box
 	ProgressBar    *ProgressBar
 	Root           *Root
@@ -122,7 +123,6 @@ func NewApplication() *Application {
 		AddItem(pBar, 5, 1, false)
 
 	Root.Primitive("Main", MainFlex)
-	App.EnableMouse(true)
 	App.SetRoot(Root.Root, true).SetFocus(playlistNav.Table)
 
 	InitNotifier()
@@ -180,10 +180,26 @@ func NewApplication() *Application {
 		}
 	}()
 
+	App.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
+		if e.Rune() == '1' {
+			Ui.App.SetFocus(NavMenu.Table)
+			return nil
+		}
+		if e.Rune() == '2' {
+			Ui.App.SetFocus(playlistNav.Table)
+			return nil
+		}
+		if e.Rune() == '3' {
+			Ui.App.SetFocus(Main.Table)
+			return nil
+		}
+		return e
+	})
 	Ui = &Application{
 		App:         App,
 		Main:        Main,
 		CoverArt:    coverArt,
+		PlaylistNav: playlistNav,
 		NavMenu:     NavMenu,
 		SearchBar:   searchbar,
 		ProgressBar: pBar,
