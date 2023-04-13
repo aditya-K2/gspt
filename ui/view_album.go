@@ -10,12 +10,14 @@ import (
 
 type AlbumView struct {
 	*DefaultView
-	currentAlbum     *spotify.SavedAlbum
+	currentAlbumID   *spotify.ID
+	currentAlbumName string
 	currentFullAlbum *spt.Album
 }
 
-func (a *AlbumView) SetAlbum(al *spotify.SavedAlbum) {
-	a.currentAlbum = al
+func (a *AlbumView) SetAlbum(name string, al *spotify.ID) {
+	a.currentAlbumID = al
+	a.currentAlbumName = name
 	a.currentFullAlbum = nil
 }
 
@@ -23,10 +25,10 @@ func (a *AlbumView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
 
-		if a.currentAlbum != nil {
+		if a.currentAlbumID != nil {
 			if a.currentFullAlbum == nil {
-				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", a.currentAlbum.Name))
-				al, err := spt.GetAlbum(a.currentAlbum.ID, func(err error) {
+				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", a.currentAlbumName))
+				al, err := spt.GetAlbum(*a.currentAlbumID, func(err error) {
 					if err != nil {
 						msg <- err.Error()
 					} else {
@@ -43,7 +45,7 @@ func (a *AlbumView) Content() func() [][]Content {
 				ca := make([]Content, 0)
 				ca = append(ca, Content{v.Name, TrackStyle})
 				ca = append(ca, Content{v.Artists[0].Name, ArtistStyle})
-				ca = append(ca, Content{a.currentAlbum.Name, AlbumStyle})
+				ca = append(ca, Content{a.currentAlbumName, AlbumStyle})
 				c = append(c, ca)
 			}
 		}
@@ -82,7 +84,7 @@ func (a *AlbumView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventK
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
 			r, _ := Ui.Main.Table.GetSelection()
-			if err := spt.PlaySongWithContext(&a.currentAlbum.URI, r); err != nil {
+			if err := spt.PlaySongWithContext(&a.currentFullAlbum.URI, r); err != nil {
 				SendNotification(err.Error())
 			}
 		}

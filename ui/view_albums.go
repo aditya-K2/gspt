@@ -44,7 +44,7 @@ func (a *AlbumsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.Event
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
 			r, _ := Ui.Main.Table.GetSelection()
-			albumView.SetAlbum(&(*a.savedAlbums)[r])
+			albumView.SetAlbum((*a.savedAlbums)[r].Name, &(*a.savedAlbums)[r].ID)
 			SetCurrentView(albumView)
 		}
 		return e
