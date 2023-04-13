@@ -240,8 +240,12 @@ func (i *interactiveView) update() {
 			i.Table.SetCell(x, 0,
 				GetCell(b, tcell.StyleDefault.Foreground(fg).Background(fg)))
 			for y := range s[x] {
+				selectable := true
+				if s[x][y].Style == NotSelectableStyle {
+					selectable = false
+				}
 				i.Table.SetCell(x, y+1,
-					GetCell(s[x][y].Content, s[x][y].Style).SetMaxWidth(w/n).SetExpansion(1))
+					GetCell(s[x][y].Content, s[x][y].Style).SetMaxWidth(w/n).SetExpansion(1).SetSelectable(selectable))
 			}
 		}
 	}
