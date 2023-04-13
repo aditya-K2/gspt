@@ -6,6 +6,7 @@ import (
 )
 
 type AlbumsView struct {
+	*DefaultViewNone
 	savedAlbums *spt.SavedAlbums
 }
 
@@ -39,8 +40,6 @@ func (a *AlbumsView) Content() func() [][]Content {
 	}
 }
 
-func (a *AlbumsView) ContextOpener() func(m *Root, s func(s int)) { return nil }
-func (a *AlbumsView) ContextHandler() func(int, int, int)         { return nil }
 func (a *AlbumsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
@@ -51,6 +50,4 @@ func (a *AlbumsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.Event
 		return e
 	}
 }
-func (a *AlbumsView) ContextKey() rune        { return 'a' }
-func (a *AlbumsView) DisableVisualMode() bool { return true }
-func (a *AlbumsView) Name() string            { return "AlbumsView" }
+func (a *AlbumsView) Name() string { return "AlbumsView" }

@@ -7,6 +7,7 @@ import (
 )
 
 type TopTracksView struct {
+	*DefaultViewNone
 	topTracks  []spotify.FullTrack
 	topArtists []spotify.FullArtist
 }
@@ -48,8 +49,6 @@ func (a *TopTracksView) Content() func() [][]Content {
 	}
 }
 
-func (a *TopTracksView) ContextOpener() func(m *Root, s func(s int)) { return nil }
-func (a *TopTracksView) ContextHandler() func(int, int, int)         { return nil }
 func (a *TopTracksView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
@@ -70,6 +69,4 @@ func (a *TopTracksView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.Ev
 	}
 }
 
-func (a *TopTracksView) ContextKey() rune        { return 'a' }
-func (a *TopTracksView) DisableVisualMode() bool { return true }
-func (a *TopTracksView) Name() string            { return "AlbumsView" }
+func (a *TopTracksView) Name() string { return "AlbumsView" }

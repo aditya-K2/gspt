@@ -2,6 +2,14 @@ package ui
 
 import "github.com/aditya-K2/gspt/spt"
 
+type DefaultViewNone struct {
+}
+
+func (a *DefaultViewNone) ContextOpener() func(m *Root, s func(s int)) { return nil }
+func (a *DefaultViewNone) ContextHandler() func(int, int, int)         { return nil }
+func (a *DefaultViewNone) ContextKey() rune                            { return 'a' }
+func (a *DefaultViewNone) DisableVisualMode() bool                     { return true }
+
 type DefaultView struct {
 }
 
