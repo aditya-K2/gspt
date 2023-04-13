@@ -8,3 +8,11 @@
     <a href="https://github.com/aditya-K2/gspt/discussions">Discussion</a>
 </div>
 
+---
+
+![](./extras/screenshot.png)
+
+---
+
+***In a very experimental stage.***
+
