@@ -82,9 +82,11 @@ func RefreshProgress() {
 		return
 	}
 	stateLock.Lock()
-	// TODO: imagePreview.RefreshState()
 	state = s
 	stateLock.Unlock()
+	if Ui != nil && Ui.CoverArt != nil {
+		Ui.CoverArt.RefreshState()
+	}
 }
 
 func RefreshProgressLocal() {

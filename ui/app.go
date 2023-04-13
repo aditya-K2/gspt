@@ -28,6 +28,7 @@ var (
 
 type Application struct {
 	App            *tview.Application
+	CoverArt       *CoverArt
 	Main           *interactiveView
 	NavMenu        *NavMenu
 	SearchBar      *tview.Box
@@ -41,6 +42,7 @@ func NewApplication() *Application {
 	App := tview.NewApplication()
 	Root := NewRoot()
 	pBar := NewProgressBar().SetProgressFunc(progressFunc)
+	coverArt := newCoverArt()
 	searchbar := tview.NewBox().SetBorder(true).SetTitle("SEARCH").SetBackgroundColor(tcell.ColorDefault)
 	SetCurrentView(playlistView)
 	Main := NewInteractiveView()
@@ -141,6 +143,7 @@ func NewApplication() *Application {
 	Ui = &Application{
 		App:            App,
 		Main:           Main,
+		CoverArt:       coverArt,
 		NavMenu:        NavMenu,
 		SearchBar:      searchbar,
 		ProgressBar:    pBar,
