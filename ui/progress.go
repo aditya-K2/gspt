@@ -17,6 +17,7 @@ import (
 var (
 	state     *spotify.PlayerState
 	stateLock sync.Mutex
+	ctrackId  spotify.ID
 )
 
 // ProgressBar is a two-lined Box. First line is the BarTitle
@@ -85,7 +86,10 @@ func RefreshProgress() {
 	state = s
 	stateLock.Unlock()
 	if Ui != nil && Ui.CoverArt != nil {
-		Ui.CoverArt.RefreshState()
+		if s.Item != nil && s.Item.ID != ctrackId {
+			ctrackId = s.Item.ID
+			Ui.CoverArt.RefreshState()
+		}
 	}
 }
 
