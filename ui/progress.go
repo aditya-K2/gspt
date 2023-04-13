@@ -75,6 +75,9 @@ func (self *ProgressBar) Draw(screen tcell.Screen) {
 			self.BarText),
 		x, y+2, _width-OFFSET, tview.AlignRight, tcell.ColorWhite)
 }
+func (self *ProgressBar) RefreshState() {
+	RefreshProgress()
+}
 
 func RefreshProgress() {
 	s, err := spt.GetPlayerState()
@@ -86,15 +89,16 @@ func RefreshProgress() {
 	state = s
 	stateLock.Unlock()
 	if Ui != nil && Ui.CoverArt != nil {
-		if s.Item != nil && s.Item.ID != ctrackId {
-			ctrackId = s.Item.ID
-			Ui.CoverArt.RefreshState()
+		if s.Item != nil && state.Item.ID != ctrackId {
+			ctrackId = state.Item.ID
+			go func() {
+				Ui.CoverArt.RefreshState()
+			}()
 		}
 	}
 }
 
 func RefreshProgressLocal() {
-	stateLock.Lock()
 	if state != nil {
 		if state.Item != nil && state.Playing {
 			if state.Item.Duration-state.Progress >= 1000 {
@@ -107,7 +111,6 @@ func RefreshProgressLocal() {
 			}
 		}
 	}
-	stateLock.Unlock()
 }
 
 func updateRoutine() {

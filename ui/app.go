@@ -9,11 +9,12 @@ import (
 )
 
 var (
-	ImgX int
-	ImgY int
-	ImgW int
-	ImgH int
-	Ui   *Application
+	ImgX  int
+	ImgY  int
+	ImgW  int
+	ImgH  int
+	start = true
+	Ui    *Application
 )
 
 var (
@@ -87,7 +88,7 @@ func NewApplication() *Application {
 	Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 	playlistNav.Table.SetBackgroundColor(tcell.ColorDefault)
 	PlaylistActions = map[string]*Action{
-		"playEntry": NewAction(playlistNav.PlaySelectEntry, nil),
+		"playEntry": NewAction(playlistNav.PlaySelectEntry, pBar),
 		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
 			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
@@ -150,7 +151,7 @@ func NewApplication() *Application {
 					for {
 						_ImgX, _ImgY, _ImgW, _ImgH := Ui.CoverArt.GetInnerRect()
 						if start {
-							coverArt.RefreshState()
+							RefreshProgress()
 							start = false
 						}
 						if _ImgX != ImgX || _ImgY != ImgY ||

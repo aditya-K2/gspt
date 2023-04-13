@@ -12,10 +12,6 @@ import (
 	"gitlab.com/diamondburned/ueberzug-go"
 )
 
-var (
-	start = true
-)
-
 type CoverArt struct {
 	*tview.Box
 	image *ueberzug.Image
