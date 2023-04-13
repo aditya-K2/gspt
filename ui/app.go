@@ -9,10 +9,10 @@ import (
 )
 
 var (
+	ImgX int
 	ImgY int
 	ImgW int
 	ImgH int
-	ImgX int
 	Ui   *Application
 )
 
@@ -67,12 +67,8 @@ func NewApplication() *Application {
 			return nil
 		}, nil)},
 	})
-	imagePreviewer := tview.NewBox()
-
-	imagePreviewer.SetBorder(true)
 
 	NavMenu.Table.SetBackgroundColor(tcell.ColorDefault)
-	imagePreviewer.SetBackgroundColor(tcell.ColorDefault)
 
 	NavMenu.Table.SetBorder(true)
 	NavMenu.Table.SetSelectable(true, false)
@@ -110,7 +106,7 @@ func NewApplication() *Application {
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(NavMenu.Table, 6, 3, false).
 		AddItem(playlistNav.Table, 0, 6, false).
-		AddItem(imagePreviewer, 9, 3, false)
+		AddItem(coverArt, 9, 3, false)
 
 	sNavExpViewFlex := tview.NewFlex().
 		AddItem(searchNavFlex, 17, 1, false).
@@ -131,6 +127,49 @@ func NewApplication() *Application {
 	InitNotifier()
 	updateRoutine()
 
+	rectWatcher := func() {
+		redrawInterval := 300
+
+		// Wait Until the ImagePreviewer is drawn
+		// Ensures that cover art is not drawn before the UI is rendered.
+		// Ref Issue: #39
+		drawCh := make(chan bool)
+		go func() {
+			for ImgX == 0 && ImgY == 0 {
+				ImgX, ImgY, ImgW, ImgH = Ui.CoverArt.GetRect()
+			}
+			drawCh <- true
+
+		}()
+
+		go func() {
+			// Waiting for the draw channel
+			draw := <-drawCh
+			if draw {
+				go func() {
+					for {
+						_ImgX, _ImgY, _ImgW, _ImgH := Ui.CoverArt.GetInnerRect()
+						if start {
+							coverArt.RefreshState()
+							start = false
+						}
+						if _ImgX != ImgX || _ImgY != ImgY ||
+							_ImgW != ImgW || _ImgH != ImgH {
+							ImgX = _ImgX
+							ImgY = _ImgY
+							ImgW = _ImgW
+							ImgH = _ImgH
+							coverArt.RefreshState()
+						}
+						time.Sleep(time.Millisecond * time.Duration(redrawInterval))
+					}
+				}()
+			}
+		}()
+	}
+
+	go rectWatcher()
+
 	go func() {
 		for {
 			if Ui != nil && Ui.App != nil {
@@ -141,14 +180,13 @@ func NewApplication() *Application {
 	}()
 
 	Ui = &Application{
-		App:            App,
-		Main:           Main,
-		CoverArt:       coverArt,
-		NavMenu:        NavMenu,
-		SearchBar:      searchbar,
-		ProgressBar:    pBar,
-		Root:           Root,
-		ImagePreviewer: imagePreviewer,
+		App:         App,
+		Main:        Main,
+		CoverArt:    coverArt,
+		NavMenu:     NavMenu,
+		SearchBar:   searchbar,
+		ProgressBar: pBar,
+		Root:        Root,
 	}
 
 	return Ui
