@@ -213,3 +213,7 @@ func CurrentUserSavedTracks(errHandler func(err error)) (*LikedSongs, error) {
 func RecentlyPlayed() ([]spotify.RecentlyPlayedItem, error) {
 	return Client.PlayerRecentlyPlayedOpt(ctx(), &spotify.RecentlyPlayedOptions{Limit: 50})
 }
+
+func GetPlayerState() (*spotify.PlayerState, error) {
+	return Client.PlayerState(ctx())
+}

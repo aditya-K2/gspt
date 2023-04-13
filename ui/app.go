@@ -2,6 +2,7 @@ package ui
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -30,7 +31,7 @@ type Application struct {
 	Main           *interactiveView
 	NavMenu        *NavMenu
 	SearchBar      *tview.Box
-	ProgressBar    *tview.Box
+	ProgressBar    *ProgressBar
 	Root           *Root
 	ImagePreviewer *tview.Box
 }
@@ -39,7 +40,7 @@ func NewApplication() *Application {
 
 	App := tview.NewApplication()
 	Root := NewRoot()
-	pBar := tview.NewBox().SetBorder(true).SetTitle("PROGRESS").SetBackgroundColor(tcell.ColorDefault)
+	pBar := NewProgressBar().SetProgressFunc(progressFunc)
 	searchbar := tview.NewBox().SetBorder(true).SetTitle("SEARCH").SetBackgroundColor(tcell.ColorDefault)
 	SetCurrentView(playlistView)
 	Main := NewInteractiveView()
@@ -126,6 +127,16 @@ func NewApplication() *Application {
 	App.SetRoot(Root.Root, true).SetFocus(playlistNav.Table)
 
 	InitNotifier()
+	updateRoutine()
+
+	go func() {
+		for {
+			if Ui != nil && Ui.App != nil {
+				Ui.App.Draw()
+				time.Sleep(time.Second)
+			}
+		}
+	}()
 
 	Ui = &Application{
 		App:            App,
