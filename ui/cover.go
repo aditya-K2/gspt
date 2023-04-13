@@ -12,6 +12,10 @@ import (
 	"gitlab.com/diamondburned/ueberzug-go"
 )
 
+var (
+	start = true
+)
+
 type CoverArt struct {
 	*tview.Box
 	image *ueberzug.Image
@@ -46,7 +50,7 @@ func getImg(uri string) (image.Image, error) {
 }
 
 func fileName(a spotify.SimpleAlbum) string {
-	return fmt.Sprintf("%s-%s.jpg", a.Name, a.Artists[0].Name)
+	return fmt.Sprintf("%s.jpg", a.ID)
 }
 
 func (c *CoverArt) RefreshState() {
@@ -61,17 +65,25 @@ func (c *CoverArt) RefreshState() {
 
 				// Download Image if doesn't Exits
 				if !utils.FileExists(file) {
+					msg := SendNotificationWithChan("Downloading Cover Art...")
 					f, err := os.OpenFile(file, os.O_CREATE|os.O_WRONLY, 0644)
 					defer f.Close()
 					if err != nil {
-						SendNotification(fmt.Sprintf("Error Downloading Image: %s", err.Error()))
+						go func() {
+							msg <- fmt.Sprintf("Error Downloading Image: %s", err.Error())
+						}()
 						return
 					}
 					err = state.Item.Album.Images[0].Download(f)
 					if err != nil {
-						SendNotification(fmt.Sprintf("Error Downloading Image: %s", err.Error()))
+						go func() {
+							msg <- fmt.Sprintf("Error Downloading Image: %s", err.Error())
+						}()
 						return
 					}
+					go func() {
+						msg <- "Image Downloaded Succesfully!"
+					}()
 				}
 
 				// Open the Image
