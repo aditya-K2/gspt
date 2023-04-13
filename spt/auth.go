@@ -30,6 +30,7 @@ var (
 		sptauth.ScopeUserLibraryModify,
 		sptauth.ScopeUserLibraryRead,
 		sptauth.ScopeUserReadPrivate,
+		sptauth.ScopeUserFollowRead,
 		sptauth.ScopeUserReadCurrentlyPlaying,
 		sptauth.ScopeUserModifyPlaybackState,
 		sptauth.ScopeUserReadRecentlyPlayed,

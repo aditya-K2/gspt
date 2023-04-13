@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -58,7 +57,11 @@ func NewApplication() *Application {
 			App.SetFocus(Main.Table)
 			return nil
 		}, nil)},
-		{"Artists", NewAction(func(e *tcell.EventKey) *tcell.EventKey { fmt.Println("Artists"); return nil }, nil)},
+		{"Artists", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			SetCurrentView(artistsView)
+			App.SetFocus(Main.Table)
+			return nil
+		}, nil)},
 		{"Liked Songs", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			SetCurrentView(likedSongsView)
 			App.SetFocus(Main.Table)

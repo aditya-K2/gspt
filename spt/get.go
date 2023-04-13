@@ -9,6 +9,12 @@ import (
 
 var (
 	topTracksLimit = 15
+	albumtypes     = []spotify.AlbumType{
+		spotify.AlbumTypeAlbum,
+		spotify.AlbumTypeSingle,
+		spotify.AlbumTypeAppearsOn,
+		spotify.AlbumTypeCompilation,
+	}
 )
 
 type Playlist struct {
@@ -23,6 +29,7 @@ type Album struct {
 }
 
 type SavedAlbums []spotify.SavedAlbum
+type FollowedArtists []spotify.FullArtist
 type UserPlaylists []spotify.SimplePlaylist
 type LikedSongs []spotify.SavedTrack
 
@@ -214,6 +221,41 @@ func CurrentUserSavedTracks(errHandler func(err error)) (*LikedSongs, error) {
 	}
 }
 
+func CurrentUserFollowedArtists(errHandler func(error)) (*FollowedArtists, error) {
+	// TODO: Check if this is the proper implementation
+	_a := make(FollowedArtists, 0)
+	artists := &_a
+	if ar, err := Client.CurrentUsersFollowedArtists(ctx()); err != nil {
+		return artists, err
+	} else {
+		ap := spotify.ID("")
+		addArtists := func() {
+			_a = append(_a, ar.Artists...)
+			ap = _a[len(_a)-1].ID
+		}
+		addArtists()
+		go func() {
+			for {
+				if len(ar.Artists) == 0 {
+					errHandler(nil)
+				}
+				if ar, err = Client.CurrentUsersFollowedArtists(ctx(), spotify.After(string(ap))); err != nil {
+					if err == spotify.ErrNoMorePages {
+						errHandler(nil)
+						break
+					} else {
+						errHandler(err)
+						break
+					}
+				} else {
+					addArtists()
+				}
+			}
+		}()
+		return artists, nil
+	}
+}
+
 func RecentlyPlayed() ([]spotify.RecentlyPlayedItem, error) {
 	return Client.PlayerRecentlyPlayedOpt(ctx(), &spotify.RecentlyPlayedOptions{Limit: 50})
 }
@@ -230,4 +272,20 @@ func GetTopTracks() ([]spotify.FullTrack, error) {
 func GetTopArtists() ([]spotify.FullArtist, error) {
 	c, err := Client.CurrentUsersTopArtists(ctx(), spotify.Limit(topTracksLimit))
 	return c.Artists, err
+}
+
+func GetArtistTopTracks(artistID spotify.ID) ([]spotify.FullTrack, error) {
+	c, err := Client.CurrentUser(ctx())
+	if err != nil {
+		return []spotify.FullTrack{}, err
+	}
+	return Client.GetArtistsTopTracks(ctx(), artistID, c.Country)
+}
+
+func GetArtistAlbums(artistID spotify.ID) ([]spotify.SimpleAlbum, error) {
+	c, err := Client.GetArtistAlbums(ctx(), artistID, albumtypes)
+	if err != nil {
+		return []spotify.SimpleAlbum{}, err
+	}
+	return c.Albums, nil
 }

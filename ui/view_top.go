@@ -69,4 +69,4 @@ func (a *TopTracksView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.Ev
 	}
 }
 
-func (a *TopTracksView) Name() string { return "AlbumsView" }
+func (a *TopTracksView) Name() string { return "TopTracksView" }
