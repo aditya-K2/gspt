@@ -7,6 +7,10 @@ import (
 	"github.com/zmb3/spotify/v2"
 )
 
+var (
+	topTracksLimit = 15
+)
+
 type Playlist struct {
 	SnapshotID string
 	ID         spotify.ID
@@ -219,11 +223,11 @@ func GetPlayerState() (*spotify.PlayerState, error) {
 }
 
 func GetTopTracks() ([]spotify.FullTrack, error) {
-	c, err := Client.CurrentUsersTopTracks(ctx(), spotify.Limit(10))
+	c, err := Client.CurrentUsersTopTracks(ctx(), spotify.Limit(topTracksLimit))
 	return c.Tracks, err
 }
 
 func GetTopArtists() ([]spotify.FullArtist, error) {
-	c, err := Client.CurrentUsersTopArtists(ctx(), spotify.Limit(10))
+	c, err := Client.CurrentUsersTopArtists(ctx(), spotify.Limit(topTracksLimit))
 	return c.Artists, err
 }
