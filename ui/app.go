@@ -18,13 +18,14 @@ var (
 )
 
 var (
-	TrackStyle       = tcell.StyleDefault.Foreground(tcell.ColorBlue).Background(tcell.ColorBlack)
-	AlbumStyle       = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
-	ArtistStyle      = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorBlack)
-	TimeStyle        = tcell.StyleDefault.Foreground(tcell.ColorOrange).Background(tcell.ColorBlack)
-	PlaylistNavStyle = tcell.StyleDefault.Foreground(tcell.ColorCoral).Background(tcell.ColorBlack)
-	NavStyle         = tcell.StyleDefault.Foreground(tcell.ColorPapayaWhip).Background(tcell.ColorBlack)
-	ContextMenuStyle = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorDefault).Bold(true)
+	TrackStyle         = tcell.StyleDefault.Foreground(tcell.ColorBlue).Background(tcell.ColorBlack)
+	AlbumStyle         = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
+	ArtistStyle        = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorBlack)
+	TimeStyle          = tcell.StyleDefault.Foreground(tcell.ColorOrange).Background(tcell.ColorBlack)
+	PlaylistNavStyle   = tcell.StyleDefault.Foreground(tcell.ColorCoral).Background(tcell.ColorBlack)
+	NavStyle           = tcell.StyleDefault.Foreground(tcell.ColorPapayaWhip).Background(tcell.ColorBlack)
+	ContextMenuStyle   = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorDefault).Bold(true)
+	NotSelectableStyle = tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorDefault).Bold(true).Italic(true)
 )
 
 type Application struct {
@@ -46,7 +47,8 @@ func NewApplication() *Application {
 	pBar := NewProgressBar().SetProgressFunc(progressFunc)
 	coverArt := newCoverArt()
 	searchbar := tview.NewBox().SetBorder(true).SetTitle("SEARCH").SetBackgroundColor(tcell.ColorDefault)
-	SetCurrentView(playlistView)
+	SetCurrentView(topTracksView)
+	topTracksView.RefreshState()
 	Main := NewInteractiveView()
 	Main.Table.SetBorder(true)
 
@@ -123,7 +125,7 @@ func NewApplication() *Application {
 		AddItem(pBar, 5, 1, false)
 
 	Root.Primitive("Main", MainFlex)
-	App.SetRoot(Root.Root, true).SetFocus(playlistNav.Table)
+	App.SetRoot(Root.Root, true).SetFocus(Main.Table)
 
 	InitNotifier()
 	updateRoutine()

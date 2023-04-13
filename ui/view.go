@@ -9,6 +9,7 @@ var (
 	albumsView         = &AlbumsView{}
 	likedSongsView     = &LikedSongsView{}
 	recentlyPlayedView = &RecentlyPlayedView{}
+	topTracksView      = &TopTracksView{}
 )
 
 type View interface {

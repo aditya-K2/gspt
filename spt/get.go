@@ -217,3 +217,13 @@ func RecentlyPlayed() ([]spotify.RecentlyPlayedItem, error) {
 func GetPlayerState() (*spotify.PlayerState, error) {
 	return Client.PlayerState(ctx())
 }
+
+func GetTopTracks() ([]spotify.FullTrack, error) {
+	c, err := Client.CurrentUsersTopTracks(ctx(), spotify.Limit(10))
+	return c.Tracks, err
+}
+
+func GetTopArtists() ([]spotify.FullArtist, error) {
+	c, err := Client.CurrentUsersTopArtists(ctx(), spotify.Limit(10))
+	return c.Artists, err
+}
