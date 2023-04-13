@@ -51,13 +51,23 @@ func (a *TopTracksView) Content() func() [][]Content {
 
 func (a *TopTracksView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
 	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
+		if e.Key() == tcell.KeyCtrlP {
 			r, _ := Ui.Main.Table.GetSelection()
 			if r > 0 {
 				if r < (len(a.topArtists) + 1) {
 					if err := spt.PlayContext(&a.topArtists[r-1].URI); err != nil {
 						SendNotification(err.Error())
 					}
+				}
+			}
+		}
+		if e.Key() == tcell.KeyEnter {
+			r, _ := Ui.Main.Table.GetSelection()
+			if r > 0 {
+				if r < (len(a.topArtists) + 1) {
+					artistView.SetArtist(&(a.topArtists)[r-1].ID)
+					artistView.RefreshState()
+					SetCurrentView(artistView)
 				} else if r != len(a.topArtists)+1 {
 					if err := spt.PlaySong(a.topTracks[r-2-len(a.topArtists)].URI); err != nil {
 						SendNotification(err.Error())
