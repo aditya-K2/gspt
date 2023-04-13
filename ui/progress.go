@@ -89,11 +89,14 @@ func RefreshProgress() {
 	state = s
 	stateLock.Unlock()
 	if Ui != nil && Ui.CoverArt != nil {
-		if s.Item != nil && state.Item.ID != ctrackId {
-			ctrackId = state.Item.ID
-			go func() {
-				Ui.CoverArt.RefreshState()
-			}()
+		// If No Item is playing
+		if (state.Item == nil) ||
+			// An Item is Playing but doesn't match the cached Track ID
+			(state.Item != nil && state.Item.ID != ctrackId) {
+			if state.Item != nil {
+				ctrackId = state.Item.ID
+			}
+			Ui.CoverArt.RefreshState()
 		}
 	}
 }
