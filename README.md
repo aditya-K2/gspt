@@ -16,6 +16,26 @@
 
 ***In a very experimental stage.***
 
+### Building
+
+```bash
+$ git clone https://github.com/aditya-K2/gspt.git
+$ cd gspt
+$ go build -v
+```
+
+### Installing
+
+```bash
+$ sudo install -D gspt -t "/usr/bin/"
+```
+
+#### You can merge them into a one liner
+
+```bash
+git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install -D gspt -t "/usr/bin/"
+```
+
 ## Setup
 
 ### How to Generate an API Key from Spotify Dashboard
@@ -47,3 +67,11 @@ $ gspt
 ```
 
 ---
+
+### Key bindings
+
+1. `d` Opens the device menu to choose a device from
+1. `1`, `2`, `3` Switch between the views
+1. `Enter` - Selects an entry
+1. `?` Search
+1. `Ctrl-P` starts playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
