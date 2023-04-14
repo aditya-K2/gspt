@@ -12,6 +12,7 @@ var (
 	topTracksView      = &TopTracksView{}
 	artistView         = &ArtistView{}
 	artistsView        = &ArtistsView{}
+	searchView         = &SearchView{}
 )
 
 type View interface {

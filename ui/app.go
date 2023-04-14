@@ -33,7 +33,7 @@ type Application struct {
 	Main           *interactiveView
 	NavMenu        *NavMenu
 	PlaylistNav    *PlaylistNav
-	SearchBar      *tview.Box
+	SearchBar      *tview.InputField
 	ProgressBar    *ProgressBar
 	Root           *Root
 	ImagePreviewer *tview.Box
@@ -45,7 +45,7 @@ func NewApplication() *Application {
 	Root := NewRoot()
 	pBar := NewProgressBar().SetProgressFunc(progressFunc)
 	coverArt := newCoverArt()
-	searchbar := tview.NewBox().SetBorder(true).SetTitle("SEARCH").SetBackgroundColor(tcell.ColorDefault)
+	searchbar := NewSearchBar()
 	SetCurrentView(topTracksView)
 	topTracksView.RefreshState()
 	Main := NewInteractiveView()
@@ -188,6 +188,10 @@ func NewApplication() *Application {
 	App.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Rune() == '1' {
 			Ui.App.SetFocus(NavMenu.Table)
+			return nil
+		}
+		if e.Rune() == '?' {
+			Ui.App.SetFocus(searchbar)
 			return nil
 		}
 		if e.Rune() == '2' {
