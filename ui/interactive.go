@@ -225,6 +225,7 @@ func GetCell(text string, st tcell.Style) *tview.TableCell {
 }
 
 func (i *interactiveView) update() {
+	n := 3
 	i.Table.Clear()
 	if GetCurrentView().Content() != nil {
 		s := GetCurrentView().Content()()
@@ -236,7 +237,6 @@ func (i *interactiveView) update() {
 				b = "[blue::]█[::]"
 				fg = tcell.ColorBlue
 			}
-			n := len(s[x])
 			i.Table.SetCell(x, 0,
 				GetCell(b, tcell.StyleDefault.Foreground(fg).Background(fg)))
 			for y := range s[x] {
