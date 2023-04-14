@@ -239,7 +239,7 @@ func NewApplication() *Application {
 					for {
 						_ImgX, _ImgY, _ImgW, _ImgH := Ui.CoverArt.GetRect()
 						if start {
-							RefreshProgress()
+							RefreshProgress(false)
 							start = false
 						}
 						if _ImgX != ImgX || _ImgY != ImgY ||
@@ -283,6 +283,10 @@ func NewApplication() *Application {
 		}
 		if e.Rune() == '3' {
 			Ui.App.SetFocus(Main.Table)
+			return nil
+		}
+		if e.Rune() == 'd' {
+			OpenDeviceMenu()
 			return nil
 		}
 		return e

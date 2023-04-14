@@ -297,3 +297,16 @@ func Search(s string) (*spotify.SearchResult, error) {
 			spotify.SearchTypeTrack|
 			spotify.SearchTypeArtist)
 }
+
+func UserDevices() ([]spotify.PlayerDevice, error) {
+	return Client.PlayerDevices(ctx())
+}
+
+func TransferPlayback(deviceId spotify.ID) error {
+	s, err := GetPlayerState()
+	if err != nil {
+		return errors.New("Unable to get Current Player State!")
+	}
+	err = Client.PauseOpt(ctx(), &spotify.PlayOptions{DeviceID: &s.Device.ID})
+	return Client.TransferPlayback(ctx(), deviceId, true)
+}
