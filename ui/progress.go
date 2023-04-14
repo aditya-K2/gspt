@@ -76,10 +76,10 @@ func (self *ProgressBar) Draw(screen tcell.Screen) {
 		x, y+2, _width-OFFSET, tview.AlignRight, tcell.ColorWhite)
 }
 func (self *ProgressBar) RefreshState() {
-	RefreshProgress()
+	RefreshProgress(false)
 }
 
-func RefreshProgress() {
+func RefreshProgress(force bool) {
 	s, err := spt.GetPlayerState()
 	if err != nil {
 		SendNotification(err.Error())
@@ -92,7 +92,9 @@ func RefreshProgress() {
 		// If No Item is playing
 		if (state.Item == nil) ||
 			// An Item is Playing but doesn't match the cached Track ID
-			(state.Item != nil && state.Item.ID != ctrackId) {
+			(state.Item != nil && state.Item.ID != ctrackId) ||
+			// Forced Redrawing
+			force {
 			if state.Item != nil {
 				ctrackId = state.Item.ID
 			}
@@ -109,7 +111,7 @@ func RefreshProgressLocal() {
 			} else {
 				state.Progress += state.Item.Duration - state.Progress
 				go func() {
-					RefreshProgress()
+					RefreshProgress(false)
 				}()
 			}
 		}
@@ -117,7 +119,7 @@ func RefreshProgressLocal() {
 }
 
 func updateRoutine() {
-	RefreshProgress()
+	RefreshProgress(false)
 	go func() {
 		localTicker := time.NewTicker(time.Second)
 		spotifyTicker := time.NewTicker(time.Second * 5)
@@ -125,7 +127,7 @@ func updateRoutine() {
 			select {
 			case <-spotifyTicker.C:
 				{
-					RefreshProgress()
+					RefreshProgress(false)
 				}
 			case <-localTicker.C:
 				{
