@@ -289,3 +289,11 @@ func GetArtistAlbums(artistID spotify.ID) ([]spotify.SimpleAlbum, error) {
 	}
 	return c.Albums, nil
 }
+
+func Search(s string) (*spotify.SearchResult, error) {
+	return Client.Search(ctx(), s,
+		spotify.SearchTypePlaylist|
+			spotify.SearchTypeAlbum|
+			spotify.SearchTypeTrack|
+			spotify.SearchTypeArtist)
+}
