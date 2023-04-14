@@ -2,12 +2,19 @@ package ui
 
 import (
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 )
 
 type ArtistsView struct {
 	*DefaultViewNone
 	followedArtists *spt.FollowedArtists
+}
+
+func NewArtistsView() *ArtistsView {
+	a := &ArtistsView{
+		&DefaultViewNone{&defView{}},
+		nil,
+	}
+	return a
 }
 
 func (a *ArtistsView) Content() func() [][]Content {
@@ -39,16 +46,11 @@ func (a *ArtistsView) Content() func() [][]Content {
 	}
 }
 
-func (a *ArtistsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
-			r, _ := Ui.Main.Table.GetSelection()
-			artistView.SetArtist(&(*a.followedArtists)[r].ID)
-			artistView.RefreshState()
-			SetCurrentView(artistView)
-		}
-		return e
-	}
+func (a *ArtistsView) OpenArtist() {
+	r, _ := Ui.Main.Table.GetSelection()
+	artistView.SetArtist(&(*a.followedArtists)[r].ID)
+	artistView.RefreshState()
+	SetCurrentView(artistView)
 }
 
 func (a *ArtistsView) Name() string { return "ArtistsView" }

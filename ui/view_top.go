@@ -2,7 +2,6 @@ package ui
 
 import (
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 )
 
@@ -10,6 +9,15 @@ type TopTracksView struct {
 	*DefaultViewNone
 	topTracks  []spotify.FullTrack
 	topArtists []spotify.FullArtist
+}
+
+func NewTopTracksView() *TopTracksView {
+	t := &TopTracksView{
+		&DefaultViewNone{&defView{}},
+		[]spotify.FullTrack{},
+		[]spotify.FullArtist{},
+	}
+	return t
 }
 
 func (a *TopTracksView) RefreshState() {
@@ -49,33 +57,30 @@ func (a *TopTracksView) Content() func() [][]Content {
 	}
 }
 
-func (a *TopTracksView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyCtrlP {
-			r, _ := Ui.Main.Table.GetSelection()
-			if r > 0 {
-				if r < (len(a.topArtists) + 1) {
-					if err := spt.PlayContext(&a.topArtists[r-1].URI); err != nil {
-						SendNotification(err.Error())
-					}
-				}
+func (a *TopTracksView) PlaySelectedEntry() {
+	r, _ := Ui.Main.Table.GetSelection()
+	if r > 0 {
+		if r < (len(a.topArtists) + 1) {
+			if err := spt.PlayContext(&a.topArtists[r-1].URI); err != nil {
+				SendNotification(err.Error())
 			}
 		}
-		if e.Key() == tcell.KeyEnter {
-			r, _ := Ui.Main.Table.GetSelection()
-			if r > 0 {
-				if r < (len(a.topArtists) + 1) {
-					artistView.SetArtist(&(a.topArtists)[r-1].ID)
-					artistView.RefreshState()
-					SetCurrentView(artistView)
-				} else if r != len(a.topArtists)+1 {
-					if err := spt.PlaySong(a.topTracks[r-2-len(a.topArtists)].URI); err != nil {
-						SendNotification(err.Error())
-					}
-				}
+	}
+
+}
+
+func (a *TopTracksView) OpenSelectEntry() {
+	r, _ := Ui.Main.Table.GetSelection()
+	if r > 0 {
+		if r < (len(a.topArtists) + 1) {
+			artistView.SetArtist(&(a.topArtists)[r-1].ID)
+			artistView.RefreshState()
+			SetCurrentView(artistView)
+		} else if r != len(a.topArtists)+1 {
+			if err := spt.PlaySong(a.topTracks[r-2-len(a.topArtists)].URI); err != nil {
+				SendNotification(err.Error())
 			}
 		}
-		return e
 	}
 }
 

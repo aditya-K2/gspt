@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 )
 
@@ -12,7 +11,15 @@ type PlaylistView struct {
 	*DefaultView
 	currentPlaylist         *spotify.SimplePlaylist
 	currentUserFullPlaylist *spt.Playlist
-	I                       *interactiveView
+}
+
+func NewPlaylistView() *PlaylistView {
+	p := &PlaylistView{
+		&DefaultView{&defView{}},
+		nil,
+		nil,
+	}
+	return p
 }
 
 func (p *PlaylistView) SetPlaylist(pl *spotify.SimplePlaylist) {
@@ -78,15 +85,10 @@ func (p *PlaylistView) ContextHandler() func(start, end, sel int) {
 	}
 }
 
-func (p *PlaylistView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
-			r, _ := Ui.Main.Table.GetSelection()
-			if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
-				SendNotification(err.Error())
-			}
-		}
-		return e
+func (p *PlaylistView) PlaySelectEntry() {
+	r, _ := Ui.Main.Table.GetSelection()
+	if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
+		SendNotification(err.Error())
 	}
 }
 

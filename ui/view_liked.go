@@ -4,13 +4,20 @@ import (
 	"fmt"
 
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 )
 
 type LikedSongsView struct {
 	*DefaultView
 	likedSongs *spt.LikedSongs
+}
+
+func NewLikedSongsView() *LikedSongsView {
+	l := &LikedSongsView{
+		&DefaultView{&defView{}},
+		nil,
+	}
+	return l
 }
 
 func (p *LikedSongsView) Content() func() [][]Content {
@@ -67,15 +74,10 @@ func (l *LikedSongsView) ContextHandler() func(start, end, sel int) {
 	}
 }
 
-func (l *LikedSongsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
-			r, _ := Ui.Main.Table.GetSelection()
-			if err := spt.PlaySong((*l.likedSongs)[r].URI); err != nil {
-				SendNotification(err.Error())
-			}
-		}
-		return e
+func (l *LikedSongsView) PlaySelectEntry() {
+	r, _ := Ui.Main.Table.GetSelection()
+	if err := spt.PlaySong((*l.likedSongs)[r].URI); err != nil {
+		SendNotification(err.Error())
 	}
 }
 

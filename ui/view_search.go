@@ -2,7 +2,6 @@ package ui
 
 import (
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 )
 
@@ -10,6 +9,14 @@ type SearchView struct {
 	*DefaultViewNone
 	search  string
 	results *spotify.SearchResult
+}
+
+func NewSearchView() *SearchView {
+	s := &SearchView{
+		&DefaultViewNone{&defView{}},
+		"", nil,
+	}
+	return s
 }
 
 func (a *SearchView) Content() func() [][]Content {
@@ -66,12 +73,6 @@ func (a *SearchView) RefreshState() {
 			return
 		}
 		a.results = results
-	}
-}
-
-func (a *SearchView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		return e
 	}
 }
 

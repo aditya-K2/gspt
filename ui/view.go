@@ -4,15 +4,15 @@ import "github.com/gdamore/tcell/v2"
 
 var (
 	CurrentView        View
-	playlistView       = &PlaylistView{}
-	albumView          = &AlbumView{}
-	albumsView         = &AlbumsView{}
-	likedSongsView     = &LikedSongsView{}
-	recentlyPlayedView = &RecentlyPlayedView{}
-	topTracksView      = &TopTracksView{}
-	artistView         = &ArtistView{}
-	artistsView        = &ArtistsView{}
-	searchView         = &SearchView{}
+	playlistView       = NewPlaylistView()
+	albumView          = NewAlbumView()
+	albumsView         = NewAlbumsView()
+	likedSongsView     = NewLikedSongsView()
+	recentlyPlayedView = NewRecentlyPlayedView()
+	topTracksView      = NewTopTracksView()
+	artistView         = NewArtistView()
+	artistsView        = NewArtistsView()
+	searchView         = NewSearchView()
 )
 
 type View interface {

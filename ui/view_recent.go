@@ -18,7 +18,14 @@ var (
 type RecentlyPlayedView struct {
 	*DefaultView
 	recentlyPlayed []spotify.RecentlyPlayedItem
-	funcMap        map[tcell.Key]string
+}
+
+func NewRecentlyPlayedView() *RecentlyPlayedView {
+	r := &RecentlyPlayedView{
+		&DefaultView{&defView{}},
+		[]spotify.RecentlyPlayedItem{},
+	}
+	return r
 }
 
 func format(t time.Duration) string {
@@ -65,15 +72,6 @@ func (r *RecentlyPlayedView) ContextHandler() func(start, end, sel int) {
 	}
 }
 
-func (re *RecentlyPlayedView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		if action, ok := re.funcMap[e.Key()]; ok {
-			RecentlyPlayedViewActions[action].Func()(e)
-		}
-		return e
-	}
-}
-
 func (r *RecentlyPlayedView) Name() string { return "RecentlyPlayedView" }
 
 func (r *RecentlyPlayedView) RefreshState() {
@@ -98,8 +96,4 @@ func (re *RecentlyPlayedView) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
 		}
 	}
 	return nil
-}
-
-func (re *RecentlyPlayedView) MapActions(f map[tcell.Key]string) {
-	re.funcMap = f
 }

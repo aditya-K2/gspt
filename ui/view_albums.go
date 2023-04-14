@@ -2,12 +2,19 @@ package ui
 
 import (
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 )
 
 type AlbumsView struct {
 	*DefaultViewNone
 	savedAlbums *spt.SavedAlbums
+}
+
+func NewAlbumsView() *AlbumsView {
+	a := &AlbumsView{
+		&DefaultViewNone{&defView{}},
+		nil,
+	}
+	return a
 }
 
 func (a *AlbumsView) Content() func() [][]Content {
@@ -40,14 +47,10 @@ func (a *AlbumsView) Content() func() [][]Content {
 	}
 }
 
-func (a *AlbumsView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
-			r, _ := Ui.Main.Table.GetSelection()
-			albumView.SetAlbum((*a.savedAlbums)[r].Name, &(*a.savedAlbums)[r].ID)
-			SetCurrentView(albumView)
-		}
-		return e
-	}
+func (a *AlbumsView) OpenAlbum() {
+	r, _ := Ui.Main.Table.GetSelection()
+	albumView.SetAlbum((*a.savedAlbums)[r].Name, &(*a.savedAlbums)[r].ID)
+	SetCurrentView(albumView)
 }
+
 func (a *AlbumsView) Name() string { return "AlbumsView" }

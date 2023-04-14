@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 )
 
@@ -13,6 +12,14 @@ type AlbumView struct {
 	currentAlbumID   *spotify.ID
 	currentAlbumName string
 	currentFullAlbum *spt.Album
+}
+
+func NewAlbumView() *AlbumView {
+	t := &AlbumView{
+		&DefaultView{&defView{}},
+		nil, "", nil,
+	}
+	return t
 }
 
 func (a *AlbumView) SetAlbum(name string, al *spotify.ID) {
@@ -80,15 +87,10 @@ func (a *AlbumView) ContextHandler() func(start, end, sel int) {
 	}
 }
 
-func (a *AlbumView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
-	return func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
-			r, _ := Ui.Main.Table.GetSelection()
-			if err := spt.PlaySongWithContext(&a.currentFullAlbum.URI, r); err != nil {
-				SendNotification(err.Error())
-			}
-		}
-		return e
+func (a *AlbumView) PlaySelectEntry() {
+	r, _ := Ui.Main.Table.GetSelection()
+	if err := spt.PlaySongWithContext(&a.currentFullAlbum.URI, r); err != nil {
+		SendNotification(err.Error())
 	}
 }
 

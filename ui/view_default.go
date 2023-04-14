@@ -1,8 +1,38 @@
 package ui
 
-import "github.com/aditya-K2/gspt/spt"
+import (
+	"github.com/aditya-K2/gspt/spt"
+	"github.com/gdamore/tcell/v2"
+)
+
+type defView struct {
+	m       map[tcell.Key]string
+	actions map[string]*Action
+}
+
+func (d *defView) SetMappings(m map[tcell.Key]string) {
+	d.m = m
+}
+
+func (d *defView) SetActions(a map[string]*Action) {
+	d.actions = a
+}
+
+func (d *defView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
+	return func(e *tcell.EventKey) *tcell.EventKey {
+		if d.m != nil {
+			if val, ok := d.m[e.Key()]; ok {
+				if d.actions != nil {
+					return d.actions[val].Func()(e)
+				}
+			}
+		}
+		return e
+	}
+}
 
 type DefaultViewNone struct {
+	*defView
 }
 
 func (a *DefaultViewNone) ContextOpener() func(m *Root, s func(s int)) { return nil }
@@ -11,6 +41,7 @@ func (a *DefaultViewNone) ContextKey() rune                            { return 
 func (a *DefaultViewNone) DisableVisualMode() bool                     { return true }
 
 type DefaultView struct {
+	*defView
 }
 
 func (d *DefaultView) ContextOpener() func(m *Root, s func(s int)) {
