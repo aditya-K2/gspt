@@ -88,7 +88,7 @@ func (v *PlaylistNav) MapActions(f map[tcell.Key]string) {
 func (v *PlaylistNav) PlaySelectEntry(e *tcell.EventKey) *tcell.EventKey {
 	r, _ := v.Table.GetSelection()
 	if err := spt.PlayContext(&(*v.Playlists)[r].URI); err != nil {
-		panic(err)
+		SendNotification(err.Error())
 	}
 	return nil
 }
