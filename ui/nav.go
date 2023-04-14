@@ -26,6 +26,7 @@ func newNavMenu(m []navItem) *NavMenu {
 		}
 		return T.GetInnerRect()
 	})
+	T.SetTitle("Library").SetTitleAlign(tview.AlignLeft)
 	T.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Key() == tcell.KeyEnter {
 			r, _ := T.GetSelection()
@@ -50,6 +51,7 @@ var PlaylistActions map[string]*Action
 func NewPlaylistNav(done func(e error)) (*PlaylistNav, error) {
 	T := tview.NewTable()
 	T.SetSelectable(true, false).SetBorder(true)
+	T.SetTitle("Playlists").SetTitleAlign(tview.AlignLeft)
 	p, err := spt.CurrentUserPlaylists(done)
 
 	if err != nil {
