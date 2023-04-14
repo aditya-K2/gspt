@@ -74,7 +74,7 @@ func (l *LikedSongsView) ContextHandler() func(start, end, sel int) {
 	}
 }
 
-func (l *LikedSongsView) PlaySelectEntry() {
+func (l *LikedSongsView) OpenEntry() {
 	r, _ := Ui.Main.Table.GetSelection()
 	if err := spt.PlaySong((*l.likedSongs)[r].URI); err != nil {
 		SendNotification(err.Error())

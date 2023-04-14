@@ -66,7 +66,7 @@ func (a *ArtistView) Content() func() [][]Content {
 	}
 }
 
-func (a *ArtistView) PlayArtistAlbum() {
+func (a *ArtistView) PlayEntry() {
 	r, _ := Ui.Main.Table.GetSelection()
 	if r > 0 {
 		if r < (len(a.albums) + 1) {
@@ -77,7 +77,7 @@ func (a *ArtistView) PlayArtistAlbum() {
 	}
 }
 
-func (a *ArtistView) OpenSelectEntry() {
+func (a *ArtistView) OpenEntry() {
 	r, _ := Ui.Main.Table.GetSelection()
 	if r > 0 {
 		if r < (len(a.albums) + 1) {

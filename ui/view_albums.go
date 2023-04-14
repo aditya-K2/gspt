@@ -53,4 +53,11 @@ func (a *AlbumsView) OpenAlbum() {
 	SetCurrentView(albumView)
 }
 
+func (a *AlbumsView) PlaySelectEntry() {
+	r, _ := Ui.Main.Table.GetSelection()
+	if err := spt.PlayContext(&(*a.savedAlbums)[r].URI); err != nil {
+		SendNotification(err.Error())
+	}
+}
+
 func (a *AlbumsView) Name() string { return "AlbumsView" }

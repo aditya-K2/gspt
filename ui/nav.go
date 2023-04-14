@@ -40,13 +40,12 @@ func newNavMenu(m []navItem) *NavMenu {
 }
 
 type PlaylistNav struct {
+	*defView
 	Table     *tview.Table
 	Playlists *spt.UserPlaylists
 	c         chan bool
 	done      func(error)
 }
-
-var PlaylistActions map[string]*Action
 
 func NewPlaylistNav(done func(e error)) (*PlaylistNav, error) {
 	T := tview.NewTable()
@@ -58,7 +57,7 @@ func NewPlaylistNav(done func(e error)) (*PlaylistNav, error) {
 		return nil, err
 	}
 
-	v := &PlaylistNav{T, p, make(chan bool), done}
+	v := &PlaylistNav{&defView{}, T, p, make(chan bool), done}
 	v.listen()
 
 	T.SetDrawFunc(func(s tcell.Screen, x, y, w, h int) (int, int, int, int) {
@@ -74,15 +73,6 @@ func (v *PlaylistNav) Draw() {
 		v.Table.SetCell(k, 0,
 			GetCell(p.Name, PlaylistNavStyle))
 	}
-}
-
-func (v *PlaylistNav) MapActions(f map[tcell.Key]string) {
-	v.Table.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
-		if action, ok := f[e.Key()]; ok {
-			PlaylistActions[action].Func()(e)
-		}
-		return e
-	})
 }
 
 func (v *PlaylistNav) PlaySelectEntry(e *tcell.EventKey) *tcell.EventKey {

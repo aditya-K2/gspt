@@ -94,7 +94,9 @@ func NewApplication() *Application {
 
 	Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 	playlistNav.Table.SetBackgroundColor(tcell.ColorDefault)
-	PlaylistActions = map[string]*Action{
+
+	// Actions
+	playlistNav.SetActions(map[string]*Action{
 		"playEntry": NewAction(playlistNav.PlaySelectEntry, pBar),
 		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
@@ -103,24 +105,92 @@ func NewApplication() *Application {
 			App.SetFocus(Main.Table)
 			return nil
 		}, nil),
-	}
-	playlistNav.MapActions(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-		tcell.KeyCtrlP: "playEntry",
 	})
-
+	playlistView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
+			playlistView.PlaySelectEntry()
+			return nil
+		}, pBar),
+	})
 	recentlyPlayedView.SetActions(map[string]*Action{
-		"selectEntry": NewAction(recentlyPlayedView.SelectEntry, pBar),
+		"openEntry": NewAction(recentlyPlayedView.SelectEntry, pBar),
 	})
-	albumsView.SetActions(map[string]*Action{
-		"openAlbum": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			albumsView.OpenAlbum()
+	topTracksView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
+		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
+	})
+	likedSongsView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			likedSongsView.OpenEntry()
+			return nil
+		}, pBar),
+	})
+	searchView.SetActions(map[string]*Action{})
+	artistsView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			artistsView.OpenArtist()
 			return nil
 		}, nil),
 	})
+	artistView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			artistView.OpenEntry()
+			return nil
+		}, pBar),
+		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			artistView.PlayEntry()
+			return nil
+		}, pBar),
+	})
+	albumsView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			albumsView.OpenAlbum()
+			return nil
+		}, nil),
+		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			albumsView.PlaySelectEntry()
+			return nil
+		}, pBar),
+	})
+	albumView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			albumView.PlaySelectEntry()
+			return nil
+		}, pBar),
+	})
 
+	// Mappings
+	playlistNav.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+		tcell.KeyCtrlP: "playEntry",
+	})
+	playlistNav.Table.SetInputCapture(playlistNav.ExternalInputCapture())
+	playlistView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+	})
 	recentlyPlayedView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "selectEntry",
+		tcell.KeyEnter: "openEntry",
+	})
+	topTracksView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+		tcell.KeyCtrlP: "playEntry",
+	})
+	likedSongsView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+	})
+	albumsView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+		tcell.KeyCtrlP: "playEntry",
+	})
+	albumView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+	})
+	artistsView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+	})
+	artistView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+		tcell.KeyCtrlP: "playEntry",
 	})
 
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
@@ -197,16 +267,6 @@ func NewApplication() *Application {
 			}
 		}
 	}()
-
-	topTracksView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-		tcell.KeyCtrlP: "playEntry",
-	})
-
-	topTracksView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
-		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
-	})
 
 	App.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Rune() == '1' {
