@@ -21,6 +21,7 @@ var (
 	AlbumStyle         = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
 	ArtistStyle        = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorBlack)
 	TimeStyle          = tcell.StyleDefault.Foreground(tcell.ColorOrange).Background(tcell.ColorBlack)
+	GenreStyle         = tcell.StyleDefault.Foreground(tcell.ColorPaleTurquoise).Background(tcell.ColorBlack)
 	PlaylistNavStyle   = tcell.StyleDefault.Foreground(tcell.ColorCoral).Background(tcell.ColorBlack)
 	NavStyle           = tcell.StyleDefault.Foreground(tcell.ColorPapayaWhip).Background(tcell.ColorBlack)
 	ContextMenuStyle   = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorDefault).Bold(true)
@@ -107,9 +108,21 @@ func NewApplication() *Application {
 		tcell.KeyEnter: "openEntry",
 		tcell.KeyCtrlP: "playEntry",
 	})
-	recentlyPlayedView.MapActions(map[tcell.Key]string{
+
+	recentlyPlayedView.SetActions(map[string]*Action{
+		"selectEntry": NewAction(recentlyPlayedView.SelectEntry, pBar),
+	})
+	albumsView.SetActions(map[string]*Action{
+		"openAlbum": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			albumsView.OpenAlbum()
+			return nil
+		}, nil),
+	})
+
+	recentlyPlayedView.SetMappings(map[tcell.Key]string{
 		tcell.KeyEnter: "selectEntry",
 	})
+
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(NavMenu.Table, 6, 3, false).
 		AddItem(playlistNav.Table, 0, 6, false).
@@ -184,6 +197,16 @@ func NewApplication() *Application {
 			}
 		}
 	}()
+
+	topTracksView.SetMappings(map[tcell.Key]string{
+		tcell.KeyEnter: "openEntry",
+		tcell.KeyCtrlP: "playEntry",
+	})
+
+	topTracksView.SetActions(map[string]*Action{
+		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
+		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
+	})
 
 	App.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		if e.Rune() == '1' {
