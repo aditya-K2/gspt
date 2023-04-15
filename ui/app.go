@@ -68,7 +68,7 @@ func NewApplication() *Application {
 	Main := NewInteractiveView()
 	Main.Table.SetBorder(true)
 
-	NavMenu := newNavMenu([]navItem{
+	navMenu := newNavMenu([]navItem{
 		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			SetCurrentView(albumsView)
 			App.SetFocus(Main.Table)
@@ -92,10 +92,10 @@ func NewApplication() *Application {
 		}, nil)},
 	})
 
-	NavMenu.Table.SetBackgroundColor(tcell.ColorDefault)
+	navMenu.Table.SetBackgroundColor(tcell.ColorDefault)
 
-	NavMenu.Table.SetBorder(true)
-	NavMenu.Table.SetSelectable(true, false)
+	navMenu.Table.SetBorder(true)
+	navMenu.Table.SetSelectable(true, false)
 
 	playlistNav, err := NewPlaylistNav(func(err error) {
 		if err != nil {
@@ -110,9 +110,42 @@ func NewApplication() *Application {
 
 	Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 	playlistNav.Table.SetBackgroundColor(tcell.ColorDefault)
+	globalMaps := map[string]*Action{
+		"focus_search": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			Ui.App.SetFocus(searchbar)
+			return nil
+		}, nil),
+		"choose_device": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			OpenDeviceMenu()
+			return nil
+		}, nil),
+		"focus_nav": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			Ui.App.SetFocus(navMenu.Table)
+			return nil
+		}, nil),
+		"focus_playlists": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			Ui.App.SetFocus(playlistNav.Table)
+			return nil
+		}, nil),
+		"focus_main_view": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			Ui.App.SetFocus(Main.Table)
+			return nil
+		}, nil),
+	}
+
+	generateActions := func(m map[string]*Action) map[string]*Action {
+		res := make(map[string]*Action)
+		for k, v := range globalMaps {
+			res[k] = v
+		}
+		for k, v := range m {
+			res[k] = v
+		}
+		return res
+	}
 
 	// Actions
-	playlistNav.SetActions(map[string]*Action{
+	playlistNav.SetActions(generateActions(map[string]*Action{
 		"play_entry": NewAction(playlistNav.PlaySelectEntry, pBar),
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
@@ -121,34 +154,37 @@ func NewApplication() *Application {
 			App.SetFocus(Main.Table)
 			return nil
 		}, nil),
-	})
-	playlistView.SetActions(map[string]*Action{
+	}))
+	navMenu.SetActions(generateActions(map[string]*Action{
+		"open_entry": NewAction(navMenu.SelectEntry, nil),
+	}))
+	playlistView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
 			playlistView.PlaySelectEntry()
 			return nil
 		}, pBar),
-	})
-	recentlyPlayedView.SetActions(map[string]*Action{
+	}))
+	recentlyPlayedView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(recentlyPlayedView.SelectEntry, pBar),
-	})
-	topTracksView.SetActions(map[string]*Action{
+	}))
+	topTracksView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
-	})
-	likedSongsView.SetActions(map[string]*Action{
+	}))
+	likedSongsView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			likedSongsView.OpenEntry()
 			return nil
 		}, pBar),
-	})
-	searchView.SetActions(map[string]*Action{})
-	artistsView.SetActions(map[string]*Action{
+	}))
+	searchView.SetActions(generateActions(map[string]*Action{}))
+	artistsView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistsView.OpenArtist()
 			return nil
 		}, nil),
-	})
-	artistView.SetActions(map[string]*Action{
+	}))
+	artistView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.OpenEntry()
 			return nil
@@ -157,8 +193,8 @@ func NewApplication() *Application {
 			artistView.PlayEntry()
 			return nil
 		}, pBar),
-	})
-	albumsView.SetActions(map[string]*Action{
+	}))
+	albumsView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumsView.OpenAlbum()
 			return nil
@@ -167,19 +203,21 @@ func NewApplication() *Application {
 			albumsView.PlaySelectEntry()
 			return nil
 		}, pBar),
-	})
-	albumView.SetActions(map[string]*Action{
+	}))
+	albumView.SetActions(generateActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumView.PlaySelectEntry()
 			return nil
 		}, pBar),
-	})
+	}))
 
 	mappings := config.GenerateMappings()
 
 	// Mappings
 	playlistNav.SetMappings(mappings["playlist_nav"])
 	playlistNav.Table.SetInputCapture(playlistNav.ExternalInputCapture())
+	navMenu.SetMappings(mappings["nav_menu"])
+	navMenu.Table.SetInputCapture(navMenu.ExternalInputCapture())
 	playlistView.SetMappings(mappings["playlist_view"])
 	recentlyPlayedView.SetMappings(mappings["recently_played_view"])
 	topTracksView.SetMappings(mappings["top_tracks_view"])
@@ -190,7 +228,7 @@ func NewApplication() *Application {
 	artistView.SetMappings(mappings["artist_view"])
 
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(NavMenu.Table, 6, 3, false).
+		AddItem(navMenu.Table, 6, 3, false).
 		AddItem(playlistNav.Table, 0, 6, false).
 		AddItem(coverArt, 9, 3, false)
 
@@ -264,30 +302,6 @@ func NewApplication() *Application {
 		}
 	}()
 
-	App.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Rune() == '1' {
-			Ui.App.SetFocus(NavMenu.Table)
-			return nil
-		}
-		if e.Rune() == '?' {
-			Ui.App.SetFocus(searchbar)
-			return nil
-		}
-		if e.Rune() == '2' {
-			Ui.App.SetFocus(playlistNav.Table)
-			return nil
-		}
-		if e.Rune() == '3' {
-			Ui.App.SetFocus(Main.Table)
-			return nil
-		}
-		if e.Rune() == 'd' {
-			OpenDeviceMenu()
-			return nil
-		}
-		return e
-	})
-
 	loadStyles()
 	config.OnConfigChange = loadStyles
 
@@ -296,7 +310,7 @@ func NewApplication() *Application {
 		Main:        Main,
 		CoverArt:    coverArt,
 		PlaylistNav: playlistNav,
-		NavMenu:     NavMenu,
+		NavMenu:     navMenu,
 		SearchBar:   searchbar,
 		ProgressBar: pBar,
 		Root:        Root,

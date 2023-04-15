@@ -83,6 +83,16 @@ func GenerateMappings() map[string]map[Key]string {
 		"recently_played_view": {
 			{K: tcell.KeyEnter}: "open_entry",
 		},
+		"nav_menu": {
+			{K: tcell.KeyEnter}: "open_entry",
+		},
+		"global": {
+			{R: 'd'}: "choose_device",
+			{R: '1'}: "focus_nav",
+			{R: '2'}: "focus_playlists",
+			{R: '3'}: "focus_main_view",
+			{R: '?'}: "focus_search",
+		},
 		"playlist_nav": {
 			{K: tcell.KeyEnter}: "open_entry",
 			{K: tcell.KeyCtrlP}: "play_entry",
@@ -120,6 +130,20 @@ func GenerateMappings() map[string]map[Key]string {
 			for function, key := range mappings.(map[string]interface{}) {
 				keys[view][NewKey(key.(string))] = function
 			}
+		}
+	}
+	mergeMaps := func(maps ...map[Key]string) map[Key]string {
+		result := make(map[Key]string)
+		for _, m := range maps {
+			for k, v := range m {
+				result[k] = v
+			}
+		}
+		return result
+	}
+	for k := range keys {
+		if k != "global" {
+			keys[k] = mergeMaps(keys["global"], keys[k])
 		}
 	}
 	return keys
