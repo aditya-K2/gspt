@@ -116,8 +116,10 @@ func GenerateMappings() map[string]map[Key]string {
 		if keys[view] == nil {
 			keys[view] = make(map[Key]string)
 		}
-		for function, key := range mappings.(map[string]interface{}) {
-			keys[view][NewKey(key.(string))] = function
+		if mappings != nil {
+			for function, key := range mappings.(map[string]interface{}) {
+				keys[view][NewKey(key.(string))] = function
+			}
 		}
 	}
 	return keys
