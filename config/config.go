@@ -75,3 +75,17 @@ func ReadConfig() {
 
 	expandHome()
 }
+
+func GenerateMappings() map[string]map[Key]string {
+	all := viper.GetStringMap("mappings")
+	keys := make(map[string]map[Key]string)
+	for view, mappings := range all {
+		if keys[view] == nil {
+			keys[view] = make(map[Key]string)
+		}
+		for function, key := range mappings.(map[string]interface{}) {
+			keys[view][NewKey(key.(string))] = function
+		}
+	}
+	return keys
+}
