@@ -200,6 +200,13 @@ mappings:
     top_tracks_view:
         open_entry
         play_entry
+    # These mappings are available in every view.
+    global:
+        focus_search
+        focus_main_view
+        focus_playlists
+        focus_nav
+        choose_device
 ```
 
 ## Roadmap
