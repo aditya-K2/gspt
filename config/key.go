@@ -85,7 +85,10 @@ func (k *Key) Key() tcell.Key {
 func NewKey(s string) Key {
 	if len(s) == 1 {
 		a := []rune(s)
-		if (a[0] >= 'A' && a[0] <= 'Z') || (a[0] >= 'a' && a[0] <= 'z') {
+		if (a[0] >= 'A' && a[0] <= 'Z') ||
+			(a[0] >= 'a' && a[0] <= 'z') ||
+			(a[0] >= '0' && a[0] <= '9') ||
+			(a[0] == '?' || a[0] == '!') {
 			return Key{R: a[0]}
 		}
 	}
