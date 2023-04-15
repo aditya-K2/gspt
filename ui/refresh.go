@@ -35,10 +35,13 @@ func (a *Action) SetRefreshable(r Refreshable) {
 
 func (a *Action) Func() ActionFunc {
 	return func(e *tcell.EventKey) *tcell.EventKey {
-		val := a.f(e)
-		if a.refreshable != nil && val == nil {
-			a.refreshable.RefreshState()
+		if a != nil && a.f != nil {
+			val := a.f(e)
+			if a.refreshable != nil && val == nil {
+				a.refreshable.RefreshState()
+			}
+			return val
 		}
-		return val
+		return e
 	}
 }
