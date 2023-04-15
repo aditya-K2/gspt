@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/aditya-K2/gspt/config"
@@ -177,7 +176,6 @@ func NewApplication() *Application {
 	})
 
 	mappings := config.GenerateMappings()
-	fmt.Println(mappings)
 
 	// Mappings
 	playlistNav.SetMappings(mappings["playlist_nav"])

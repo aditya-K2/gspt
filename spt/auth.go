@@ -41,10 +41,10 @@ var (
 		sptauth.WithRedirectURL(redirectURI),
 		sptauth.WithScopes(scopes...))
 	ch                           = make(chan *payload)
-	state                        = "__GSPOT_AUTH__"
+	state                        = "__GSPT_AUTH__"
 	userConfigDir, userConfigErr = os.UserConfigDir()
-	gspotDir                     = filepath.Join(userConfigDir, "/gspot")
-	tokenPath                    = filepath.Join(gspotDir, "/oauthtoken")
+	gsptDir                      = filepath.Join(userConfigDir, "/gspt")
+	tokenPath                    = filepath.Join(gsptDir, "/oauthtoken")
 )
 
 type payload struct {
@@ -114,8 +114,8 @@ func completeAuth(w http.ResponseWriter, r *http.Request) {
 	if val, merr := json.Marshal(tok); merr != nil {
 		ch <- &payload{nil, merr}
 	} else {
-		if !utils.FileExists(gspotDir) {
-			if derr := os.Mkdir(gspotDir, 0777); derr != nil {
+		if !utils.FileExists(gsptDir) {
+			if derr := os.Mkdir(gsptDir, 0777); derr != nil {
 				ch <- &payload{nil, derr}
 			}
 		}
