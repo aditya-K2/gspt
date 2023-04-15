@@ -5,6 +5,7 @@ import (
 
 	"github.com/aditya-K2/utils"
 	"github.com/fsnotify/fsnotify"
+	"github.com/gdamore/tcell/v2"
 	"github.com/spf13/viper"
 )
 
@@ -78,7 +79,39 @@ func ReadConfig() {
 
 func GenerateMappings() map[string]map[Key]string {
 	all := viper.GetStringMap("mappings")
-	keys := make(map[string]map[Key]string)
+	keys := map[string]map[Key]string{
+		"recently_played_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+		},
+		"playlist_nav": {
+			{K: tcell.KeyEnter}: "open_entry",
+			{K: tcell.KeyCtrlP}: "play_entry",
+		},
+		"playlist_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+		},
+		"top_tracks_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+			{K: tcell.KeyCtrlP}: "play_entry",
+		},
+		"liked_songs_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+		},
+		"artists_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+		},
+		"artist_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+			{K: tcell.KeyCtrlP}: "play_entry",
+		},
+		"albums_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+			{K: tcell.KeyCtrlP}: "play_entry",
+		},
+		"album_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+		},
+	}
 	for view, mappings := range all {
 		if keys[view] == nil {
 			keys[view] = make(map[Key]string)

@@ -113,7 +113,7 @@ func NewApplication() *Application {
 
 	// Actions
 	playlistNav.SetActions(map[string]*Action{
-		"playEntry": NewAction(playlistNav.PlaySelectEntry, pBar),
+		"play_entry": NewAction(playlistNav.PlaySelectEntry, pBar),
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
 			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
@@ -133,7 +133,7 @@ func NewApplication() *Application {
 	})
 	topTracksView.SetActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
-		"playEntry":  NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
+		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
 	})
 	likedSongsView.SetActions(map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -153,7 +153,7 @@ func NewApplication() *Application {
 			artistView.OpenEntry()
 			return nil
 		}, pBar),
-		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.PlayEntry()
 			return nil
 		}, pBar),
@@ -163,7 +163,7 @@ func NewApplication() *Application {
 			albumsView.OpenAlbum()
 			return nil
 		}, nil),
-		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumsView.PlaySelectEntry()
 			return nil
 		}, pBar),
