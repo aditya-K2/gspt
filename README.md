@@ -74,10 +74,79 @@ $ gspt
 
 ---
 
-### Key bindings
+## Key bindings
 
 1. `d` Opens the device menu to choose a device from
 1. `1`, `2`, `3` Switch between the views
 1. `Enter` - Selects an entry
 1. `?` Search
 1. `Ctrl-P` starts playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
+
+## Config Options
+
+Config file can be defined at `$HOME/.config/gspt/config.yaml`
+
+Note: Configuration is live updated when you make a change
+
+#### Following Options are configurable
+
+```yml
+    # Following are the default values
+    cache_dir: $XDG_CACHE_HOME # Path to where the cached images should be stored.
+    redraw_interval: 500
+    additional_padding_x : 12
+    additional_padding_y : 16
+    image_width_extra_x : -1.5
+    image_width_extra_y : -3.75
+    colors:
+        artist:
+            fg: Pink
+            bg: ""
+            bold: false
+            italic: false
+        album:
+            fg: Green
+            bg: ""
+            bold: false
+            italic: false
+        track:
+            fg: Blue
+            bg: ""
+            bold: false
+            italic: false
+        genre:
+            fg: DarkCyan
+            bg: ""
+            bold: true
+            italic: false
+        timestamp:
+            fg: Red
+            bg: ""
+            bold: false
+            italic: true
+        pbar_artist:
+            fg: Blue
+            bg: ""
+            bold: true
+            italic: false
+        pbar_track:
+            fg: Green
+            bg: ""
+            bold: true
+            italic: true
+        playlist_nav:
+            fg: Coral
+            bg: ""
+            bold: false
+            italic: false
+        nav:
+            fg: PapayaWhip
+            bg: ""
+            bold: false
+            italic: false
+        context_menu:
+            fg: Turquoise
+            bg: ""
+            bold: true
+            italic: false
+```
