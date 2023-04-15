@@ -5,19 +5,13 @@ import (
 	"image"
 	"os"
 
+	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/nfnt/resize"
 	"github.com/rivo/tview"
 	"github.com/zmb3/spotify/v2"
 	"gitlab.com/diamondburned/ueberzug-go"
-)
-
-var (
-	ax = 5
-	ay = 10
-	ex = -0.47
-	ey = -1.5
 )
 
 type CoverArt struct {
@@ -45,8 +39,8 @@ func getImg(uri string) (image.Image, error) {
 	}
 	fw, fh := utils.GetFontWidth()
 	img = resize.Resize(
-		uint(float32(ImgW)*(fw+float32(ex))),
-		uint(float32(ImgH)*(fh+float32(ey))),
+		uint(float32(ImgW)*(fw+float32(config.Config.ExtraImageWidthX))),
+		uint(float32(ImgH)*(fh+float32(config.Config.ExtraImageWidthY))),
 		img,
 		resize.Bilinear,
 	)
@@ -54,7 +48,7 @@ func getImg(uri string) (image.Image, error) {
 }
 
 func fileName(a spotify.SimpleAlbum) string {
-	return fmt.Sprintf("%s.jpg", a.ID)
+	return fmt.Sprintf(config.Config.CacheDir+"/%s.jpg", a.ID)
 }
 
 func (c *CoverArt) RefreshState() {
@@ -97,8 +91,8 @@ func (c *CoverArt) RefreshState() {
 					return
 				}
 				im, err := ueberzug.NewImage(uimg,
-					int(float32(ImgX)*fw)+ax,
-					int(float32(ImgY)*fh)+ay)
+					int(float32(ImgX)*fw)+config.Config.AdditionalPaddingX,
+					int(float32(ImgY)*fh)+config.Config.AdditionalPaddingY)
 				if err != nil {
 					SendNotification(fmt.Sprintf("Error Rendering Image: %s", err.Error()))
 					return

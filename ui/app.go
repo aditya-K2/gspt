@@ -3,6 +3,7 @@ package ui
 import (
 	"time"
 
+	"github.com/aditya-K2/gspt/config"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -17,16 +18,31 @@ var (
 )
 
 var (
-	TrackStyle         = tcell.StyleDefault.Foreground(tcell.ColorBlue).Background(tcell.ColorBlack)
-	AlbumStyle         = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
-	ArtistStyle        = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorBlack)
-	TimeStyle          = tcell.StyleDefault.Foreground(tcell.ColorOrange).Background(tcell.ColorBlack)
-	GenreStyle         = tcell.StyleDefault.Foreground(tcell.ColorPaleTurquoise).Background(tcell.ColorBlack)
-	PlaylistNavStyle   = tcell.StyleDefault.Foreground(tcell.ColorCoral).Background(tcell.ColorBlack)
-	NavStyle           = tcell.StyleDefault.Foreground(tcell.ColorPapayaWhip).Background(tcell.ColorBlack)
-	ContextMenuStyle   = tcell.StyleDefault.Foreground(tcell.ColorPink).Background(tcell.ColorDefault).Bold(true)
-	NotSelectableStyle = tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorDefault).Bold(true).Italic(true)
+	TrackStyle         tcell.Style
+	AlbumStyle         tcell.Style
+	ArtistStyle        tcell.Style
+	TimeStyle          tcell.Style
+	GenreStyle         tcell.Style
+	PlaylistNavStyle   tcell.Style
+	NavStyle           tcell.Style
+	ContextMenuStyle   tcell.Style
+	NotSelectableStyle tcell.Style
 )
+
+func loadStyles() {
+	TrackStyle = config.Config.Colors.Track.Style()
+	AlbumStyle = config.Config.Colors.Album.Style()
+	ArtistStyle = config.Config.Colors.Artist.Style()
+	TimeStyle = config.Config.Colors.Timestamp.Style()
+	GenreStyle = config.Config.Colors.Genre.Style()
+	PlaylistNavStyle = config.Config.Colors.PlaylistNav.Style()
+	NavStyle = config.Config.Colors.Nav.Style()
+	ContextMenuStyle = config.Config.Colors.ContextMenu.Style()
+	NotSelectableStyle = config.Config.Colors.Null.Style()
+	if Ui != nil {
+		Ui.CoverArt.RefreshState()
+	}
+}
 
 type Application struct {
 	App            *tview.Application
@@ -291,6 +307,10 @@ func NewApplication() *Application {
 		}
 		return e
 	})
+
+	loadStyles()
+	config.OnConfigChange = loadStyles
+
 	Ui = &Application{
 		App:         App,
 		Main:        Main,
