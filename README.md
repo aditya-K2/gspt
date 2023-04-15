@@ -41,6 +41,11 @@ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pi
 - You will need Spotify Premium to use `gspt`.
 - `gspt` uses the [Web API](https://developer.spotify.com/documentation/web-api) from Spotify, which doesn't handle streaming itself. So you'll need either an official Spotify client open or a lighter weight alternative such as [spotifyd](https://github.com/Spotifyd/spotifyd).
 - Images are rendered using the Xorg child windows. Currently there is no support for Wayland.
+- Some Terminals even in Xorg don't seem to support Image rendering.
+    - Following terminals have been tested with:
+        - Alacritty
+        - ST
+        - Urxvt
 
 ## Setup
 
@@ -154,7 +159,50 @@ colors:
         italic: false
 ```
 
-### Roadmap
+### Key Mappings
+
+```yaml
+
+# Key mappings has the following API
+
+# mappings:
+#     view:
+#     function: mapping
+
+# for e.g
+
+mappings:
+    recently_played_view:
+        open_entry: "ctrl-p"
+
+# Following Views and Functions are currently available
+# To see available keys please see: https://github.com/aditya-K2/gspt/blob/master/config/key.go#L13
+mappings:
+    album_view:
+        open_entry
+    albums_view:
+        open_entry
+        play_entry
+    artist_view:
+        open_entry
+        play_entry
+    artists_view:
+        open_entry
+    liked_songs_view:
+        open_entry
+    playlist_nav:
+        open_entry
+        play_entry
+    playlist_view:
+        open_entry
+    recently_played_view:
+        open_entry
+    top_tracks_view:
+        open_entry
+        play_entry
+```
+
+## Roadmap
 
 - [ ] Multiple Image rendering backends
     - [ ] Sixel
@@ -164,4 +212,4 @@ colors:
 - [ ] Customisable UI
 - [ ] Wayland Support for Image rendering
 - [ ] Queue Support
-- [ ] Key Mappings
+- [x] Key Mappings
