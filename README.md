@@ -4,7 +4,7 @@
     <br><img src="./extras/mascot-res.png" alt="mascot" width="200" class="mascot"/><br>
     Spotify for terminal written in Go.<br>
     with builtin <b>cover-art view</b> and <b>much more.</b> <br>
-    <a href="https://aditya-K2.github.io/gspt/"> Documentation </a> |
+    <!-- <a href="https://aditya-K2.github.io/gspt/"> Documentation </a> | -->
     <a href="https://github.com/aditya-K2/gspt/discussions">Discussion</a>
 </div>
 
@@ -100,52 +100,52 @@ Note: Configuration is live updated when you make a change
     image_width_extra_y : -3.75
     colors:
         artist:
-            fg: Pink
+            fg: pink
             bg: ""
             bold: false
             italic: false
         album:
-            fg: Green
+            fg: green
             bg: ""
             bold: false
             italic: false
         track:
-            fg: Blue
+            fg: blue
             bg: ""
             bold: false
             italic: false
         genre:
-            fg: DarkCyan
+            fg: darkCyan
             bg: ""
             bold: true
             italic: false
         timestamp:
-            fg: Red
+            fg: red
             bg: ""
             bold: false
             italic: true
         pbar_artist:
-            fg: Blue
+            fg: blue
             bg: ""
             bold: true
             italic: false
         pbar_track:
-            fg: Green
+            fg: green
             bg: ""
             bold: true
             italic: true
         playlist_nav:
-            fg: Coral
+            fg: coral
             bg: ""
             bold: false
             italic: false
         nav:
-            fg: PapayaWhip
+            fg: papayawhip
             bg: ""
             bold: false
             italic: false
         context_menu:
-            fg: Turquoise
+            fg: turquoise
             bg: ""
             bold: true
             italic: false
