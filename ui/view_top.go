@@ -35,6 +35,18 @@ func (a *TopTracksView) RefreshState() {
 	a.topArtists = artists
 }
 
+func mergeGenres(g []string) string {
+	s := ""
+	for k, v := range g {
+		sep := ","
+		if k == 0 {
+			sep = ""
+		}
+		s += sep + v
+	}
+	return s
+}
+
 func (a *TopTracksView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
@@ -42,7 +54,7 @@ func (a *TopTracksView) Content() func() [][]Content {
 		for _, v := range a.topArtists {
 			c = append(c, []Content{
 				{Content: v.Name, Style: ArtistStyle},
-				{Content: v.Genres[0], Style: GenreStyle},
+				{Content: mergeGenres(v.Genres), Style: GenreStyle},
 			})
 		}
 		c = append(c, []Content{{"Top Tracks:", NotSelectableStyle}})
