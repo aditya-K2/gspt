@@ -1,16 +1,17 @@
 package ui
 
 import (
+	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 )
 
 type defView struct {
-	m       map[tcell.Key]string
+	m       map[config.Key]string
 	actions map[string]*Action
 }
 
-func (d *defView) SetMappings(m map[tcell.Key]string) {
+func (d *defView) SetMappings(m map[config.Key]string) {
 	d.m = m
 }
 
@@ -21,10 +22,14 @@ func (d *defView) SetActions(a map[string]*Action) {
 func (d *defView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if d.m != nil {
-			if val, ok := d.m[e.Key()]; ok {
-				if d.actions != nil {
-					return d.actions[val].Func()(e)
-				}
+			var key config.Key
+			if e.Key() == tcell.KeyRune {
+				key = config.Key{R: e.Rune()}
+			} else {
+				key = config.Key{K: e.Key()}
+			}
+			if val, ok := d.m[key]; ok {
+				return d.actions[val].Func()(e)
 			}
 		}
 		return e

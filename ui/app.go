@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aditya-K2/gspt/config"
@@ -114,7 +115,7 @@ func NewApplication() *Application {
 	// Actions
 	playlistNav.SetActions(map[string]*Action{
 		"playEntry": NewAction(playlistNav.PlaySelectEntry, pBar),
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
 			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
 			SetCurrentView(playlistView)
@@ -123,33 +124,33 @@ func NewApplication() *Application {
 		}, nil),
 	})
 	playlistView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
+		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
 			playlistView.PlaySelectEntry()
 			return nil
 		}, pBar),
 	})
 	recentlyPlayedView.SetActions(map[string]*Action{
-		"openEntry": NewAction(recentlyPlayedView.SelectEntry, pBar),
+		"open_entry": NewAction(recentlyPlayedView.SelectEntry, pBar),
 	})
 	topTracksView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
-		"playEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
+		"playEntry":  NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
 	})
 	likedSongsView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			likedSongsView.OpenEntry()
 			return nil
 		}, pBar),
 	})
 	searchView.SetActions(map[string]*Action{})
 	artistsView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistsView.OpenArtist()
 			return nil
 		}, nil),
 	})
 	artistView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.OpenEntry()
 			return nil
 		}, pBar),
@@ -159,7 +160,7 @@ func NewApplication() *Application {
 		}, pBar),
 	})
 	albumsView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumsView.OpenAlbum()
 			return nil
 		}, nil),
@@ -169,45 +170,26 @@ func NewApplication() *Application {
 		}, pBar),
 	})
 	albumView.SetActions(map[string]*Action{
-		"openEntry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumView.PlaySelectEntry()
 			return nil
 		}, pBar),
 	})
 
+	mappings := config.GenerateMappings()
+	fmt.Println(mappings)
+
 	// Mappings
-	playlistNav.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-		tcell.KeyCtrlP: "playEntry",
-	})
+	playlistNav.SetMappings(mappings["playlist_nav"])
 	playlistNav.Table.SetInputCapture(playlistNav.ExternalInputCapture())
-	playlistView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-	})
-	recentlyPlayedView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-	})
-	topTracksView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-		tcell.KeyCtrlP: "playEntry",
-	})
-	likedSongsView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-	})
-	albumsView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-		tcell.KeyCtrlP: "playEntry",
-	})
-	albumView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-	})
-	artistsView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-	})
-	artistView.SetMappings(map[tcell.Key]string{
-		tcell.KeyEnter: "openEntry",
-		tcell.KeyCtrlP: "playEntry",
-	})
+	playlistView.SetMappings(mappings["playlist_view"])
+	recentlyPlayedView.SetMappings(mappings["recently_played_view"])
+	topTracksView.SetMappings(mappings["top_tracks_view"])
+	likedSongsView.SetMappings(mappings["liked_songs_view"])
+	albumsView.SetMappings(mappings["albums_view"])
+	albumView.SetMappings(mappings["album_view"])
+	artistsView.SetMappings(mappings["artists_view"])
+	artistView.SetMappings(mappings["artist_view"])
 
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(NavMenu.Table, 6, 3, false).
