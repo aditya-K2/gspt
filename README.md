@@ -36,9 +36,15 @@ $ sudo install -D gspt -t "/usr/bin/"
 git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install -D gspt -t "/usr/bin/"
 ```
 
+### Please Note
+
+- You will need Spotify Premium to use `gspt`.
+- `gspt` uses the [Web API](https://developer.spotify.com/documentation/web-api) from Spotify, which doesn't handle streaming itself. So you'll need either an official Spotify client open or a lighter weight alternative such as [spotifyd](https://github.com/Spotifyd/spotifyd).
+
 ## Setup
 
 ### How to Generate an API Key from Spotify Dashboard
+
 
 If you want to use Spotify's API to create applications that interact with their music streaming service, you will need an API key. Here's how you can generate one from the Spotify Dashboard:
 
