@@ -1,10 +1,12 @@
 package config
 
-import "github.com/gdamore/tcell/v2"
+import (
+	"github.com/gdamore/tcell/v2"
+)
 
 type Key struct {
-	r rune
-	k tcell.Key
+	R rune
+	K tcell.Key
 }
 
 var (
@@ -72,30 +74,23 @@ var (
 	}
 )
 
-func (k *Key) IsRune() bool {
-	if k.r == 0 {
-		return true
-	}
-	return false
-}
-
 func (k *Key) Rune() rune {
-	return k.r
+	return k.R
 }
 
 func (k *Key) Key() tcell.Key {
-	return k.k
+	return k.K
 }
 
 func NewKey(s string) Key {
 	if len(s) == 1 {
 		a := []rune(s)
 		if (a[0] >= 'A' && a[0] <= 'Z') || (a[0] >= 'a' && a[0] <= 'z') {
-			return Key{r: a[0]}
+			return Key{R: a[0]}
 		}
 	}
 	if val, ok := m[s]; ok {
-		return Key{k: val}
+		return Key{K: val}
 	}
 	return Key{}
 }
