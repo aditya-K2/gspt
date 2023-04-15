@@ -7,6 +7,7 @@ import (
 )
 
 type NavMenu struct {
+	*defView
 	Table *tview.Table
 	m     []navItem
 }
@@ -18,7 +19,7 @@ type navItem struct {
 
 func newNavMenu(m []navItem) *NavMenu {
 	T := tview.NewTable()
-	n := &NavMenu{T, m}
+	n := &NavMenu{&defView{}, T, m}
 	T.SetDrawFunc(func(tcell.Screen, int, int, int, int) (int, int, int, int) {
 		for k := range n.m {
 			T.SetCell(k, 0,
@@ -27,16 +28,15 @@ func newNavMenu(m []navItem) *NavMenu {
 		return T.GetInnerRect()
 	})
 	T.SetTitle("Library").SetTitleAlign(tview.AlignLeft)
-	T.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
-		if e.Key() == tcell.KeyEnter {
-			r, _ := T.GetSelection()
-			if r < len(n.m) {
-				return (*n.m[r].action).Func()(e)
-			}
-		}
-		return e
-	})
 	return n
+}
+
+func (n *NavMenu) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
+	r, _ := n.Table.GetSelection()
+	if r < len(n.m) {
+		return (*n.m[r].action).Func()(e)
+	}
+	return e
 }
 
 type PlaylistNav struct {
