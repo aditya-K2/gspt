@@ -40,6 +40,7 @@ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pi
 
 - You will need Spotify Premium to use `gspt`.
 - `gspt` uses the [Web API](https://developer.spotify.com/documentation/web-api) from Spotify, which doesn't handle streaming itself. So you'll need either an official Spotify client open or a lighter weight alternative such as [spotifyd](https://github.com/Spotifyd/spotifyd).
+- Images are rendered using the Xorg child windows. Currently there is no support for Wayland.
 
 ## Setup
 
@@ -93,62 +94,74 @@ Note: Configuration is live updated when you make a change
 #### Following Options are configurable
 
 ```yml
-    # Following are the default values
-    cache_dir: $XDG_CACHE_HOME # Path to where the cached images should be stored.
-    redraw_interval: 500
-    additional_padding_x : 12
-    additional_padding_y : 16
-    image_width_extra_x : -1.5
-    image_width_extra_y : -3.75
-    colors:
-        artist:
-            fg: pink
-            bg: ""
-            bold: false
-            italic: false
-        album:
-            fg: green
-            bg: ""
-            bold: false
-            italic: false
-        track:
-            fg: blue
-            bg: ""
-            bold: false
-            italic: false
-        genre:
-            fg: darkCyan
-            bg: ""
-            bold: true
-            italic: false
-        timestamp:
-            fg: red
-            bg: ""
-            bold: false
-            italic: true
-        pbar_artist:
-            fg: blue
-            bg: ""
-            bold: true
-            italic: false
-        pbar_track:
-            fg: green
-            bg: ""
-            bold: true
-            italic: true
-        playlist_nav:
-            fg: coral
-            bg: ""
-            bold: false
-            italic: false
-        nav:
-            fg: papayawhip
-            bg: ""
-            bold: false
-            italic: false
-        context_menu:
-            fg: turquoise
-            bg: ""
-            bold: true
-            italic: false
+# Following are the default values
+cache_dir: $XDG_CACHE_HOME # Path to where the cached images should be stored.
+redraw_interval: 500
+additional_padding_x : 12
+additional_padding_y : 16
+image_width_extra_x : -1.5
+image_width_extra_y : -3.75
+colors:
+    artist:
+        fg: pink
+        bg: ""
+        bold: false
+        italic: false
+    album:
+        fg: green
+        bg: ""
+        bold: false
+        italic: false
+    track:
+        fg: blue
+        bg: ""
+        bold: false
+        italic: false
+    genre:
+        fg: darkCyan
+        bg: ""
+        bold: true
+        italic: false
+    timestamp:
+        fg: red
+        bg: ""
+        bold: false
+        italic: true
+    pbar_artist:
+        fg: blue
+        bg: ""
+        bold: true
+        italic: false
+    pbar_track:
+        fg: green
+        bg: ""
+        bold: true
+        italic: true
+    playlist_nav:
+        fg: coral
+        bg: ""
+        bold: false
+        italic: false
+    nav:
+        fg: papayawhip
+        bg: ""
+        bold: false
+        italic: false
+    context_menu:
+        fg: turquoise
+        bg: ""
+        bold: true
+        italic: false
 ```
+
+### Roadmap
+
+- [ ] Multiple Image rendering backends
+    - [ ] Sixel
+    - [ ] tview Images
+    - [ ] Kitty Images
+- [ ] Rounded Corners
+- [ ] Customisable UI
+- [ ] Wayland Support for Image rendering
+- [ ] Queue Support
+- [ ] Key Mappings
