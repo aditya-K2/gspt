@@ -266,12 +266,20 @@ func GetPlayerState() (*spotify.PlayerState, error) {
 
 func GetTopTracks() ([]spotify.FullTrack, error) {
 	c, err := Client.CurrentUsersTopTracks(ctx(), spotify.Limit(topTracksLimit))
-	return c.Tracks, err
+	if c != nil {
+		return c.Tracks, err
+	} else {
+		return []spotify.FullTrack{}, errors.New("No Top Tracks Found!")
+	}
 }
 
 func GetTopArtists() ([]spotify.FullArtist, error) {
 	c, err := Client.CurrentUsersTopArtists(ctx(), spotify.Limit(topTracksLimit))
-	return c.Artists, err
+	if c != nil {
+		return c.Artists, err
+	} else {
+		return []spotify.FullArtist{}, errors.New("No Top Artists Found!")
+	}
 }
 
 func GetArtistTopTracks(artistID spotify.ID) ([]spotify.FullTrack, error) {
