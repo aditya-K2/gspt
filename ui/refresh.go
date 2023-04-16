@@ -38,7 +38,9 @@ func (a *Action) Func() ActionFunc {
 		if a != nil && a.f != nil {
 			val := a.f(e)
 			if a.refreshable != nil && val == nil {
-				a.refreshable.RefreshState()
+				go func() {
+					a.refreshable.RefreshState()
+				}()
 			}
 			return val
 		}
