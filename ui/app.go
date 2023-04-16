@@ -31,7 +31,7 @@ var (
 	NotSelectableStyle tcell.Style
 )
 
-func loadStyles() {
+func onConfigChange() {
 	TrackStyle = config.Config.Colors.Track.Style()
 	AlbumStyle = config.Config.Colors.Album.Style()
 	ArtistStyle = config.Config.Colors.Artist.Style()
@@ -112,7 +112,9 @@ func NewApplication() *Application {
 
 	Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 	playlistNav.Table.SetBackgroundColor(tcell.ColorDefault)
-	globalMaps := map[string]*Action{
+
+	// Actions
+	globalActions := map[string]*Action{
 		"focus_search": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			Ui.App.SetFocus(searchbar)
 			return nil
@@ -140,10 +142,9 @@ func NewApplication() *Application {
 			return nil
 		}, nil),
 	}
-
-	// Actions
-	playlistNav.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
-		"play_entry": NewAction(playlistNav.PlaySelectEntry, pBar),
+	playlistNav.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
+		"play_entry": NewAction(playlistNav.PlaySelectEntry,
+			pBar),
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
 			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
@@ -152,41 +153,49 @@ func NewApplication() *Application {
 			return nil
 		}, nil),
 	}))
-	navMenu.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
-		"open_entry": NewAction(navMenu.SelectEntry, nil),
+	navMenu.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
+		"open_entry": NewAction(navMenu.SelectEntry,
+			nil),
 	}))
-	playlistView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+	playlistView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
 			playlistView.PlaySelectEntry()
 			return nil
 		}, pBar),
 	}))
-	recentlyPlayedView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
-		"open_entry": NewAction(recentlyPlayedView.SelectEntry, pBar),
+	recentlyPlayedView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
+		"open_entry": NewAction(recentlyPlayedView.SelectEntry,
+			pBar),
 	}))
-	topTracksView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
-		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
+	topTracksView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			topTracksView.OpenSelectEntry()
+			return nil
+		}, pBar),
+		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			topTracksView.PlaySelectedEntry()
+			return nil
+		}, pBar),
 	}))
-	likedSongsView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+	likedSongsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			likedSongsView.OpenEntry()
 			return nil
 		}, pBar),
 	}))
-	searchView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+	searchView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			searchView.SelectEntry()
 			return nil
 		}, nil),
 	}))
-	artistsView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+	artistsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistsView.OpenArtist()
 			return nil
 		}, nil),
 	}))
-	artistView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+	artistView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.OpenEntry()
 			return nil
@@ -196,7 +205,7 @@ func NewApplication() *Application {
 			return nil
 		}, pBar),
 	}))
-	albumsView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+	albumsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumsView.OpenAlbum()
 			return nil
@@ -206,7 +215,7 @@ func NewApplication() *Application {
 			return nil
 		}, pBar),
 	}))
-	albumView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+	albumView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumView.PlaySelectEntry()
 			return nil
@@ -303,8 +312,8 @@ func NewApplication() *Application {
 		}
 	}()
 
-	loadStyles()
-	config.OnConfigChange = loadStyles
+	onConfigChange()
+	config.OnConfigChange = onConfigChange
 
 	Ui = &Application{
 		App:         App,
