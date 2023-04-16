@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/aditya-K2/gspt/config"
+	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -133,19 +134,8 @@ func NewApplication() *Application {
 		}, nil),
 	}
 
-	generateActions := func(m map[string]*Action) map[string]*Action {
-		res := make(map[string]*Action)
-		for k, v := range globalMaps {
-			res[k] = v
-		}
-		for k, v := range m {
-			res[k] = v
-		}
-		return res
-	}
-
 	// Actions
-	playlistNav.SetActions(generateActions(map[string]*Action{
+	playlistNav.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"play_entry": NewAction(playlistNav.PlaySelectEntry, pBar),
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
@@ -155,36 +145,36 @@ func NewApplication() *Application {
 			return nil
 		}, nil),
 	}))
-	navMenu.SetActions(generateActions(map[string]*Action{
+	navMenu.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(navMenu.SelectEntry, nil),
 	}))
-	playlistView.SetActions(generateActions(map[string]*Action{
+	playlistView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
 			playlistView.PlaySelectEntry()
 			return nil
 		}, pBar),
 	}))
-	recentlyPlayedView.SetActions(generateActions(map[string]*Action{
+	recentlyPlayedView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(recentlyPlayedView.SelectEntry, pBar),
 	}))
-	topTracksView.SetActions(generateActions(map[string]*Action{
+	topTracksView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.OpenSelectEntry(); return nil }, pBar),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey { topTracksView.PlaySelectedEntry(); return nil }, pBar),
 	}))
-	likedSongsView.SetActions(generateActions(map[string]*Action{
+	likedSongsView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			likedSongsView.OpenEntry()
 			return nil
 		}, pBar),
 	}))
-	searchView.SetActions(generateActions(map[string]*Action{}))
-	artistsView.SetActions(generateActions(map[string]*Action{
+	searchView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{}))
+	artistsView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistsView.OpenArtist()
 			return nil
 		}, nil),
 	}))
-	artistView.SetActions(generateActions(map[string]*Action{
+	artistView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.OpenEntry()
 			return nil
@@ -194,7 +184,7 @@ func NewApplication() *Application {
 			return nil
 		}, pBar),
 	}))
-	albumsView.SetActions(generateActions(map[string]*Action{
+	albumsView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumsView.OpenAlbum()
 			return nil
@@ -204,7 +194,7 @@ func NewApplication() *Application {
 			return nil
 		}, pBar),
 	}))
-	albumView.SetActions(generateActions(map[string]*Action{
+	albumView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumView.PlaySelectEntry()
 			return nil

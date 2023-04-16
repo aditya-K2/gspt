@@ -132,18 +132,9 @@ func GenerateMappings() map[string]map[Key]string {
 			}
 		}
 	}
-	mergeMaps := func(maps ...map[Key]string) map[Key]string {
-		result := make(map[Key]string)
-		for _, m := range maps {
-			for k, v := range m {
-				result[k] = v
-			}
-		}
-		return result
-	}
 	for k := range keys {
 		if k != "global" {
-			keys[k] = mergeMaps(keys["global"], keys[k])
+			keys[k] = utils.MergeMaps(keys["global"], keys[k])
 		}
 	}
 	return keys
