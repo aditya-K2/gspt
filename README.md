@@ -230,10 +230,9 @@ and the image appears like this:
 
 ![Padding](./extras/padding.png)
 
-One might be happy the way things turn out but for a perfectionist like me this
-is not enough. You can notice that the Height of the image is a little bit more
-than the box height and hence the image is flowing outside the box. Now it's
-time to change the `image_width_extra_y`.
+One might be happy the way things turn out but you can notice that the image is
+a little bigger than the box height and hence is overflowing outside the
+box. Now it's time to change the `image_width_extra_y`.
 
 Width can be changed by defining the `image_width_extra_y` and
 `image_width_extra_x` it act's a little differently think of it like a chunk
@@ -241,8 +240,8 @@ which is either added or subtracted from the image's original width. We can
 look at the configuration and realize that the chunk `image_width_extra_y` when
 subtracted from the original `image_width` doesn't get us the proper result and
 is a little to low. We need to subtract a more bigger chunk, Hence we will
-increase the magnitude of `image_width_extra_y` or decrease
-`image_width_extra_y`
+increase the magnitude of `image_width_extra_y` (or in other words "decrease"
+`image_width_extra_y`)
 
 Now the Configuration becomes:
 ```yml
