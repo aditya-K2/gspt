@@ -318,3 +318,7 @@ func TransferPlayback(deviceId spotify.ID) error {
 	err = Client.PauseOpt(ctx(), &spotify.PlayOptions{DeviceID: &s.Device.ID})
 	return Client.TransferPlayback(ctx(), deviceId, true)
 }
+
+func GetSimplePlaylist(id *spotify.ID) (*spotify.FullPlaylist, error) {
+	return Client.GetPlaylist(ctx(), *id)
+}
