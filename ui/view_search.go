@@ -30,12 +30,20 @@ func NewSearchView() *SearchView {
 func (a *SearchView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
+		generate := true
+		if len(a.searchContent) != 0 {
+			generate = false
+		}
 		if a.results != nil {
 			if a.results.Tracks != nil {
 				c = append(c, []Content{{"Tracks", NotSelectableStyle}})
-				a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				if generate {
+					a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				}
 				for _, v := range a.results.Tracks.Tracks {
-					a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "track"})
+					if generate {
+						a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "track"})
+					}
 					c = append(c, []Content{
 						{Content: v.Name, Style: TrackStyle},
 						{Content: v.Artists[0].Name, Style: ArtistStyle},
@@ -45,9 +53,13 @@ func (a *SearchView) Content() func() [][]Content {
 			}
 			if a.results.Albums != nil {
 				c = append(c, []Content{{"Albums", NotSelectableStyle}})
-				a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				if generate {
+					a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				}
 				for _, v := range a.results.Albums.Albums {
-					a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "album"})
+					if generate {
+						a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "album"})
+					}
 					c = append(c, []Content{
 						{Content: v.Name, Style: AlbumStyle},
 						{Content: v.Artists[0].Name, Style: ArtistStyle},
@@ -57,9 +69,13 @@ func (a *SearchView) Content() func() [][]Content {
 			}
 			if a.results.Artists != nil {
 				c = append(c, []Content{{"Artists", NotSelectableStyle}})
-				a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				if generate {
+					a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				}
 				for _, v := range a.results.Artists.Artists {
-					a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "artist"})
+					if generate {
+						a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "artist"})
+					}
 					c = append(c, []Content{
 						{Content: v.Name, Style: AlbumStyle},
 					})
@@ -67,9 +83,13 @@ func (a *SearchView) Content() func() [][]Content {
 			}
 			if a.results.Playlists != nil {
 				c = append(c, []Content{{"Playlists", NotSelectableStyle}})
-				a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				if generate {
+					a.searchContent = append(a.searchContent, SearchContent{Type: "null"})
+				}
 				for _, v := range a.results.Playlists.Playlists {
-					a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "playlist"})
+					if generate {
+						a.searchContent = append(a.searchContent, SearchContent{v.URI, v.ID, v.Name, "playlist"})
+					}
 					c = append(c, []Content{
 						{Content: v.Name, Style: PlaylistNavStyle},
 						{Content: v.Owner.DisplayName, Style: ArtistStyle},
@@ -127,6 +147,7 @@ func (a *SearchView) RefreshState() {
 
 func (a *SearchView) SetSearch(s string) {
 	a.search = s
+	a.searchContent = make([]SearchContent, 0)
 	a.RefreshState()
 }
 
