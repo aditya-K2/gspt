@@ -195,6 +195,8 @@ mappings:
         play_entry
     playlist_view:
         open_entry
+    search_view:
+        open_entry
     recently_played_view:
         open_entry
     top_tracks_view:
@@ -220,3 +222,4 @@ mappings:
 - [ ] Wayland Support for Image rendering
 - [ ] Queue Support
 - [x] Key Mappings
+

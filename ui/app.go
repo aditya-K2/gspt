@@ -167,7 +167,12 @@ func NewApplication() *Application {
 			return nil
 		}, pBar),
 	}))
-	searchView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{}))
+	searchView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			searchView.SelectEntry()
+			return nil
+		}, nil),
+	}))
 	artistsView.SetActions(utils.MergeMaps(globalMaps, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistsView.OpenArtist()
@@ -216,6 +221,7 @@ func NewApplication() *Application {
 	albumView.SetMappings(mappings["album_view"])
 	artistsView.SetMappings(mappings["artists_view"])
 	artistView.SetMappings(mappings["artist_view"])
+	searchView.SetMappings(mappings["search_view"])
 
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(navMenu.Table, 6, 3, false).

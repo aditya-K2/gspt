@@ -86,6 +86,9 @@ func GenerateMappings() map[string]map[Key]string {
 		"nav_menu": {
 			{K: tcell.KeyEnter}: "open_entry",
 		},
+		"search_view": {
+			{K: tcell.KeyEnter}: "open_entry",
+		},
 		"global": {
 			{R: 'd'}: "choose_device",
 			{R: '1'}: "focus_nav",
