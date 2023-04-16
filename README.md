@@ -223,3 +223,6 @@ mappings:
 - [ ] Queue Support
 - [x] Key Mappings
 
+### Special thanks to
+
+- [spotify-tui](https://github.com/Rigellute/spotify-tui)
