@@ -16,40 +16,30 @@
 
 ***In a very experimental stage.***
 
-### Building
+### Please Note
 
-```bash
-$ git clone https://github.com/aditya-K2/gspt.git
-$ cd gspt
-$ go build -v
-```
+- You will need Spotify Premium.
+- "gspt" uses the [Web API](https://developer.spotify.com/documentation/web-api) from Spotify, which doesn't handle streaming itself. So you'll need either an official Spotify client open or a lighter weight alternative such as [spotifyd](https://github.com/Spotifyd/spotifyd).
+- Images are rendered using the Xorg child windows. Currently there is no support for Wayland.
+- Some Terminals even in Xorg don't seem to support Image rendering. (See [Verified Terminals](http://github.com/aditya-K2/gspt#verified-terminals))
+
+## Setup
 
 ### Installing
 
 ```bash
-$ sudo install -D gspt -t "/usr/bin/"
+$ git clone https://github.com/aditya-K2/gspt.git # Cloning
+$ cd gspt
+$ go build -v # Building
+$ sudo install -D gspt -t "/usr/bin/" # Installing
+
+# You can merge them into a one liner
+$ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install -D gspt -t "/usr/bin/"
 ```
 
-#### You can merge them into a one liner
+### Afer Installation Steps
 
-```bash
-git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install -D gspt -t "/usr/bin/"
-```
-
-### Please Note
-
-- You will need Spotify Premium to use `gspt`.
-- `gspt` uses the [Web API](https://developer.spotify.com/documentation/web-api) from Spotify, which doesn't handle streaming itself. So you'll need either an official Spotify client open or a lighter weight alternative such as [spotifyd](https://github.com/Spotifyd/spotifyd).
-- Images are rendered using the Xorg child windows. Currently there is no support for Wayland.
-- Some Terminals even in Xorg don't seem to support Image rendering.
-    - Following terminals have been tested with:
-        - Alacritty
-        - ST
-        - Urxvt
-
-## Setup
-
-### How to Generate an API Key from Spotify Dashboard
+- #### Generate an API Key from Spotify Dashboard
 
 
 If you want to use Spotify's API to create applications that interact with their music streaming service, you will need an API key. Here's how you can generate one from the Spotify Dashboard:
@@ -63,153 +53,165 @@ If you want to use Spotify's API to create applications that interact with their
 3. Give your application a name and description, and agree to the terms of service. In the `Redirect URI` section add `http://localhost:8080/callback` as a callback URL. This is necessary for the OAuth 2.0 authentication flow to work. Click on "Create" to proceed.
    ![Create an App Form](./extras/create_form.png)
 
-4. On the next page, you'll see the details of your newly created application. In the Settings Look for the section labeled "Client ID" and click on the "Show Client Secret" button.
+4. On the next page, you'll see the details of your newly created application. In the Settings Look for the section labeled "Client ID" and click on the "Show Client Secret" button. You will now see your Client ID and Client Secret. You will need both of these to use the Spotify API in "gspt"
 
-5. You will now see your Client ID and Client Secret. You will need both of these to use the Spotify API in `gspt`
+- #### Using the Generated Credentials
+
+1. Set the following environment variables from the credentials you generated.
 
 ```bash
 $ export SPOTIFY_ID= # client id
 $ export SPOTIFY_SECRET= # client secret
 ```
 
-7. After this you can just run `gspt`. And follow the link that it generates, and Login.
+2. After this you can just run `gspt`. And follow the link that it generates, and Login.
 
 ```bash
 $ gspt
 ```
-
 ---
 
-## Key bindings
+## Configuration
 
-1. `d` Opens the device menu to choose a device from
-1. `1`, `2`, `3` Switch between the views
-1. `Enter` - Selects an entry
-1. `?` Search
-1. `v` Toggle Visual Mode (Only works in some views)
-1. `a` Add to Playlist (Only works in some views)
-1. `Ctrl-P` starts playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
+The configuration is done through `$XDG_CONFIG_HOME/gspt/config.yml`
 
-## Config Options
+Also, Configuration is live updated when you make a change except for the Key Mappings.
 
-Config file can be defined at `$HOME/.config/gspt/config.yaml`
-
-Note: Configuration is live updated when you make a change
-
-#### Following Options are configurable
+#### Config Options
 
 ```yml
-# Following are the default values
-cache_dir: $XDG_CACHE_HOME # Path to where the cached images should be stored.
+# Option followed by default values
+
+# Path to where the cached images should be stored.
+cache_dir: $XDG_CACHE_HOME
+
+# The amount of milliseconds after which the cover art should be redrawn if there is a event.
 redraw_interval: 500
+
+# Image Drawing related options. See next section for an in-detail explanation.
 additional_padding_x : 12
 additional_padding_y : 16
 image_width_extra_x : -1.5
 image_width_extra_y : -3.75
+
+# Color configuration has the following api
+colors:
+    entity:
+        fg: # foreground
+        bg: # background
+        bold: # true/false (boolean)
+        italic: # true/false (boolean)
+
+# for e.g
 colors:
     artist:
         fg: pink
-        bg: ""
-        bold: false
-        italic: false
-    album:
-        fg: green
-        bg: ""
-        bold: false
-        italic: false
-    track:
-        fg: blue
-        bg: ""
-        bold: false
-        italic: false
-    genre:
-        fg: darkCyan
-        bg: ""
-        bold: true
-        italic: false
-    timestamp:
-        fg: red
-        bg: ""
+        bg: black # Would be ignored in most of the cases.
         bold: false
         italic: true
-    pbar_artist:
-        fg: blue
-        bg: ""
-        bold: true
-        italic: false
-    pbar_track:
-        fg: green
-        bg: ""
-        bold: true
-        italic: true
-    playlist_nav:
-        fg: coral
-        bg: ""
-        bold: false
-        italic: false
-    nav:
-        fg: papayawhip
-        bg: ""
-        bold: false
-        italic: false
-    context_menu:
-        fg: turquoise
-        bg: ""
-        bold: true
-        italic: false
-```
-
-### Key Mappings
-
-```yaml
 
 # Key mappings has the following API
-
-# mappings:
-#     view:
-#     function: mapping
+mappings:
+    view:
+    function: key_mapping
 
 # for e.g
 
 mappings:
     recently_played_view:
         open_entry: "ctrl-p"
-
-# Following Views and Functions are currently available
-# To see available keys please see: https://github.com/aditya-K2/gspt/blob/master/config/key.go#L13
-mappings:
-    album_view:
-        open_entry
-    albums_view:
-        open_entry
-        play_entry
-    artist_view:
-        open_entry
-        play_entry
-    artists_view:
-        open_entry
-    liked_songs_view:
-        open_entry
-    playlist_nav:
-        open_entry
-        play_entry
-    playlist_view:
-        open_entry
-    search_view:
-        open_entry
-    recently_played_view:
-        open_entry
-    top_tracks_view:
-        open_entry
-        play_entry
-    # These mappings are available in every view.
-    global:
-        focus_search
-        focus_main_view
-        focus_playlists
-        focus_nav
-        choose_device
 ```
+
+## Image Rendering Related Options
+
+The position of the image without any configuration may vary in different
+terminals due to font or terminal padding. The app tries to calculate
+the position based on rows and columns and font width of you terminal
+but the exact position can't be defined. Therefore, it is recommended to define
+extra padding and your own image width ratio in the config file.
+Additional padding can be positive or negative and can be used to move the
+image up, down, left, or right. Image width can be adjusted by defining the
+extra width to be added or subtracted from the original image width.
+
+---
+
+##### Additional Padding
+
+The `additional_padding_x` and `additional_padding_y` configuration parameters allow
+you to add extra padding to the placement of the image within the terminal
+window. This additional padding can be set to positive or negative values, which
+will shift the position of the image accordingly.
+
+Note that the `additional_padding_x` parameter affects the horizontal placement of
+the image, with negative values shifting the image to the right and positive
+values shifting it to the left. Similarly, the `additional_padding_y` parameter
+affects the vertical placement of the image, with negative values shifting the
+image up and positive values shifting it down.
+
+To adjust the `additional_padding_x` and `additional_padding_y` parameters, simply
+modify the configuration file according to your needs. Keep in mind that adding
+too much padding may cause the image to overlap with other terminal content,
+while adding too little padding may cause the image to be cut off. Experiment
+with different values until you find the perfect placement for your image.
+
+![](./extras/info_padding.png)
+
+---
+
+##### Image Width
+
+By default, the app assumes that the image preview box has no font or terminal
+padding or margin, so the image will be rendered at different positions in
+different terminals. To ensure that the image fits perfectly within the preview
+box, you can add extra width to the image using the `image_width_extra_x` and
+`image_width_extra_y` configuration parameters. These parameters can be set to
+positive or negative values to increase or decrease the size of the image,
+respectively. To add extra width to the image, the app takes into account the
+font width specified by the variables.
+
+To adjust the `image_width_extra_x` and `image_width_extra_y` parameters, simply
+modify the configuration file according to your needs. Note that these
+parameters act like a chunk that is either added or subtracted from the original
+image width. Therefore, if the image is flowing outside the preview box, you may
+need to adjust the parameters to increase or decrease the chunk size until the
+image fits perfectly within the box.
+
+![](./extras/info_width.png)
+
+### Tutorial
+
+for e.g
+
+![Cover Art Position](./extras/default.png)
+
+Let's say upon opening "gspt" for the first time and your image is rendered this way.
+
+Here the `Y` Position is too low hence we have to decrease the `additional_padding_y` so that image will be rendered
+in a better position so we decrement the  `additional_padding_y` by `9`
+
+Now the configuration becomes
+```yml
+additional_padding_y : 9
+```
+
+and the image appears like this:
+
+![Padding](./extras/padding.png)
+
+One might be happy the way things turn out but for a perfectionist like me this is not enough.
+You can notice that the Height of the image is a little bit more than the box height and hence the image is flowing outside the box. Now it's  time to change the `WIDTH_Y`.
+
+Width can be changed by defining the `image_width_extra_y` and `IMAGE_WIDTH_EXTRA_X` it act's a little differently think of it like a chunk which is either added or subtracted from the image's original width. We can look at the configuration and realize that the chunk `image_width_extra_y` when subtracted from the original `IMAGE_WIDTH` doesn't get us the proper result and is a little to low. We need to subtract a more bigger chunk, Hence we will increase the magnitude of `image_width_extra_y` or decrease `image_width_extra_y`
+
+Now the Configuration becomes:
+```yml
+image_width_extra_y : -3.2
+```
+and the image appears like this:
+
+![Width](./extras/width.png)
+
+Which looks perfect. 🎉
 
 ## Roadmap
 
@@ -221,7 +223,20 @@ mappings:
 - [ ] Customisable UI
 - [ ] Wayland Support for Image rendering
 - [ ] Queue Support
+- [ ] Windows Support
 - [x] Key Mappings
+
+### Verified Terminals
+
+| Terminal        | Status |
+|------------     |--------|
+| Alacritty       |   ✅   |
+| ST              |   ✅   |
+| Xterm           |   ✅   |
+| Konsole         |   ✅   |
+| Urxvt           |   ✅   |
+| xfce-terminal   |   ❌   |
+| gnome-terminal  |   ❌   |
 
 ### Special thanks to
 
