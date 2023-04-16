@@ -254,8 +254,6 @@ func NewApplication() *Application {
 	updateRoutine()
 
 	rectWatcher := func() {
-		redrawInterval := 300
-
 		// Wait Until the ImagePreviewer is drawn
 		// Ensures that cover art is not drawn before the UI is rendered.
 		// Ref Issue: #39
@@ -287,7 +285,7 @@ func NewApplication() *Application {
 							ImgH = _ImgH
 							coverArt.RefreshState()
 						}
-						time.Sleep(time.Millisecond * time.Duration(redrawInterval))
+						time.Sleep(time.Millisecond * time.Duration(config.Config.RedrawInterval))
 					}
 				}()
 			}
