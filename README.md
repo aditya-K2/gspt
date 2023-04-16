@@ -82,7 +82,7 @@ $ gspt
 ```
 ---
 
-#### Default Key Mappings
+### Default Key Mappings
 
 1. `d` Opens the device menu to choose a device from
 1. `1`, `2`, `3` Switch between the views
@@ -143,67 +143,74 @@ mappings:
         open_entry: "ctrl-p"
 ```
 
-## Image Rendering Related Options
+## Image Rendering Related Parameters
 
 The position of the image without any configuration may vary in different
 terminals due to font or terminal padding. The app tries to calculate
 the position based on rows and columns and font width of you terminal
 but the exact position can't be defined. Therefore, it is recommended to define
 extra padding and your own image width ratio in the config file.
-Additional padding can be positive or negative and can be used to move the
-image up, down, left, or right. Image width can be adjusted by defining the
+***Additional Padding*** can be positive or negative and can be used to move the
+image up, down, left, or right. ***Extra Image width*** can be adjusted by defining the
 extra width to be added or subtracted from the original image width.
 
+<details>
+    <p>
+        The <code>additional_padding_x</code> and <code>additional_padding_y</code>
+        configuration parameters allow you to add extra padding to the placement of
+        the image within the terminal window. This additional padding can be set to
+        positive or negative values, which will shift the position of the image
+        accordingly.
+    </p>
+    <p>
+        Note that the <code>additional_padding_x</code> parameter affects the
+        horizontal placement of the image, with negative values shifting the image
+        to the right and positive values shifting it to the left. Similarly, the
+        <code>additional_padding_y</code> parameter affects the vertical placement
+        of the image, with negative values shifting the image up and positive
+        values shifting it down.
+    </p>
+    <p>
+        To adjust the <code>additional_padding_x</code> and
+        <code>additional_padding_y</code> parameters, simply modify the
+        configuration file according to your needs. Keep in mind that adding too
+        much padding may cause the image to overlap with other terminal content,
+        while adding too little padding may cause the image to be cut off.
+        Experiment with different values until you find the perfect placement
+        for your image.
+    </p>
+    <summary><b>Additional Padding</b></summary>
+    <img src="./extras/info_padding.png">
+</details>
+<details>
+    <p>
+        By default, the app assumes that the image preview box has no font or
+        terminal padding or margin, so the image will be rendered at different
+        positions in different terminals. To ensure that the image fits
+        perfectly within the preview box, you can add extra width to the image
+        using the <code>image_width_extra_x</code> and
+        <code>image_width_extra_y</code> configuration parameters. These
+        parameters can be set to positive or negative values to increase or
+        decrease the size of the image, respectively. To add extra width to the
+        image, the app takes into account the font width specified by the
+        variables.
+    </p>
+    <p>
+        To adjust the <code>image_width_extra_x</code> and
+        <code>image_width_extra_y</code> parameters, simply modify the
+        configuration file according to your needs. Note that these parameters
+        act like a chunk that is either added or subtracted from the original
+        image width. Therefore, if the image is flowing outside the preview
+        box, you may need to adjust the parameters to increase or decrease the
+        chunk size until the image fits perfectly within the box.
+    </p>
+    <summary><b>Extra Image Width</b></summary>
+    <img src="./extras/info_width.png">
+</details>
+
 ---
 
-##### Additional Padding
-
-The `additional_padding_x` and `additional_padding_y` configuration parameters allow
-you to add extra padding to the placement of the image within the terminal
-window. This additional padding can be set to positive or negative values, which
-will shift the position of the image accordingly.
-
-Note that the `additional_padding_x` parameter affects the horizontal placement of
-the image, with negative values shifting the image to the right and positive
-values shifting it to the left. Similarly, the `additional_padding_y` parameter
-affects the vertical placement of the image, with negative values shifting the
-image up and positive values shifting it down.
-
-To adjust the `additional_padding_x` and `additional_padding_y` parameters, simply
-modify the configuration file according to your needs. Keep in mind that adding
-too much padding may cause the image to overlap with other terminal content,
-while adding too little padding may cause the image to be cut off. Experiment
-with different values until you find the perfect placement for your image.
-
-![](./extras/info_padding.png)
-
----
-
-##### Image Width
-
-By default, the app assumes that the image preview box has no font or terminal
-padding or margin, so the image will be rendered at different positions in
-different terminals. To ensure that the image fits perfectly within the preview
-box, you can add extra width to the image using the `image_width_extra_x` and
-`image_width_extra_y` configuration parameters. These parameters can be set to
-positive or negative values to increase or decrease the size of the image,
-respectively. To add extra width to the image, the app takes into account the
-font width specified by the variables.
-
-To adjust the `image_width_extra_x` and `image_width_extra_y` parameters, simply
-modify the configuration file according to your needs. Note that these
-parameters act like a chunk that is either added or subtracted from the original
-image width. Therefore, if the image is flowing outside the preview box, you may
-need to adjust the parameters to increase or decrease the chunk size until the
-image fits perfectly within the box.
-
-![](./extras/info_width.png)
-
----
-
-### Tutorial
-
-for e.g
+### Configuring Additional Padding and Image Width.
 
 ![Cover Art Position](./extras/default.png)
 
