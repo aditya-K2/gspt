@@ -143,8 +143,12 @@ func progressFunc() (string, string, string, float64) {
 	barTitle := " - "
 	barText := "---:---"
 	barTopTitle := "[]"
+	playing := "Paused"
 	if state != nil {
-		barTopTitle = fmt.Sprintf("[Device: %s Shuffle: %t Repeat: %s]", state.Device.Name, state.ShuffleState, state.RepeatState)
+		if state.Playing {
+			playing = "Playing"
+		}
+		barTopTitle = fmt.Sprintf("[%s Device: %s Shuffle: %t Repeat: %s]", playing, state.Device.Name, state.ShuffleState, state.RepeatState)
 		if state.Item != nil {
 			barTitle = fmt.Sprintf("[blue:-:bi]%s[-:-:-] - [green:-:b]%s", state.Item.Name, state.Item.Artists[0].Name)
 			barText = utils.StrTime(float64(state.Progress/1000)) + "/" + utils.StrTime(float64(state.Item.Duration/1000))
