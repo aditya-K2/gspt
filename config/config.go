@@ -95,6 +95,7 @@ func GenerateMappings() map[string]map[Key]string {
 			{R: '2'}: "focus_playlists",
 			{R: '3'}: "focus_main_view",
 			{R: '?'}: "focus_search",
+			{R: ' '}: "toggle_playback",
 		},
 		"playlist_nav": {
 			{K: tcell.KeyEnter}: "open_entry",

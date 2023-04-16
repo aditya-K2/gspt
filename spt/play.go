@@ -33,3 +33,20 @@ func PlayContext(context *spotify.URI) error {
 		PlaybackContext: context,
 	})
 }
+
+func TogglePlayback() error {
+	p, err := Client.PlayerCurrentlyPlaying(ctx())
+	if err != nil {
+		return err
+	}
+	if p.Playing {
+		if err := Client.Pause(ctx()); err != nil {
+			return err
+		}
+	} else {
+		if err := Client.Play(ctx()); err != nil {
+			return err
+		}
+	}
+	return nil
+}

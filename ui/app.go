@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/aditya-K2/gspt/config"
+	"github.com/aditya-K2/gspt/spt"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -116,6 +117,12 @@ func NewApplication() *Application {
 			Ui.App.SetFocus(searchbar)
 			return nil
 		}, nil),
+		"toggle_playback": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			if err := spt.TogglePlayback(); err != nil {
+				SendNotification(err.Error())
+			}
+			return nil
+		}, pBar),
 		"choose_device": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			OpenDeviceMenu()
 			return nil

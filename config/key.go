@@ -72,6 +72,11 @@ var (
 		"pause":           tcell.KeyPause,
 		"backtab":         tcell.KeyBacktab,
 	}
+	runeMap = map[rune]bool{
+		'?': true,
+		'!': true,
+		' ': true,
+	}
 )
 
 func (k *Key) Rune() rune {
@@ -88,7 +93,7 @@ func NewKey(s string) Key {
 		if (a[0] >= 'A' && a[0] <= 'Z') ||
 			(a[0] >= 'a' && a[0] <= 'z') ||
 			(a[0] >= '0' && a[0] <= '9') ||
-			(a[0] == '?' || a[0] == '!') {
+			(runeMap[a[0]]) {
 			return Key{R: a[0]}
 		}
 	}
