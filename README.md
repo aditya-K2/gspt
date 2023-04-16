@@ -10,7 +10,7 @@
 
 ---
 
-![](./extras/screenshot.png)
+https://user-images.githubusercontent.com/51816057/232330465-634faadd-a4ce-419d-ba9b-3cf7515d3f32.mp4
 
 ---
 
