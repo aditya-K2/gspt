@@ -19,7 +19,10 @@
 ### Please Note
 
 - You will need Spotify Premium.
-- "gspt" uses the [Web API](https://developer.spotify.com/documentation/web-api) from Spotify, which doesn't handle streaming itself. So you'll need either an official Spotify client open or a lighter weight alternative such as [spotifyd](https://github.com/Spotifyd/spotifyd).
+- "gspt" uses the [Web API](https://developer.spotify.com/documentation/web-api)
+  from Spotify, which doesn't handle streaming itself. So you'll need either
+  an official Spotify client open or a lighter weight alternative such as
+  [spotifyd](https://github.com/Spotifyd/spotifyd).
 - Images are rendered using the Xorg child windows. Currently there is no support for Wayland.
 - Some Terminals even in Xorg don't seem to support Image rendering. (See [Verified Terminals](http://github.com/aditya-K2/gspt#verified-terminals))
 
@@ -42,18 +45,26 @@ $ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=
 - #### Generate an API Key from Spotify Dashboard
 
 
-If you want to use Spotify's API to create applications that interact with their music streaming service, you will need an API key. Here's how you can generate one from the Spotify Dashboard:
+If you want to use Spotify's API to create applications that interact with
+their music streaming service, you will need an API key. Here's how you can
+generate one from the Spotify Dashboard:
 
-1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/) and log in with your Spotify account credentials.
+1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/)
+and log in with your Spotify account credentials.
 
 2. Click on the "Create an App" button to create a new application.
 
    ![Create an App](./extras/create.png)
 
-3. Give your application a name and description, and agree to the terms of service. In the `Redirect URI` section add `http://localhost:8080/callback` as a callback URL. This is necessary for the OAuth 2.0 authentication flow to work. Click on "Create" to proceed.
-   ![Create an App Form](./extras/create_form.png)
+3. Give your application a name and description, and agree to the terms of
+   service. In the `Redirect URI` section add `http://localhost:8080/callback`
+   as a callback URL. This is necessary for the OAuth 2.0 authentication flow
+   to work. Click on "Create" to proceed. ![Create an App Form](./extras/create_form.png)
 
-4. On the next page, you'll see the details of your newly created application. In the Settings Look for the section labeled "Client ID" and click on the "Show Client Secret" button. You will now see your Client ID and Client Secret. You will need both of these to use the Spotify API in "gspt"
+4. On the next page, you'll see the details of your newly created application.
+   In the Settings Look for the section labeled "Client ID" and click on the
+   "Show Client Secret" button. You will now see your Client ID and Client
+   Secret. You will need both of these to use the Spotify API in "gspt"
 
 - #### Using the Generated Credentials
 
@@ -178,6 +189,8 @@ image fits perfectly within the box.
 
 ![](./extras/info_width.png)
 
+---
+
 ### Tutorial
 
 for e.g
@@ -186,8 +199,9 @@ for e.g
 
 Let's say upon opening "gspt" for the first time and your image is rendered this way.
 
-Here the `Y` Position is too low hence we have to decrease the `additional_padding_y` so that image will be rendered
-in a better position so we decrement the  `additional_padding_y` by `9`
+Here the `Y` Position is too low hence we have to decrease the
+`additional_padding_y` so that image will be rendered in a better position so
+we decrement the  `additional_padding_y` by 9
 
 Now the configuration becomes
 ```yml
@@ -198,10 +212,19 @@ and the image appears like this:
 
 ![Padding](./extras/padding.png)
 
-One might be happy the way things turn out but for a perfectionist like me this is not enough.
-You can notice that the Height of the image is a little bit more than the box height and hence the image is flowing outside the box. Now it's  time to change the `WIDTH_Y`.
+One might be happy the way things turn out but for a perfectionist like me this
+is not enough. You can notice that the Height of the image is a little bit more
+than the box height and hence the image is flowing outside the box. Now it's
+time to change the `image_width_extra_y`.
 
-Width can be changed by defining the `image_width_extra_y` and `IMAGE_WIDTH_EXTRA_X` it act's a little differently think of it like a chunk which is either added or subtracted from the image's original width. We can look at the configuration and realize that the chunk `image_width_extra_y` when subtracted from the original `IMAGE_WIDTH` doesn't get us the proper result and is a little to low. We need to subtract a more bigger chunk, Hence we will increase the magnitude of `image_width_extra_y` or decrease `image_width_extra_y`
+Width can be changed by defining the `image_width_extra_y` and
+`image_width_extra_x` it act's a little differently think of it like a chunk
+which is either added or subtracted from the image's original width. We can
+look at the configuration and realize that the chunk `image_width_extra_y` when
+subtracted from the original `image_width` doesn't get us the proper result and
+is a little to low. We need to subtract a more bigger chunk, Hence we will
+increase the magnitude of `image_width_extra_y` or decrease
+`image_width_extra_y`
 
 Now the Configuration becomes:
 ```yml
