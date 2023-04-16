@@ -82,6 +82,16 @@ $ gspt
 ```
 ---
 
+#### Default Key Mappings
+
+1. `d` Opens the device menu to choose a device from
+1. `1`, `2`, `3` Switch between the views
+1. `Enter` - Selects an entry
+1. `?` Search
+1. `v` Toggle Visual Mode (Only works in some views)
+1. `a` Add to Playlist (Only works in some views)
+1. `Ctrl-P` starts playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
+
 ## Configuration
 
 The configuration is done through `$XDG_CONFIG_HOME/gspt/config.yml`
