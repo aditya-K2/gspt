@@ -123,7 +123,7 @@ func (a *SearchView) SelectEntry() {
 		}
 	case "playlist":
 		{
-			if p, err := spt.GetSimplePlaylist(&a.searchContent[r].ID); err != nil {
+			if p, err := spt.GetFullPlaylist(&a.searchContent[r].ID); err != nil {
 				SendNotification("Error Opening the playlists: " + err.Error())
 				return
 			} else {
