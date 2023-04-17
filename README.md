@@ -93,16 +93,28 @@ $ gspt
 1. `Ctrl-P` Start playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
 1. `Space` Toggle Playback
 
+## Command-line Parameters
+
+```
+Usage of ./gspt:
+  -c string
+        Specify The Directory to check for config.yml file. (default "$XDG_CONFIG_HOME/gspt")
+  -hide-image
+        Do not display the cover art image.
+```
+
 ## Configuration
 
 The configuration is done through `$XDG_CONFIG_HOME/gspt/config.yml`
+or the path to the folder provided by the `-c` flag before starting the app.
+See [Command-line Parameters](https://github.com/aditya-K2/gspt#command-line-parameters)
 
 Also, Configuration is live updated when you make a change except for the Key Mappings.
 
-#### Config Options
+#### Config Parameters
 
 ```yml
-# Option followed by default values
+# Parameter followed by default values
 
 # Path to where the cached images should be stored.
 cache_dir: $XDG_CACHE_HOME
@@ -110,7 +122,10 @@ cache_dir: $XDG_CACHE_HOME
 # The amount of milliseconds after which the cover art should be redrawn if there is a event.
 redraw_interval: 500
 
-# Image Drawing related options. See next section for an in-detail explanation.
+# Do not display the cover art image.
+hide_image: false
+
+# Image Drawing related parameters. See next section for an in-detail explanation.
 additional_padding_x : 12
 additional_padding_y : 16
 image_width_extra_x : -1.5
@@ -138,7 +153,6 @@ mappings:
     function: key_mapping
 
 # for e.g
-
 mappings:
     recently_played_view:
         open_entry: "ctrl-p"
