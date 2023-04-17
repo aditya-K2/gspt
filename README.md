@@ -86,12 +86,15 @@ $ gspt
 
 1. `d` Open the device menu to choose a device from
 1. `1`, `2`, `3` Switch between the views
-1. `Enter` - Select an entry
+1. `enter` - Select an entry
 1. `?` Search
 1. `v` Toggle Visual Mode (Only works in some views)
 1. `a` Add to Playlist (Only works in some views)
-1. `Ctrl-P` Start playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
-1. `Space` Toggle Playback
+1. `ctrl-p` Start playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
+1. ` ` Toggle Playback (Space)
+1. `o` Open the Current Track's Album
+1. `O` Open the Current Track's Artist
+1. `ctrl-o` Open the Current Context (Album/Artist/Playlist)
 
 ## Command-line Parameters
 

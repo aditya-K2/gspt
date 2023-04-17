@@ -130,6 +130,25 @@ func NewApplication() *Application {
 	Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 	playlistNav.Table.SetBackgroundColor(tcell.ColorDefault)
 
+	openCurrentArtist := func() {
+		if state != nil && state.Item != nil {
+			if len(state.Item.Artists) != 0 {
+				artistView.SetArtist(&state.Item.Artists[0].ID)
+				artistView.RefreshState()
+				SetCurrentView(artistView)
+				App.SetFocus(Main.Table)
+			} else {
+				SendNotification("No Artist Found!")
+			}
+		}
+	}
+	openCurrentAlbum := func() {
+		if state != nil && state.Item != nil {
+			albumView.SetAlbum(state.Item.Album.Name, &state.Item.Album.ID)
+			SetCurrentView(albumView)
+			App.SetFocus(Main.Table)
+		}
+	}
 	// Actions
 	globalActions := map[string]*Action{
 		"focus_search": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -156,6 +175,49 @@ func NewApplication() *Application {
 		}, nil),
 		"focus_main_view": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			Ui.App.SetFocus(Main.Table)
+			return nil
+		}, nil),
+		"open_current_track_album": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			openCurrentAlbum()
+			return nil
+		}, nil),
+		"open_current_track_artist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			openCurrentArtist()
+			return nil
+		}, nil),
+		"open_current_context": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			if state != nil && state.Item != nil {
+				switch state.PlaybackContext.Type {
+				case "artist":
+					{
+						openCurrentArtist()
+					}
+				case "album":
+					{
+						openCurrentAlbum()
+					}
+				case "playlist":
+					{
+						id, err := spt.UriToID(state.PlaybackContext.URI)
+						if err != nil {
+							SendNotification("Error switching contexts: " + err.Error())
+							return e
+						}
+						p, err := spt.GetFullPlaylist(&id)
+						if err != nil {
+							SendNotification("Error switching contexts: " + err.Error())
+							return e
+						}
+						playlistView.SetPlaylist(&p.SimplePlaylist)
+						SetCurrentView(playlistView)
+						App.SetFocus(Main.Table)
+					}
+				default:
+					{
+						SendNotification("No Context Found!")
+					}
+				}
+			}
 			return nil
 		}, nil),
 	}
