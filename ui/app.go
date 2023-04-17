@@ -5,9 +5,9 @@ import (
 
 	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
+	"github.com/aditya-K2/tview"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
-	"github.com/aditya-K2/tview"
 )
 
 var (
@@ -29,6 +29,8 @@ var (
 	NavStyle           tcell.Style
 	ContextMenuStyle   tcell.Style
 	NotSelectableStyle tcell.Style
+	FocusBorderStyle   tcell.Style = tcell.StyleDefault.Foreground(tcell.ColorRed)
+	BorderStyle        tcell.Style = tcell.StyleDefault.Foreground(tcell.ColorGrey)
 )
 
 func onConfigChange() {
@@ -59,6 +61,21 @@ type Application struct {
 }
 
 func NewApplication() *Application {
+	if config.Config.RoundedCorners {
+		tview.Borders.TopLeft = '╭'
+		tview.Borders.TopRight = '╮'
+		tview.Borders.BottomRight = '╯'
+		tview.Borders.BottomLeft = '╰'
+		tview.Borders.Vertical = '│'
+		tview.Borders.Horizontal = '─'
+		tview.Borders.TopLeftFocus = '╭'
+		tview.Borders.TopRightFocus = '╮'
+		tview.Borders.BottomRightFocus = '╯'
+		tview.Borders.BottomLeftFocus = '╰'
+		tview.Borders.VerticalFocus = '│'
+		tview.Borders.HorizontalFocus = '─'
+		tview.Styles.BorderColorFocus = tcell.ColorRed
+	}
 
 	App := tview.NewApplication()
 	Root := NewRoot()
@@ -275,7 +292,6 @@ func NewApplication() *Application {
 				ImgX, ImgY, ImgW, ImgH = Ui.CoverArt.GetRect()
 			}
 			drawCh <- true
-
 		}()
 
 		go func() {

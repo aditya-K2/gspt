@@ -18,6 +18,7 @@ type ConfigS struct {
 	ExtraImageWidthX   float64 `mapstructure:"image_width_extra_x"`
 	ExtraImageWidthY   float64 `mapstructure:"image_width_extra_y"`
 	HideImage          bool    `mapstructure:"hide_image"`
+	RoundedCorners     bool    `mapstructure:"rounded_corners"`
 }
 
 func NewConfigS() *ConfigS {
@@ -30,6 +31,7 @@ func NewConfigS() *ConfigS {
 		RedrawInterval:     500,
 		Colors:             NewColors(),
 		HideImage:          false,
+		RoundedCorners:     false,
 	}
 }
 
