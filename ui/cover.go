@@ -9,7 +9,7 @@ import (
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/nfnt/resize"
-	"github.com/rivo/tview"
+	"github.com/aditya-K2/tview"
 	"github.com/zmb3/spotify/v2"
 	"gitlab.com/diamondburned/ueberzug-go"
 )

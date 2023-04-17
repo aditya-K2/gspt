@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/rivo/tview"
+	"github.com/aditya-K2/tview"
 )
 
 var (
