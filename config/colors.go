@@ -18,8 +18,8 @@ var (
 )
 
 type Color struct {
-	Fg     string `mapstructure:"foreground"`
-	Bg     string `mapstructure:"background"`
+	Fg     string `mapstructure:"fg"`
+	Bg     string `mapstructure:"bg"`
 	Bold   bool   `mapstructure:"bold"`
 	Italic bool   `mapstructure:"italic"`
 }

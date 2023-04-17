@@ -134,8 +134,8 @@ image_width_extra_y : -3.75
 # Color configuration has the following api
 colors:
     entity:
-        fg: # foreground
-        bg: # background
+        fg: # foreground (Can be Hex value or a color name)
+        bg: # background (Can be Hex value or a color name)
         bold: # true/false (boolean)
         italic: # true/false (boolean)
 
