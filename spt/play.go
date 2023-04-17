@@ -1,6 +1,9 @@
 package spt
 
 import (
+	"errors"
+	"strings"
+
 	"github.com/zmb3/spotify/v2"
 )
 
@@ -49,4 +52,12 @@ func TogglePlayback() error {
 		}
 	}
 	return nil
+}
+
+func UriToID(uri spotify.URI) (spotify.ID, error) {
+	a := strings.Split(string(uri), ":")
+	if len(a) != 3 {
+		return "", errors.New("Error Decoding the URI")
+	}
+	return spotify.ID(a[2]), nil
 }
