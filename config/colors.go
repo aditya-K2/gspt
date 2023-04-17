@@ -36,6 +36,8 @@ type Colors struct {
 	PlaylistNav Color `mapstructure:"playlist_nav"`
 	Nav         Color `mapstructure:"nav"`
 	ContextMenu Color `mapstructure:"context_menu"`
+	BorderFocus Color `mapstructure:"border_focus"`
+	Border      Color `mapstructure:"border"`
 
 	Null Color
 }
@@ -151,6 +153,16 @@ func NewColors() *Colors {
 		ContextMenu: Color{
 			Fg:     "turquoise",
 			Bold:   true,
+			Italic: false,
+		},
+		BorderFocus: Color{
+			Fg:     "white",
+			Bold:   false,
+			Italic: false,
+		},
+		Border: Color{
+			Fg:     "grey",
+			Bold:   false,
 			Italic: false,
 		},
 		Null: Color{

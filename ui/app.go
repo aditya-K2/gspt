@@ -29,11 +29,9 @@ var (
 	NavStyle           tcell.Style
 	ContextMenuStyle   tcell.Style
 	NotSelectableStyle tcell.Style
-	FocusBorderStyle   tcell.Style = tcell.StyleDefault.Foreground(tcell.ColorRed)
-	BorderStyle        tcell.Style = tcell.StyleDefault.Foreground(tcell.ColorGrey)
 )
 
-func onConfigChange() {
+func setStyles() {
 	TrackStyle = config.Config.Colors.Track.Style()
 	AlbumStyle = config.Config.Colors.Album.Style()
 	ArtistStyle = config.Config.Colors.Artist.Style()
@@ -46,6 +44,23 @@ func onConfigChange() {
 	if Ui != nil {
 		Ui.CoverArt.RefreshState()
 	}
+	if config.Config.RoundedCorners {
+		tview.Borders.TopLeft = '╭'
+		tview.Borders.TopRight = '╮'
+		tview.Borders.BottomRight = '╯'
+		tview.Borders.BottomLeft = '╰'
+		tview.Borders.Vertical = '│'
+		tview.Borders.Horizontal = '─'
+		tview.Borders.TopLeftFocus = '╭'
+		tview.Borders.TopRightFocus = '╮'
+		tview.Borders.BottomRightFocus = '╯'
+		tview.Borders.BottomLeftFocus = '╰'
+		tview.Borders.VerticalFocus = '│'
+		tview.Borders.HorizontalFocus = '─'
+		tview.Styles.BorderColorFocus = config.Config.Colors.BorderFocus.Foreground()
+		tview.Styles.BorderColor = config.Config.Colors.Border.Foreground()
+	}
+
 }
 
 type Application struct {
@@ -61,22 +76,7 @@ type Application struct {
 }
 
 func NewApplication() *Application {
-	if config.Config.RoundedCorners {
-		tview.Borders.TopLeft = '╭'
-		tview.Borders.TopRight = '╮'
-		tview.Borders.BottomRight = '╯'
-		tview.Borders.BottomLeft = '╰'
-		tview.Borders.Vertical = '│'
-		tview.Borders.Horizontal = '─'
-		tview.Borders.TopLeftFocus = '╭'
-		tview.Borders.TopRightFocus = '╮'
-		tview.Borders.BottomRightFocus = '╯'
-		tview.Borders.BottomLeftFocus = '╰'
-		tview.Borders.VerticalFocus = '│'
-		tview.Borders.HorizontalFocus = '─'
-		tview.Styles.BorderColorFocus = tcell.ColorRed
-	}
-
+	setStyles()
 	App := tview.NewApplication()
 	Root := NewRoot()
 	pBar := NewProgressBar().SetProgressFunc(progressFunc)
@@ -333,8 +333,7 @@ func NewApplication() *Application {
 		}
 	}()
 
-	onConfigChange()
-	config.OnConfigChange = onConfigChange
+	config.OnConfigChange = setStyles
 
 	Ui = &Application{
 		App:         App,
