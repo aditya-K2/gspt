@@ -10,7 +10,7 @@
 
 ---
 
-https://user-images.githubusercontent.com/51816057/232330465-634faadd-a4ce-419d-ba9b-3cf7515d3f32.mp4
+![](./extras/screenshot.png)
 
 ---
 
@@ -101,6 +101,8 @@ Usage of ./gspt:
         Specify The Directory to check for config.yml file. (default "$XDG_CONFIG_HOME/gspt")
   -hide-image
         Do not display the cover art image.
+  -rounded-corners
+        Enable Rounded Corners
 ```
 
 ## Configuration
@@ -124,6 +126,9 @@ redraw_interval: 500
 
 # Do not display the cover art image.
 hide_image: false
+
+# Enable Rounded Corners
+rounded_corners: false
 
 # Image Drawing related parameters. See next section for an in-detail explanation.
 additional_padding_x : 12
@@ -273,7 +278,7 @@ Which looks perfect. 🎉
     - [ ] Sixel
     - [ ] tview Images
     - [ ] Kitty Images
-- [ ] Rounded Corners
+- [x] Rounded Corners
 - [ ] Customisable UI
 - [ ] Wayland Support for Image rendering
 - [ ] Queue Support
