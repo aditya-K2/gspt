@@ -9,6 +9,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 
+	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/aditya-K2/utils"
 	"github.com/rivo/tview"
@@ -98,7 +99,9 @@ func RefreshProgress(force bool) {
 			if state.Item != nil {
 				ctrackId = state.Item.ID
 			}
-			Ui.CoverArt.RefreshState()
+			if !config.Config.HideImage {
+				Ui.CoverArt.RefreshState()
+			}
 		}
 	}
 }

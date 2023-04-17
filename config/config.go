@@ -17,6 +17,7 @@ type ConfigS struct {
 	AdditionalPaddingY int     `mapstructure:"additional_padding_y"`
 	ExtraImageWidthX   float64 `mapstructure:"image_width_extra_x"`
 	ExtraImageWidthY   float64 `mapstructure:"image_width_extra_y"`
+	HideImage          bool    `mapstructure:"hide_image"`
 }
 
 func NewConfigS() *ConfigS {
@@ -28,6 +29,7 @@ func NewConfigS() *ConfigS {
 		CacheDir:           utils.CheckDirectoryFmt(userCacheDir),
 		RedrawInterval:     500,
 		Colors:             NewColors(),
+		HideImage:          false,
 	}
 }
 

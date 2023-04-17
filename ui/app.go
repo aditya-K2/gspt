@@ -241,8 +241,11 @@ func NewApplication() *Application {
 
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(navMenu.Table, 6, 3, false).
-		AddItem(playlistNav.Table, 0, 6, false).
-		AddItem(coverArt, 9, 3, false)
+		AddItem(playlistNav.Table, 0, 6, false)
+
+	if !config.Config.HideImage {
+		searchNavFlex.AddItem(coverArt, 9, 3, false)
+	}
 
 	sNavExpViewFlex := tview.NewFlex().
 		AddItem(searchNavFlex, 17, 1, false).
@@ -301,7 +304,9 @@ func NewApplication() *Application {
 		}()
 	}
 
-	go rectWatcher()
+	if !config.Config.HideImage {
+		go rectWatcher()
+	}
 
 	go func() {
 		for {
