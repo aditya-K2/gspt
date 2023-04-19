@@ -2,8 +2,8 @@ package ui
 
 import (
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/gdamore/tcell/v2"
 	"github.com/aditya-K2/tview"
+	"github.com/gdamore/tcell/v2"
 )
 
 type NavMenu struct {
@@ -20,6 +20,7 @@ type navItem struct {
 func newNavMenu(m []navItem) *NavMenu {
 	T := tview.NewTable()
 	n := &NavMenu{&defView{}, T, m}
+
 	T.SetDrawFunc(func(tcell.Screen, int, int, int, int) (int, int, int, int) {
 		for k := range n.m {
 			T.SetCell(k, 0,
@@ -28,6 +29,10 @@ func newNavMenu(m []navItem) *NavMenu {
 		return T.GetInnerRect()
 	})
 	T.SetTitle("Library").SetTitleAlign(tview.AlignLeft)
+	T.SetBackgroundColor(tcell.ColorDefault)
+	T.SetBorder(true)
+	T.SetSelectable(true, false)
+
 	return n
 }
 
