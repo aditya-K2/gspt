@@ -119,7 +119,7 @@ func NewApplication() *tview.Application {
 
 	progressBar := NewProgressBar().SetProgressFunc(progressFunc)
 	searchbar := NewSearchBar()
-	navMenu := newNavMenu([]navItem{
+	navMenu := NewNavMenu([]navItem{
 		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			SetCurrentView(albumsView)
 			App.SetFocus(Main.Table)

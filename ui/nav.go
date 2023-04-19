@@ -6,18 +6,18 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+type navItem struct {
+	name   string
+	action *Action
+}
+
 type NavMenu struct {
 	*defView
 	Table *tview.Table
 	m     []navItem
 }
 
-type navItem struct {
-	name   string
-	action *Action
-}
-
-func newNavMenu(m []navItem) *NavMenu {
+func NewNavMenu(m []navItem) *NavMenu {
 	T := tview.NewTable()
 	n := &NavMenu{&defView{}, T, m}
 
@@ -62,7 +62,6 @@ func NewPlaylistNav() *PlaylistNav {
 			SendNotification(err.Error())
 		}
 	}}
-	v.listen()
 	T.SetDrawFunc(func(s tcell.Screen, x, y, w, h int) (int, int, int, int) {
 		v.Draw()
 		return T.GetInnerRect()
@@ -72,19 +71,7 @@ func NewPlaylistNav() *PlaylistNav {
 
 func (v *PlaylistNav) Draw() {
 	if v.Playlists == nil {
-		done := func(err error) {
-			if err != nil {
-				SendNotification(err.Error())
-				return
-			}
-			App.Draw()
-		}
-		p, err := spt.CurrentUserPlaylists(done)
-		if err != nil {
-			SendNotification(err.Error())
-			return
-		}
-		v.Playlists = p
+		v.RefreshState()
 	}
 	for k, p := range *v.Playlists {
 		v.Table.SetCell(k, 0,
@@ -100,22 +87,18 @@ func (v *PlaylistNav) PlaySelectEntry(e *tcell.EventKey) *tcell.EventKey {
 	return nil
 }
 
-func (v *PlaylistNav) listen() {
-	go func() {
-		for {
-			if <-v.c {
-				p, err := spt.CurrentUserPlaylists(v.done)
-				if err != nil {
-					panic(err)
-				}
-				v.Playlists = p
-			}
-		}
-	}()
-}
-
 func (v *PlaylistNav) RefreshState() {
-	go func() {
-		v.c <- true
-	}()
+	done := func(err error) {
+		if err != nil {
+			SendNotification(err.Error())
+			return
+		}
+		App.Draw()
+	}
+	p, err := spt.CurrentUserPlaylists(done)
+	if err != nil {
+		SendNotification(err.Error())
+		return
+	}
+	v.Playlists = p
 }
