@@ -52,28 +52,39 @@ type PlaylistNav struct {
 	done      func(error)
 }
 
-func NewPlaylistNav(done func(e error)) (*PlaylistNav, error) {
+func NewPlaylistNav() *PlaylistNav {
 	T := tview.NewTable()
 	T.SetSelectable(true, false).SetBorder(true)
 	T.SetTitle("Playlists").SetTitleAlign(tview.AlignLeft)
-	p, err := spt.CurrentUserPlaylists(done)
-
-	if err != nil {
-		return nil, err
-	}
-
-	v := &PlaylistNav{&defView{}, T, p, make(chan bool), done}
+	v := &PlaylistNav{&defView{}, T, nil, make(chan bool), func(err error) {
+		if err != nil {
+			SendNotification(err.Error())
+		}
+	}}
 	v.listen()
-
 	T.SetDrawFunc(func(s tcell.Screen, x, y, w, h int) (int, int, int, int) {
 		v.Draw()
 		return T.GetInnerRect()
 	})
-
-	return v, nil
+	return v
 }
 
 func (v *PlaylistNav) Draw() {
+	if v.Playlists == nil {
+		done := func(err error) {
+			if err != nil {
+				SendNotification(err.Error())
+				return
+			}
+			App.Draw()
+		}
+		p, err := spt.CurrentUserPlaylists(done)
+		if err != nil {
+			SendNotification(err.Error())
+			return
+		}
+		v.Playlists = p
+	}
 	for k, p := range *v.Playlists {
 		v.Table.SetCell(k, 0,
 			GetCell(p.Name, PlaylistNavStyle))
