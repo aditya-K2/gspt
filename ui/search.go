@@ -1,8 +1,8 @@
 package ui
 
 import (
-	"github.com/gdamore/tcell/v2"
 	"github.com/aditya-K2/tview"
+	"github.com/gdamore/tcell/v2"
 )
 
 func NewSearchBar() *tview.InputField {
@@ -23,14 +23,14 @@ func NewSearchBar() *tview.InputField {
 		case tcell.KeyEscape:
 			{
 				Ui.App.SetFocus(Ui.Main.Table)
-				Ui.SearchBar.SetText("")
+				T.SetText("")
 			}
 		case tcell.KeyEnter:
 			{
 				searchView.SetSearch(T.GetText())
 				SetCurrentView(searchView)
 				Ui.App.SetFocus(Ui.Main.Table)
-				Ui.SearchBar.SetText("")
+				T.SetText("")
 			}
 		}
 	})
