@@ -6,8 +6,8 @@ import (
 
 	"github.com/aditya-K2/utils"
 
-	"github.com/gdamore/tcell/v2"
 	"github.com/aditya-K2/tview"
+	"github.com/gdamore/tcell/v2"
 )
 
 var (
@@ -138,18 +138,18 @@ func notify(n *notification) {
 			npos = posArr.GetNextPosition()
 		}
 		n.position = npos
-		Ui.Root.Root.AddPage(currentTime, n, false, true)
-		Ui.App.Draw()
-		Ui.App.SetFocus(Ui.Main.Table)
+		root.Root.AddPage(currentTime, n, false, true)
+		App.Draw()
+		App.SetFocus(Main.Table)
 		if n.msg != nil {
 			n.text = <-n.msg
-			Ui.App.Draw()
+			App.Draw()
 		}
 		time.Sleep(n.timer)
-		Ui.Root.Root.RemovePage(currentTime)
+		root.Root.RemovePage(currentTime)
 		posArr.Free(npos)
-		Ui.App.SetFocus(Ui.Main.Table)
-		Ui.App.Draw()
+		App.SetFocus(Main.Table)
+		App.Draw()
 	}()
 }
 

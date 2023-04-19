@@ -88,7 +88,7 @@ func (a *AlbumView) ContextHandler() func(start, end, sel int) {
 }
 
 func (a *AlbumView) PlaySelectEntry() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	if err := spt.PlaySongWithContext(&a.currentFullAlbum.URI, r); err != nil {
 		SendNotification(err.Error())
 	}

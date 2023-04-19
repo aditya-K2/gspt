@@ -11,8 +11,8 @@ import (
 
 	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
-	"github.com/aditya-K2/utils"
 	"github.com/aditya-K2/tview"
+	"github.com/aditya-K2/utils"
 )
 
 var (
@@ -89,7 +89,7 @@ func RefreshProgress(force bool) {
 	stateLock.Lock()
 	state = s
 	stateLock.Unlock()
-	if Ui != nil && Ui.CoverArt != nil {
+	if coverArt != nil {
 		// If No Item is playing
 		if (state.Item == nil) ||
 			// An Item is Playing but doesn't match the cached Track ID
@@ -100,7 +100,7 @@ func RefreshProgress(force bool) {
 				ctrackId = state.Item.ID
 			}
 			if !config.Config.HideImage {
-				Ui.CoverArt.RefreshState()
+				coverArt.RefreshState()
 			}
 		}
 	}

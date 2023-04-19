@@ -11,7 +11,7 @@ func main() {
 	if err := spt.InitClient(); err != nil {
 		panic(err)
 	}
-	if err := ui.NewApplication().App.Run(); err != nil {
+	if err := ui.NewApplication().Run(); err != nil {
 		panic(err)
 	}
 }

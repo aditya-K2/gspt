@@ -56,6 +56,7 @@ func NewPlaylistNav() *PlaylistNav {
 	T := tview.NewTable()
 	T.SetSelectable(true, false).SetBorder(true)
 	T.SetTitle("Playlists").SetTitleAlign(tview.AlignLeft)
+	T.SetBackgroundColor(tcell.ColorDefault)
 	v := &PlaylistNav{&defView{}, T, nil, make(chan bool), func(err error) {
 		if err != nil {
 			SendNotification(err.Error())

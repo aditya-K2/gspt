@@ -86,7 +86,7 @@ func (p *PlaylistView) ContextHandler() func(start, end, sel int) {
 }
 
 func (p *PlaylistView) PlaySelectEntry() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
 		SendNotification(err.Error())
 	}

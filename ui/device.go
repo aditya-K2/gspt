@@ -23,5 +23,5 @@ func OpenDeviceMenu() {
 			RefreshProgress(true)
 		}
 	})
-	Ui.Root.AddCenteredWidget(m)
+	root.AddCenteredWidget(m)
 }

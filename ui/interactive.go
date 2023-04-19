@@ -3,8 +3,8 @@ package ui
 import (
 	"errors"
 
-	"github.com/gdamore/tcell/v2"
 	"github.com/aditya-K2/tview"
+	"github.com/gdamore/tcell/v2"
 )
 
 var (
@@ -162,7 +162,7 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 		},
 		"openCtx": func(e *tcell.EventKey) *tcell.EventKey {
 			if GetCurrentView().ContextOpener() != nil {
-				GetCurrentView().ContextOpener()(Ui.Root, Ui.Main.SelectionHandler)
+				GetCurrentView().ContextOpener()(root, Main.SelectionHandler)
 				return nil
 			}
 			return e

@@ -60,7 +60,7 @@ func getFontWidth() (int, int, error) {
 	if err != nil {
 		return 0, 0, err
 	}
-	_, _, rw, rh := Ui.Root.Root.GetRect()
+	_, _, rw, rh := root.Root.GetRect()
 	if rw == 0 || rh == 0 {
 		return 0, 0, errors.New("Unable to get row width and height")
 	}

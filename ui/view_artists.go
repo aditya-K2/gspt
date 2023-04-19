@@ -47,7 +47,7 @@ func (a *ArtistsView) Content() func() [][]Content {
 }
 
 func (a *ArtistsView) OpenArtist() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	artistView.SetArtist(&(*a.followedArtists)[r].ID)
 	artistView.RefreshState()
 	SetCurrentView(artistView)

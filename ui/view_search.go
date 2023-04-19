@@ -102,7 +102,7 @@ func (a *SearchView) Content() func() [][]Content {
 }
 
 func (a *SearchView) SelectEntry() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	switch a.searchContent[r].Type {
 	case "track":
 		{

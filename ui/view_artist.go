@@ -67,7 +67,7 @@ func (a *ArtistView) Content() func() [][]Content {
 }
 
 func (a *ArtistView) PlayEntry() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	if r > 0 {
 		if r < (len(a.albums) + 1) {
 			if err := spt.PlayContext(&a.albums[r-1].URI); err != nil {
@@ -78,7 +78,7 @@ func (a *ArtistView) PlayEntry() {
 }
 
 func (a *ArtistView) OpenEntry() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	if r > 0 {
 		if r < (len(a.albums) + 1) {
 			albumView.SetAlbum(a.albums[r-1].Name, &a.albums[r-1].ID)

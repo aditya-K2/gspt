@@ -70,7 +70,7 @@ func (a *TopTracksView) Content() func() [][]Content {
 }
 
 func (a *TopTracksView) PlaySelectedEntry() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	if r > 0 {
 		if r < (len(a.topArtists) + 1) {
 			if err := spt.PlayContext(&a.topArtists[r-1].URI); err != nil {
@@ -82,7 +82,7 @@ func (a *TopTracksView) PlaySelectedEntry() {
 }
 
 func (a *TopTracksView) OpenSelectEntry() {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	if r > 0 {
 		if r < (len(a.topArtists) + 1) {
 			artistView.SetArtist(&(a.topArtists)[r-1].ID)

@@ -84,7 +84,7 @@ func (r *RecentlyPlayedView) RefreshState() {
 }
 
 func (re *RecentlyPlayedView) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
-	r, _ := Ui.Main.Table.GetSelection()
+	r, _ := Main.Table.GetSelection()
 	contextUri := re.recentlyPlayed[r].PlaybackContext.URI
 	if string(contextUri) != "" {
 		if err := spt.PlaySongWithContextURI(&re.recentlyPlayed[r].PlaybackContext.URI, &re.recentlyPlayed[r].Track.URI); err != nil {
