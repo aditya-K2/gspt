@@ -3,7 +3,6 @@ package ui
 import (
 	"fmt"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -16,9 +15,8 @@ import (
 )
 
 var (
-	state     *spotify.PlayerState
-	stateLock sync.Mutex
-	ctrackId  spotify.ID
+	state    *spotify.PlayerState
+	ctrackId spotify.ID
 )
 
 // ProgressBar is a two-lined Box. First line is the BarTitle
@@ -86,9 +84,7 @@ func RefreshProgress(force bool) {
 		SendNotification(err.Error())
 		return
 	}
-	stateLock.Lock()
 	state = s
-	stateLock.Unlock()
 	if coverArt != nil {
 		// If No Item is playing
 		if (state.Item == nil) ||
