@@ -121,7 +121,7 @@ func RefreshProgressLocal() {
 	}
 }
 
-func updateRoutine() {
+func progressRoutine() {
 	RefreshProgress(false)
 	go func() {
 		localTicker := time.NewTicker(time.Second)

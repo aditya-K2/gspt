@@ -89,7 +89,7 @@ func rectWatcher() {
 				for {
 					_ImgX, _ImgY, _ImgW, _ImgH := coverArt.GetRect()
 					if start {
-						updateRoutine()
+						progressRoutine()
 						start = false
 					}
 					if _ImgX != ImgX || _ImgY != ImgY ||
