@@ -16,7 +16,6 @@ var (
 	ImgW  int
 	ImgH  int
 	start = true
-	Ui    *Application
 )
 
 var (
@@ -31,6 +30,13 @@ var (
 	NotSelectableStyle tcell.Style
 )
 
+var (
+	App      *tview.Application
+	coverArt *CoverArt
+	Main     *interactiveView
+	root     *Root
+)
+
 func setStyles() {
 	TrackStyle = config.Config.Colors.Track.Style()
 	AlbumStyle = config.Config.Colors.Album.Style()
@@ -41,8 +47,8 @@ func setStyles() {
 	NavStyle = config.Config.Colors.Nav.Style()
 	ContextMenuStyle = config.Config.Colors.ContextMenu.Style()
 	NotSelectableStyle = config.Config.Colors.Null.Style()
-	if Ui != nil {
-		Ui.CoverArt.RefreshState()
+	if coverArt != nil {
+		coverArt.RefreshState()
 	}
 	if config.Config.RoundedCorners {
 		tview.Borders.TopLeft = '╭'
@@ -63,30 +69,56 @@ func setStyles() {
 
 }
 
-type Application struct {
-	App            *tview.Application
-	CoverArt       *CoverArt
-	Main           *interactiveView
-	NavMenu        *NavMenu
-	PlaylistNav    *PlaylistNav
-	SearchBar      *tview.InputField
-	ProgressBar    *ProgressBar
-	Root           *Root
-	ImagePreviewer *tview.Box
+func rectWatcher() {
+	// Wait Until the ImagePreviewer is drawn
+	// Ensures that cover art is not drawn before the UI is rendered.
+	// Ref Issue: #39
+	drawCh := make(chan bool)
+	go func() {
+		for ImgX == 0 && ImgY == 0 {
+			ImgX, ImgY, ImgW, ImgH = coverArt.GetRect()
+		}
+		drawCh <- true
+	}()
+
+	go func() {
+		// Waiting for the draw channel
+		draw := <-drawCh
+		if draw {
+			go func() {
+				for {
+					_ImgX, _ImgY, _ImgW, _ImgH := coverArt.GetRect()
+					if start {
+						updateRoutine()
+						start = false
+					}
+					if _ImgX != ImgX || _ImgY != ImgY ||
+						_ImgW != ImgW || _ImgH != ImgH {
+						ImgX = _ImgX
+						ImgY = _ImgY
+						ImgW = _ImgW
+						ImgH = _ImgH
+						coverArt.RefreshState()
+					}
+					time.Sleep(time.Millisecond * time.Duration(config.Config.RedrawInterval))
+				}
+			}()
+		}
+	}()
 }
 
-func NewApplication() *Application {
+func NewApplication() *tview.Application {
 	setStyles()
-	App := tview.NewApplication()
-	Root := NewRoot()
-	pBar := NewProgressBar().SetProgressFunc(progressFunc)
-	coverArt := newCoverArt()
-	searchbar := NewSearchBar()
-	SetCurrentView(topTracksView)
-	topTracksView.RefreshState()
-	Main := NewInteractiveView()
+	config.OnConfigChange = setStyles
+
+	App = tview.NewApplication()
+	root = NewRoot()
+	coverArt = newCoverArt()
+	Main = NewInteractiveView()
 	Main.Table.SetBorder(true)
 
+	progressBar := NewProgressBar().SetProgressFunc(progressFunc)
+	searchbar := NewSearchBar()
 	navMenu := newNavMenu([]navItem{
 		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			SetCurrentView(albumsView)
@@ -110,26 +142,11 @@ func NewApplication() *Application {
 			return nil
 		}, nil)},
 	})
+	playlistNav := NewPlaylistNav()
 
-	navMenu.Table.SetBackgroundColor(tcell.ColorDefault)
+	root.AfterContextClose(func() { App.SetFocus(Main.Table) })
 
-	navMenu.Table.SetBorder(true)
-	navMenu.Table.SetSelectable(true, false)
-
-	playlistNav, err := NewPlaylistNav(func(err error) {
-		if err != nil {
-			panic(err)
-		}
-		// Draw the App again after all the user playlists are retrieved.
-		App.Draw()
-	})
-	if err != nil {
-		panic(err)
-	}
-
-	Root.AfterContextClose(func() { App.SetFocus(Main.Table) })
-	playlistNav.Table.SetBackgroundColor(tcell.ColorDefault)
-
+	// Define Actions
 	openCurrentArtist := func() {
 		if state != nil && state.Item != nil {
 			if len(state.Item.Artists) != 0 {
@@ -149,10 +166,9 @@ func NewApplication() *Application {
 			App.SetFocus(Main.Table)
 		}
 	}
-	// Actions
 	globalActions := map[string]*Action{
 		"focus_search": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			Ui.App.SetFocus(searchbar)
+			App.SetFocus(searchbar)
 			return nil
 		}, nil),
 		"toggle_playback": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -160,21 +176,21 @@ func NewApplication() *Application {
 				SendNotification(err.Error())
 			}
 			return nil
-		}, pBar),
+		}, progressBar),
 		"choose_device": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			OpenDeviceMenu()
 			return nil
 		}, nil),
 		"focus_nav": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			Ui.App.SetFocus(navMenu.Table)
+			App.SetFocus(navMenu.Table)
 			return nil
 		}, nil),
 		"focus_playlists": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			Ui.App.SetFocus(playlistNav.Table)
+			App.SetFocus(playlistNav.Table)
 			return nil
 		}, nil),
 		"focus_main_view": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			Ui.App.SetFocus(Main.Table)
+			App.SetFocus(Main.Table)
 			return nil
 		}, nil),
 		"open_current_track_album": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -223,7 +239,7 @@ func NewApplication() *Application {
 	}
 	playlistNav.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(playlistNav.PlaySelectEntry,
-			pBar),
+			progressBar),
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			r, _ := playlistNav.Table.GetSelection()
 			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
@@ -240,27 +256,27 @@ func NewApplication() *Application {
 		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
 			playlistView.PlaySelectEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 	}))
 	recentlyPlayedView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(recentlyPlayedView.SelectEntry,
-			pBar),
+			progressBar),
 	}))
 	topTracksView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			topTracksView.OpenSelectEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			topTracksView.PlaySelectedEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 	}))
 	likedSongsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			likedSongsView.OpenEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 	}))
 	searchView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -278,11 +294,11 @@ func NewApplication() *Application {
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.OpenEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.PlayEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 	}))
 	albumsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -292,18 +308,18 @@ func NewApplication() *Application {
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumsView.PlaySelectEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 	}))
 	albumView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumView.PlaySelectEntry()
 			return nil
-		}, pBar),
+		}, progressBar),
 	}))
 
 	mappings := config.GenerateMappings()
 
-	// Mappings
+	// Map Actions
 	playlistNav.SetMappings(mappings["playlist_nav"])
 	playlistNav.Table.SetInputCapture(playlistNav.ExternalInputCapture())
 	navMenu.SetMappings(mappings["nav_menu"])
@@ -318,6 +334,7 @@ func NewApplication() *Application {
 	artistView.SetMappings(mappings["artist_view"])
 	searchView.SetMappings(mappings["search_view"])
 
+	// Set up UI
 	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(navMenu.Table, 6, 3, false).
 		AddItem(playlistNav.Table, 0, 6, false)
@@ -336,77 +353,29 @@ func NewApplication() *Application {
 
 	MainFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(searchBarFlex, 0, 8, false).
-		AddItem(pBar, 5, 1, false)
+		AddItem(progressBar, 5, 1, false)
 
-	Root.Primitive("Main", MainFlex)
-	App.SetRoot(Root.Root, true).SetFocus(Main.Table)
+	root.Primitive("Main", MainFlex)
+	App.SetRoot(root.Root, true).SetFocus(Main.Table)
 
+	// Start Routines
 	InitNotifier()
-	updateRoutine()
-
-	rectWatcher := func() {
-		// Wait Until the ImagePreviewer is drawn
-		// Ensures that cover art is not drawn before the UI is rendered.
-		// Ref Issue: #39
-		drawCh := make(chan bool)
-		go func() {
-			for ImgX == 0 && ImgY == 0 {
-				ImgX, ImgY, ImgW, ImgH = Ui.CoverArt.GetRect()
-			}
-			drawCh <- true
-		}()
-
-		go func() {
-			// Waiting for the draw channel
-			draw := <-drawCh
-			if draw {
-				go func() {
-					for {
-						_ImgX, _ImgY, _ImgW, _ImgH := Ui.CoverArt.GetRect()
-						if start {
-							RefreshProgress(false)
-							start = false
-						}
-						if _ImgX != ImgX || _ImgY != ImgY ||
-							_ImgW != ImgW || _ImgH != ImgH {
-							ImgX = _ImgX
-							ImgY = _ImgY
-							ImgW = _ImgW
-							ImgH = _ImgH
-							coverArt.RefreshState()
-						}
-						time.Sleep(time.Millisecond * time.Duration(config.Config.RedrawInterval))
-					}
-				}()
-			}
-		}()
-	}
-
 	if !config.Config.HideImage {
 		go rectWatcher()
 	}
 
+	// Draw App every one second
 	go func() {
 		for {
-			if Ui != nil && Ui.App != nil {
-				Ui.App.Draw()
+			if App != nil {
+				App.Draw()
 				time.Sleep(time.Second)
 			}
 		}
 	}()
 
-	config.OnConfigChange = setStyles
+	SetCurrentView(topTracksView)
+	topTracksView.RefreshState()
 
-	Ui = &Application{
-		App:         App,
-		Main:        Main,
-		CoverArt:    coverArt,
-		PlaylistNav: playlistNav,
-		NavMenu:     navMenu,
-		SearchBar:   searchbar,
-		ProgressBar: pBar,
-		Root:        Root,
-	}
-
-	return Ui
+	return App
 }
