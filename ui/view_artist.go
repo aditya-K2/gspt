@@ -85,10 +85,10 @@ func (a *ArtistView) PlayEntry() {
 func (a *ArtistView) OpenEntry() {
 	r, _ := Main.Table.GetSelection()
 	if r > 0 {
-		if r < (len(a.albums) + 1) {
+		if r < (len(a.albums)+1) && len(a.albums) > 0 {
 			albumView.SetAlbum(a.albums[r-1].Name, &a.albums[r-1].ID)
 			SetCurrentView(albumView)
-		} else if r != len(a.albums)+1 {
+		} else if r != len(a.albums)+1 && len(a.topTracks) > 0 {
 			if err := spt.PlaySong(a.topTracks[r-2-len(a.albums)].URI); err != nil {
 				SendNotification(err.Error())
 			}
