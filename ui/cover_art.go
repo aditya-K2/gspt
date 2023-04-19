@@ -1,15 +1,16 @@
 package ui
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"os"
 
 	"github.com/aditya-K2/gspt/config"
+	"github.com/aditya-K2/tview"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/nfnt/resize"
-	"github.com/aditya-K2/tview"
 	"github.com/zmb3/spotify/v2"
 	"gitlab.com/diamondburned/ueberzug-go"
 )
@@ -37,10 +38,13 @@ func getImg(uri string) (image.Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	fw, fh := utils.GetFontWidth()
+	fw, fh, err := getFontWidth()
+	if err != nil {
+		return nil, err
+	}
 	img = resize.Resize(
-		uint(float32(ImgW)*(fw+float32(config.Config.ExtraImageWidthX))),
-		uint(float32(ImgH)*(fh+float32(config.Config.ExtraImageWidthY))),
+		uint((ImgW*fw)+config.Config.ImageWidthExtraX),
+		uint((ImgH*fh)+config.Config.ImageWidthExtraY),
 		img,
 		resize.Bilinear,
 	)
@@ -51,10 +55,28 @@ func fileName(a spotify.SimpleAlbum) string {
 	return fmt.Sprintf(config.Config.CacheDir+"/%s.jpg", a.ID)
 }
 
+func getFontWidth() (int, int, error) {
+	w, h, err := ueberzug.GetParentSize()
+	if err != nil {
+		return 0, 0, err
+	}
+	_, _, rw, rh := Ui.Root.Root.GetRect()
+	if rw == 0 || rh == 0 {
+		return 0, 0, errors.New("Unable to get row width and height")
+	}
+	fw := w / rw
+	fh := h / rh
+	return fw, fh, nil
+}
+
 func (c *CoverArt) RefreshState() {
-	fw, fh := utils.GetFontWidth()
 	if c.image != nil {
 		c.image.Clear()
+	}
+	fw, fh, err := getFontWidth()
+	if err != nil {
+		SendNotification(err.Error())
+		return
 	}
 	if state != nil {
 		if state.Item != nil {
@@ -91,8 +113,8 @@ func (c *CoverArt) RefreshState() {
 					return
 				}
 				im, err := ueberzug.NewImage(uimg,
-					int(float32(ImgX)*fw)+config.Config.AdditionalPaddingX,
-					int(float32(ImgY)*fh)+config.Config.AdditionalPaddingY)
+					int(ImgX*fw)+config.Config.AdditionalPaddingX,
+					int(ImgY*fh)+config.Config.AdditionalPaddingY)
 				if err != nil {
 					SendNotification(fmt.Sprintf("Error Rendering Image: %s", err.Error()))
 					return
