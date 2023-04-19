@@ -23,8 +23,7 @@
   from Spotify, which doesn't handle streaming itself. So you'll need either
   an official Spotify client open or a lighter weight alternative such as
   [spotifyd](https://github.com/Spotifyd/spotifyd).
-- Images are rendered using the Xorg child windows. Currently there is no support for Wayland.
-- Some Terminals even in Xorg don't seem to support Image rendering. (See [Verified Terminals](http://github.com/aditya-K2/gspt#verified-terminals))
+- Images are rendered using the X child windows. Currently there is ***no support*** for Wayland.
 
 ## Setup
 
@@ -112,7 +111,7 @@ Usage of ./gspt:
 
 The configuration is done through `$XDG_CONFIG_HOME/gspt/config.yml`
 or the path to the folder provided by the `-c` flag before starting the app.
-See [Command-line Parameters](https://github.com/aditya-K2/gspt#command-line-parameters)
+See [Command-line Parameters](#command-line-parameters)
 
 Also, Configuration is live updated when you make a change except for the Key Mappings.
 
@@ -134,10 +133,10 @@ hide_image: false
 rounded_corners: false
 
 # Image Drawing related parameters. See next section for an in-detail explanation.
-additional_padding_x : 12
-additional_padding_y : 16
-image_width_extra_x : -1.5
-image_width_extra_y : -3.75
+additional_padding_x : 0
+additional_padding_y : 0
+image_width_extra_x  : 0
+image_width_extra_y  : 0
 
 # Color configuration has the following api
 colors:
@@ -235,43 +234,50 @@ extra width to be added or subtracted from the original image width.
 
 ### Configuring Additional Padding and Image Width.
 
-![Cover Art Position](./extras/default.png)
+###### Please read about [Image Rendering Related Parameters](#image-rendering-related-parameters) first.
 
 Let's say upon opening "gspt" for the first time and your image is rendered this way.
 
-Here the `Y` Position is too low hence we have to decrease the
-`additional_padding_y` so that image will be rendered in a better position so
-we decrement the  `additional_padding_y` by 9
+![Cover Art Position](./extras/default.png)
 
-Now the configuration becomes
+Here, the image is placed too high, so we will start by adding
+`additional_padding_y` so that it will be moved down.
+
+The configuration becomes:
+
 ```yml
-additional_padding_y : 9
-```
-
-and the image appears like this:
-
-![Padding](./extras/padding.png)
-
-One might be happy the way things turn out but you can notice that the image is
-a little bigger than the box height and hence is overflowing outside the
-box. Now it's time to change the `image_width_extra_y`.
-
-Width can be changed by defining the `image_width_extra_y` and
-`image_width_extra_x` it act's a little differently think of it like a chunk
-which is either added or subtracted from the image's original width. We can
-look at the configuration and realize that the chunk `image_width_extra_y` when
-subtracted from the original `image_width` doesn't get us the proper result and
-is a little to low. We need to subtract a more bigger chunk, Hence we will
-increase the magnitude of `image_width_extra_y` (or in other words "decrease"
-`image_width_extra_y`)
-
-Now the Configuration becomes:
-```yml
-image_width_extra_y : -3.2
+additional_padding_y: 36 # you will need to use trial and error
 ```
 and the image appears like this:
 
-![Width](./extras/width.png)
+![PADDING Y](./extras/paddingy.png)
+
+Now the image overflows the image box, we need to decrease the image's width, hence
+will change `image_width_extra_y` first
+
+```yml
+image_width_extra_y : -16
+```
+
+![WIDTH Y](./extras/widthy.png)
+
+Now the image  overflows from the left side, hence we will change `additional_padding_x`
+to move the image to the right
+
+```yml
+additional_padding_x: 6
+```
+
+![PADDING X](./extras/paddingx.png)
+
+The last thing we will do is to decrease the `image_width_extra_x` so that it will
+be placed correctly in the box
+
+```yml
+image_width_extra_x : -8
+```
+
+![WIDTH X](./extras/widthx.png)
 
 Which looks perfect. 🎉
 
@@ -287,18 +293,6 @@ Which looks perfect. 🎉
 - [ ] Queue Support
 - [ ] Windows Support
 - [x] Key Mappings
-
-### Verified Terminals
-
-| Terminal        | Status |
-|------------     |--------|
-| Alacritty       |   ✅   |
-| ST              |   ✅   |
-| Xterm           |   ✅   |
-| Konsole         |   ✅   |
-| Urxvt           |   ✅   |
-| xfce-terminal   |   ❌   |
-| gnome-terminal  |   ❌   |
 
 ### Special thanks to
 
