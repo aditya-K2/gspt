@@ -15,23 +15,19 @@ type ConfigS struct {
 	Colors             *Colors `mapstructure:"colors"`
 	AdditionalPaddingX int     `mapstructure:"additional_padding_x"`
 	AdditionalPaddingY int     `mapstructure:"additional_padding_y"`
-	ExtraImageWidthX   float64 `mapstructure:"image_width_extra_x"`
-	ExtraImageWidthY   float64 `mapstructure:"image_width_extra_y"`
+	ImageWidthExtraX   int     `mapstructure:"image_width_extra_x"`
+	ImageWidthExtraY   int     `mapstructure:"image_width_extra_y"`
 	HideImage          bool    `mapstructure:"hide_image"`
 	RoundedCorners     bool    `mapstructure:"rounded_corners"`
 }
 
 func NewConfigS() *ConfigS {
 	return &ConfigS{
-		AdditionalPaddingX: 12,
-		AdditionalPaddingY: 16,
-		ExtraImageWidthX:   -1.5,
-		ExtraImageWidthY:   -3.75,
-		CacheDir:           utils.CheckDirectoryFmt(userCacheDir),
-		RedrawInterval:     500,
-		Colors:             NewColors(),
-		HideImage:          false,
-		RoundedCorners:     false,
+		CacheDir:       utils.CheckDirectoryFmt(userCacheDir),
+		RedrawInterval: 500,
+		Colors:         NewColors(),
+		HideImage:      false,
+		RoundedCorners: false,
 	}
 }
 
