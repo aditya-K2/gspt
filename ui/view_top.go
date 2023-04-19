@@ -86,7 +86,6 @@ func (a *TopTracksView) OpenSelectEntry() {
 	if r > 0 {
 		if r < (len(a.topArtists) + 1) {
 			artistView.SetArtist(&(a.topArtists)[r-1].ID)
-			artistView.RefreshState()
 			SetCurrentView(artistView)
 		} else if r != len(a.topArtists)+1 {
 			if err := spt.PlaySong(a.topTracks[r-2-len(a.topArtists)].URI); err != nil {

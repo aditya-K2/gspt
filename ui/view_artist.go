@@ -24,23 +24,28 @@ func NewArtistView() *ArtistView {
 
 func (a *ArtistView) SetArtist(id *spotify.ID) {
 	a.artistID = id
+	a.topTracks = []spotify.FullTrack{}
+	a.albums = []spotify.SimpleAlbum{}
+	go func() {
+		a.RefreshState()
+	}()
 }
 
 func (a *ArtistView) RefreshState() {
-	if a.artistID != nil {
-		topTracks, err := spt.GetArtistTopTracks(*a.artistID)
-		if err != nil {
-			SendNotification("Error retrieving Artist Top Tracks: " + err.Error())
-			return
-		}
-		a.topTracks = topTracks
-		albums, err := spt.GetArtistAlbums(*a.artistID)
-		if err != nil {
-			SendNotification("Error retrieving Artist Albums: " + err.Error())
-			return
-		}
-		a.albums = albums
+	msg := SendNotificationWithChan("Loading Artist!")
+	topTracks, err := spt.GetArtistTopTracks(*a.artistID)
+	if err != nil {
+		msg <- ("Error retrieving Artist Top Tracks: " + err.Error())
+		return
 	}
+	a.topTracks = topTracks
+	albums, err := spt.GetArtistAlbums(*a.artistID)
+	if err != nil {
+		msg <- ("Error retrieving Artist Albums: " + err.Error())
+		return
+	}
+	a.albums = albums
+	msg <- "Artist Loaded Succesfully!"
 }
 
 func (a *ArtistView) Content() func() [][]Content {

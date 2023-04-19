@@ -151,7 +151,6 @@ func NewApplication() *tview.Application {
 		if state != nil && state.Item != nil {
 			if len(state.Item.Artists) != 0 {
 				artistView.SetArtist(&state.Item.Artists[0].ID)
-				artistView.RefreshState()
 				SetCurrentView(artistView)
 				App.SetFocus(Main.Table)
 			} else {

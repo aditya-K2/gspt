@@ -118,7 +118,6 @@ func (a *SearchView) SelectEntry() {
 	case "artist":
 		{
 			artistView.SetArtist(&a.searchContent[r].ID)
-			artistView.RefreshState()
 			SetCurrentView(artistView)
 		}
 	case "playlist":
