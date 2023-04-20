@@ -27,7 +27,11 @@ func write(body string) {
 func runes() string {
 	_s := ""
 	for k := range config.RuneKeys {
-		_s += fmt.Sprintf("%c, ", k)
+		if k == '|' {
+			_s += "\\|"
+		} else {
+			_s += fmt.Sprintf("%c, ", k)
+		}
 	}
 	return strings.TrimSuffix(_s, ", ")
 }
@@ -69,6 +73,9 @@ func main() {
 			_s += "|" + _ma[k] + "|\n"
 		}
 	}
+
+	// Override the file
+	f.Truncate(0)
 
 	// Write
 	write("***Auto generated*** (If you find any bugs please open an issue)\n")
