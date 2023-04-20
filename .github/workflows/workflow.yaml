@@ -5,6 +5,7 @@ on:
     branches: [ "master" ]
     paths:
       - config/**
+      - extras/generate.go
   workflow_dispatch:
 
 jobs:
