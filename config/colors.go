@@ -31,12 +31,12 @@ type Colors struct {
 	Genre       Color `mapstructure:"genre"`
 	Folder      Color `mapstructure:"folder"`
 	Timestamp   Color `mapstructure:"timestamp"`
-	PBarArtist  Color `mapstructure:"pbar_artist"`
-	PBarTrack   Color `mapstructure:"pbar_track"`
-	PlaylistNav Color `mapstructure:"playlist_nav"`
+	PBarArtist  Color `yaml:"pbar_artist" mapstructure:"pbar_artist"`
+	PBarTrack   Color `yaml:"pbar_track" mapstructure:"pbar_track"`
+	PlaylistNav Color `yaml:"playlist_nav" mapstructure:"playlist_nav"`
 	Nav         Color `mapstructure:"nav"`
-	ContextMenu Color `mapstructure:"context_menu"`
-	BorderFocus Color `mapstructure:"border_focus"`
+	ContextMenu Color `yaml:"context_menu" mapstructure:"context_menu"`
+	BorderFocus Color `yaml:"border_focus" mapstructure:"border_focus"`
 	Border      Color `mapstructure:"border"`
 
 	Null Color

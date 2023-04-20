@@ -68,15 +68,15 @@ var (
 )
 
 type ConfigS struct {
-	CacheDir           string  `mapstructure:"cache_dir"`
-	RedrawInterval     int     `mapstructure:"redraw_interval"`
+	CacheDir           string  `yaml:"cache_dir" mapstructure:"cache_dir"`
+	RedrawInterval     int     `yaml:"redraw_interval" mapstructure:"redraw_interval"`
 	Colors             *Colors `mapstructure:"colors"`
-	AdditionalPaddingX int     `mapstructure:"additional_padding_x"`
-	AdditionalPaddingY int     `mapstructure:"additional_padding_y"`
-	ImageWidthExtraX   int     `mapstructure:"image_width_extra_x"`
-	ImageWidthExtraY   int     `mapstructure:"image_width_extra_y"`
-	HideImage          bool    `mapstructure:"hide_image"`
-	RoundedCorners     bool    `mapstructure:"rounded_corners"`
+	AdditionalPaddingX int     `yaml:"additional_padding_x" mapstructure:"additional_padding_x"`
+	AdditionalPaddingY int     `yaml:"additional_padding_y" mapstructure:"additional_padding_y"`
+	ImageWidthExtraX   int     `yaml:"image_width_extra_x" mapstructure:"image_width_extra_x"`
+	ImageWidthExtraY   int     `yaml:"image_width_extra_y" mapstructure:"image_width_extra_y"`
+	HideImage          bool    `yaml:"hide_image" mapstructure:"hide_image"`
+	RoundedCorners     bool    `yaml:"rounded_corners" mapstructure:"rounded_corners"`
 }
 
 func NewConfigS() *ConfigS {
