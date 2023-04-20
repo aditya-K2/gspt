@@ -119,6 +119,8 @@ Also, Configuration is live updated when you make a change except for the Key Ma
 
 ```yml
 # Parameter followed by default values
+# For the default configuration used by gspt please see:
+# https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md
 
 # Path to where the cached images should be stored.
 cache_dir: $XDG_CACHE_HOME
