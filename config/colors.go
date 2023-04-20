@@ -19,7 +19,7 @@ var (
 
 type Color struct {
 	Fg     string `mapstructure:"fg"`
-	Bg     string `mapstructure:"bg"`
+	Bg     string `yaml:"bg,omitempty" mapstructure:"bg"`
 	Bold   bool   `mapstructure:"bold"`
 	Italic bool   `mapstructure:"italic"`
 }

@@ -10,7 +10,7 @@ type Key struct {
 }
 
 var (
-	m = map[string]tcell.Key{
+	M = map[string]tcell.Key{
 		"backspace":       tcell.KeyBackspace,
 		"tab":             tcell.KeyTab,
 		"esc":             tcell.KeyEsc,
@@ -72,7 +72,7 @@ var (
 		"pause":           tcell.KeyPause,
 		"backtab":         tcell.KeyBacktab,
 	}
-	runeMap = map[rune]bool{
+	RuneKeys = map[rune]bool{
 		'!':  true,
 		'@':  true,
 		'#':  true,
@@ -121,11 +121,11 @@ func NewKey(s string) Key {
 		if (a[0] >= 'A' && a[0] <= 'Z') ||
 			(a[0] >= 'a' && a[0] <= 'z') ||
 			(a[0] >= '0' && a[0] <= '9') ||
-			(runeMap[a[0]]) {
+			(RuneKeys[a[0]]) {
 			return Key{R: a[0]}
 		}
 	}
-	if val, ok := m[s]; ok {
+	if val, ok := M[s]; ok {
 		return Key{K: val}
 	}
 	return Key{}
