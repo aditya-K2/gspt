@@ -1,8 +1,8 @@
 ***This file is auto generated. If you find any bugs please open an issue***
 ## Default Configuration
 ```yml
-cachedir: $XDG_CACHE_HOME
-redrawinterval: 500
+cache_dir: $XDG_CACHE_HOME
+redraw_interval: 500
 colors:
   artist:
     fg: pink
@@ -28,15 +28,15 @@ colors:
     fg: red
     bold: false
     italic: true
-  pbarartist:
+  pbar_artist:
     fg: blue
     bold: true
     italic: false
-  pbartrack:
+  pbar_track:
     fg: green
     bold: true
     italic: true
-  playlistnav:
+  playlist_nav:
     fg: coral
     bold: false
     italic: false
@@ -44,11 +44,11 @@ colors:
     fg: papayawhip
     bold: false
     italic: false
-  contextmenu:
+  context_menu:
     fg: turquoise
     bold: true
     italic: false
-  borderfocus:
+  border_focus:
     fg: white
     bold: false
     italic: false
@@ -60,66 +60,66 @@ colors:
     fg: white
     bold: true
     italic: false
-additionalpaddingx: 0
-additionalpaddingy: 0
-imagewidthextrax: 0
-imagewidthextray: 0
-hideimage: false
-roundedcorners: false
+additional_padding_x: 0
+additional_padding_y: 0
+image_width_extra_x: 0
+image_width_extra_y: 0
+hide_image: false
+rounded_corners: false
 mappings:
-    playlist_view:
+    top_tracks_view:
         open_entry: "ctrl-m"
+        play_entry: "ctrl-p"
     liked_songs_view:
         open_entry: "ctrl-m"
-    artist_view:
+    albums_view:
         open_entry: "ctrl-m"
         play_entry: "ctrl-p"
-    albums_view:
-        play_entry: "ctrl-p"
+    recently_played_view:
+        open_entry: "ctrl-m"
+    nav_menu:
+        open_entry: "ctrl-m"
+    global:
+        focus_nav: "1"
+        toggle_playback: " "
+        open_current_track_album: "o"
+        open_current_track_artist: "O"
+        open_current_context: "ctrl-o"
+        choose_device: "d"
+        focus_playlists: "2"
+        focus_main_view: "3"
+        focus_search: "?"
+    playlist_view:
         open_entry: "ctrl-m"
     album_view:
         open_entry: "ctrl-m"
-    recently_played_view:
+    search_view:
         open_entry: "ctrl-m"
-    global:
-        focus_playlists: "2"
-        open_current_track_artist: "O"
-        focus_search: "?"
-        toggle_playback: " "
-        open_current_track_album: "o"
-        open_current_context: "ctrl-o"
-        choose_device: "d"
-        focus_nav: "1"
-        focus_main_view: "3"
     playlist_nav:
-        open_entry: "ctrl-m"
-        play_entry: "ctrl-p"
-    top_tracks_view:
         open_entry: "ctrl-m"
         play_entry: "ctrl-p"
     artists_view:
         open_entry: "ctrl-m"
-    nav_menu:
+    artist_view:
         open_entry: "ctrl-m"
-    search_view:
-        open_entry: "ctrl-m"
+        play_entry: "ctrl-p"
 ```
 ## Keys available to map
 |||
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>&, *, ), -, ., %, ^, ?, \|$, >, =, {, ], ', !, #, [, ", (, ,, \,  , +, <, @, }, :, ;, _, /</kbd> | <kbd>enter</kbd> |
-| <kbd>up_right</kbd> | <kbd>center</kbd> |
-| <kbd>right</kbd> | <kbd>pgup</kbd> |
-| <kbd>delete</kbd> | <kbd>tab</kbd> |
-| <kbd>help</kbd> | <kbd>clear</kbd> |
-| <kbd>exit</kbd> | <kbd>pause</kbd> |
-| <kbd>backtab</kbd> | <kbd>up</kbd> |
-| <kbd>down_left</kbd> | <kbd>insert</kbd> |
-| <kbd>cancel</kbd> | <kbd>escape</kbd> |
-| <kbd>backspace</kbd> | <kbd>down_right</kbd> |
-| <kbd>end</kbd> | <kbd>home</kbd> |
-| <kbd>print</kbd> | <kbd>down</kbd> |
-| <kbd>pgdn</kbd> | <kbd>esc</kbd> |
-| <kbd>up_left</kbd> | <kbd>backspace2</kbd> |
+| <kbd>[, ], !, @, &, (, ), }, \|;, $, %, *, -, :, ', ", _, <, ?, {, =, \,  , #, ., >, /, ^, +, ,</kbd> | <kbd>backtab</kbd> |
+| <kbd>clear</kbd> | <kbd>pause</kbd> |
+| <kbd>center</kbd> | <kbd>left</kbd> |
+| <kbd>down_right</kbd> | <kbd>cancel</kbd> |
+| <kbd>delete</kbd> | <kbd>enter</kbd> |
+| <kbd>backspace</kbd> | <kbd>print</kbd> |
+| <kbd>tab</kbd> | <kbd>escape</kbd> |
+| <kbd>insert</kbd> | <kbd>end</kbd> |
+| <kbd>help</kbd> | <kbd>pgdn</kbd> |
+| <kbd>pgup</kbd> | <kbd>down_left</kbd> |
+| <kbd>up</kbd> | <kbd>down</kbd> |
+| <kbd>right</kbd> | <kbd>up_left</kbd> |
+| <kbd>up_right</kbd> | <kbd>home</kbd> |
+| <kbd>backspace2</kbd> | <kbd>exit</kbd> |
