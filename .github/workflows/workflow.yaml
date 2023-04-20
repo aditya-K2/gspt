@@ -25,4 +25,4 @@ jobs:
     - name: Commit CONFIG.md
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: Auto-generated CONFIG.md
+        commit_message: Generate CONFIG.md
