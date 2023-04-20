@@ -67,22 +67,20 @@ func main() {
 
 	_s := "|||\n|--|--|\n"
 	for k := 0; k < len(_ma)-1; k++ {
-		if k != len(_ma)-1 {
-			_s += "|" + _ma[k]
-			k++
-			_s += "|" + _ma[k] + "|\n"
-		}
+		_s += fmt.Sprintf("| <kbd>%s</kbd> ", _ma[k])
+		k++
+		_s += fmt.Sprintf("| <kbd>%s</kbd> |\n", _ma[k])
 	}
 
 	// Override the file
 	f.Truncate(0)
 
 	// Write
-	write("***Auto generated*** (If you find any bugs please open an issue)\n")
+	write("***This file is auto generated. If you find any bugs please open an issue***\n")
 
-	write("# Default Configuration\n```yml\n" + string(c) + "mappings:\n" + s + "```\n")
+	write("## Default Configuration\n```yml\n" + string(c) + "mappings:\n" + s + "```\n")
 
-	write("# Available Keys\n" + _s)
+	write("## Keys available to map\n" + _s)
 
 	fmt.Println("GENERATED CONFIG.MD")
 }
