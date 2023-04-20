@@ -85,6 +85,12 @@ func RefreshProgress(force bool) {
 		return
 	}
 	state = s
+
+	// Reset the "cached" if nothing is playing (TODO: better name)[
+	if s.Item == nil {
+		ctrackId = ""
+	}
+
 	if coverArt != nil {
 		// If No Item is playing
 		if (state.Item == nil) ||
