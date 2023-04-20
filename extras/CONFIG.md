@@ -1,5 +1,5 @@
-***Auto generated*** (If you find any bugs please open an issue)
-# Default Configuration
+***This file is auto generated. If you find any bugs please open an issue***
+## Default Configuration
 ```yml
 cachedir: $XDG_CACHE_HOME
 redrawinterval: 500
@@ -67,59 +67,59 @@ imagewidthextray: 0
 hideimage: false
 roundedcorners: false
 mappings:
-    recently_played_view:
+    playlist_view:
         open_entry: "ctrl-m"
-    nav_menu:
-        open_entry: "ctrl-m"
-    playlist_nav:
-        open_entry: "ctrl-m"
-        play_entry: "ctrl-p"
     liked_songs_view:
         open_entry: "ctrl-m"
     artist_view:
         open_entry: "ctrl-m"
         play_entry: "ctrl-p"
     albums_view:
-        open_entry: "ctrl-m"
         play_entry: "ctrl-p"
-    search_view:
+        open_entry: "ctrl-m"
+    album_view:
+        open_entry: "ctrl-m"
+    recently_played_view:
         open_entry: "ctrl-m"
     global:
-        focus_main_view: "3"
+        focus_playlists: "2"
+        open_current_track_artist: "O"
         focus_search: "?"
         toggle_playback: " "
         open_current_track_album: "o"
-        open_current_track_artist: "O"
         open_current_context: "ctrl-o"
         choose_device: "d"
         focus_nav: "1"
-        focus_playlists: "2"
-    playlist_view:
+        focus_main_view: "3"
+    playlist_nav:
         open_entry: "ctrl-m"
+        play_entry: "ctrl-p"
     top_tracks_view:
         open_entry: "ctrl-m"
         play_entry: "ctrl-p"
     artists_view:
         open_entry: "ctrl-m"
-    album_view:
+    nav_menu:
+        open_entry: "ctrl-m"
+    search_view:
         open_entry: "ctrl-m"
 ```
-# Available Keys
+## Keys available to map
 |||
 |--|--|
-|a-z|A-Z|
-|ctrl-a - ctrl-z|0-9|
-|&, =, _, [, ;, ?,  , #, ^, ., >, /, @, +, ', ", $, <, \, ,, {, }, !, *, (, -, ], %, ), \|:|insert|
-|end|print|
-|pgup|right|
-|home|enter|
-|help|backspace|
-|escape|backspace2|
-|up|backtab|
-|pgdn|clear|
-|pause|tab|
-|exit|cancel|
-|down_left|down|
-|up_left|up_right|
-|center|delete|
-|left|down_right|
+| <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
+| <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
+| <kbd>&, *, ), -, ., %, ^, ?, \|$, >, =, {, ], ', !, #, [, ", (, ,, \,  , +, <, @, }, :, ;, _, /</kbd> | <kbd>enter</kbd> |
+| <kbd>up_right</kbd> | <kbd>center</kbd> |
+| <kbd>right</kbd> | <kbd>pgup</kbd> |
+| <kbd>delete</kbd> | <kbd>tab</kbd> |
+| <kbd>help</kbd> | <kbd>clear</kbd> |
+| <kbd>exit</kbd> | <kbd>pause</kbd> |
+| <kbd>backtab</kbd> | <kbd>up</kbd> |
+| <kbd>down_left</kbd> | <kbd>insert</kbd> |
+| <kbd>cancel</kbd> | <kbd>escape</kbd> |
+| <kbd>backspace</kbd> | <kbd>down_right</kbd> |
+| <kbd>end</kbd> | <kbd>home</kbd> |
+| <kbd>print</kbd> | <kbd>down</kbd> |
+| <kbd>pgdn</kbd> | <kbd>esc</kbd> |
+| <kbd>up_left</kbd> | <kbd>backspace2</kbd> |
