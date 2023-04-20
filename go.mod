@@ -12,6 +12,7 @@ require (
 	github.com/zmb3/spotify/v2 v2.3.1
 	gitlab.com/diamondburned/ueberzug-go v0.0.0-20190521043425-7c15a5f63b06
 	golang.org/x/oauth2 v0.4.0
+	gopkg.in/yaml.v2 v2.2.2
 )
 
 require (
