@@ -334,27 +334,29 @@ func NewApplication() *tview.Application {
 	searchView.SetMappings(mappings["search_view"])
 
 	// Set up UI
-	searchNavFlex := tview.NewFlex().SetDirection(tview.FlexRow).
+	navFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(navMenu.Table, 6, 3, false).
 		AddItem(playlistNav.Table, 0, 6, false)
 
 	if !config.Config.HideImage {
-		searchNavFlex.AddItem(coverArt, 9, 3, false)
+		navFlex.AddItem(coverArt, 9, 3, false)
 	}
 
-	sNavExpViewFlex := tview.NewFlex().
-		AddItem(searchNavFlex, 17, 1, false).
+	// mid
+	mFlex := tview.NewFlex().
+		AddItem(navFlex, 17, 1, false).
 		AddItem(Main.Table, 0, 4, false)
 
-	searchBarFlex := tview.NewFlex().SetDirection(tview.FlexRow).
+	// mid + top
+	tFlex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(searchbar, 3, 1, false).
-		AddItem(sNavExpViewFlex, 0, 1, false)
+		AddItem(mFlex, 0, 1, false)
 
-	MainFlex := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(searchBarFlex, 0, 8, false).
+	mainFlex := tview.NewFlex().SetDirection(tview.FlexRow).
+		AddItem(tFlex, 0, 8, false).
 		AddItem(progressBar, 5, 1, false)
 
-	root.Primitive("Main", MainFlex)
+	root.Primitive("Main", mainFlex)
 	App.SetRoot(root.Root, true).SetFocus(Main.Table)
 
 	// Start Routines
@@ -363,7 +365,6 @@ func NewApplication() *tview.Application {
 		go rectWatcher()
 	}
 
-	// Draw App every one second
 	go func() {
 		for {
 			if App != nil {

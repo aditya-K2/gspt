@@ -45,7 +45,7 @@ func NewProgressBar() *ProgressBar {
 	}
 }
 
-func GetProgressGlyph(width, percentage float64, btext string) string {
+func getProgressGlyph(width, percentage float64, btext string) string {
 	q := "[black:white:b]"
 	var a string
 	a += strings.Repeat(" ", int(width)-len(btext))
@@ -69,7 +69,7 @@ func (self *ProgressBar) Draw(screen tcell.Screen) {
 	x, y, _width, _ := self.Box.GetInnerRect()
 	tview.Print(screen, self.BarTitle, x+OFFSET, y, _width, tview.AlignLeft, tcell.ColorWhite)
 	tview.Print(screen,
-		GetProgressGlyph(float64(_width-OFFSET-1),
+		getProgressGlyph(float64(_width-OFFSET-1),
 			percentage,
 			self.BarText),
 		x, y+2, _width-OFFSET, tview.AlignRight, tcell.ColorWhite)
@@ -108,7 +108,7 @@ func RefreshProgress(force bool) {
 	}
 }
 
-func RefreshProgressLocal() {
+func refreshProgressLocal() {
 	if state != nil {
 		if state.Item != nil && state.Playing {
 			if state.Item.Duration-state.Progress >= 1000 {
@@ -136,7 +136,7 @@ func progressRoutine() {
 				}
 			case <-localTicker.C:
 				{
-					RefreshProgressLocal()
+					refreshProgressLocal()
 				}
 			}
 		}
