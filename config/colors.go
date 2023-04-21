@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	ColorError = func(s string) {
+	colorErrHandler = func(s string) {
 		_s := fmt.Sprintf("Wrong Color Provided: %s", s)
 		utils.Print("RED", _s)
 		os.Exit(-1)
@@ -48,7 +48,7 @@ func (c Color) Foreground() tcell.Color {
 	} else if val, ok := tcell.ColorNames[c.Fg]; ok {
 		return val
 	} else {
-		ColorError(c.Fg)
+		colorErrHandler(c.Fg)
 		return tcell.ColorBlack
 	}
 }
@@ -62,7 +62,7 @@ func (c Color) Background() tcell.Color {
 	} else if val, ok := tcell.ColorNames[c.Bg]; ok {
 		return val
 	} else {
-		ColorError(c.Bg)
+		colorErrHandler(c.Bg)
 		return tcell.ColorBlack
 	}
 }
@@ -90,7 +90,7 @@ func (c Color) String() string {
 		} else if strings.HasPrefix(s, "#") && len(s) == 7 {
 			res = s
 		} else {
-			ColorError(s)
+			colorErrHandler(s)
 		}
 		return res
 	}
