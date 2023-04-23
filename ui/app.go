@@ -363,6 +363,9 @@ func NewApplication() *tview.Application {
 	InitNotifier()
 	if !config.Config.HideImage {
 		go rectWatcher()
+	} else {
+		// Start Progress Routine directly
+		progressRoutine()
 	}
 
 	go func() {
