@@ -20,7 +20,7 @@ func PlaySong(uri spotify.URI) error {
 func PlaySongWithContext(context *spotify.URI, position int) error {
 	return play(&spotify.PlayOptions{
 		PlaybackContext: context,
-		PlaybackOffset:  &spotify.PlaybackOffset{Position: position},
+		PlaybackOffset:  &spotify.PlaybackOffset{Position: &position},
 	})
 }
 
