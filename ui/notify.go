@@ -87,7 +87,7 @@ func newNotificationWithChan(s string, c chan string) *notification {
 	return &notification{
 		Box:   tview.NewBox(),
 		text:  s,
-		timer: time.Second / 2,
+		timer: time.Second,
 		msg:   c,
 	}
 }
