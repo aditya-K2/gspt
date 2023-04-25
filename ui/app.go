@@ -326,6 +326,10 @@ func NewApplication() *tview.Application {
 			albumsView.PlaySelectEntry()
 			return nil
 		}, progressBar),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			albumsView.QueueSelectEntry()
+			return nil
+		}, progressBar),
 	}))
 	albumView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {

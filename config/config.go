@@ -63,6 +63,7 @@ var (
 		"albums_view": {
 			{K: tcell.KeyEnter}: "open_entry",
 			{K: tcell.KeyCtrlP}: "play_entry",
+			{R: 'i'}:            "queue_entry",
 		},
 		"album_view": {
 			{K: tcell.KeyEnter}: "open_entry",
