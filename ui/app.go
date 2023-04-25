@@ -241,14 +241,14 @@ func NewApplication() *tview.Application {
 				return e
 			}
 			return nil
-		}, nil),
+		}, progressBar),
 		"previous": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			if err := spt.Previous(); err != nil {
 				SendNotification(err.Error())
 				return e
 			}
 			return nil
-		}, nil),
+		}, progressBar),
 	}
 	playlistNav.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(playlistNav.PlaySelectEntry,
