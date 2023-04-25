@@ -140,6 +140,8 @@ additional_padding_y : 0
 image_width_extra_x  : 0
 image_width_extra_y  : 0
 
+---
+
 # Color configuration has the following api
 colors:
     entity:
@@ -151,10 +153,17 @@ colors:
 # for e.g
 colors:
     artist:
-        fg: pink
-        bg: black # Would be ignored in most of the cases.
+        fg: "#ff0000"
+        bg: black # Background will be ignored in most cases. (Terminals default background color is used)
         bold: false
         italic: true
+
+# For the default colors used for the "entities" please see:
+# https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md
+# Available color names (i.e. pink, green, etc.) can be seen here:
+# https://github.com/gdamore/tcell/blob/main/color.go#L845
+
+---
 
 # Key mappings has the following API
 mappings:
@@ -165,6 +174,9 @@ mappings:
 mappings:
     recently_played_view:
         open_entry: "ctrl-p"
+
+# For the default mappings for each view please see:
+# https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md
 ```
 
 ## Image Rendering Related Parameters
