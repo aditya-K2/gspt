@@ -34,6 +34,8 @@ var (
 			{R: ' '}:            "toggle_playback",
 			{R: 'o'}:            "open_current_track_album",
 			{R: 'O'}:            "open_current_track_artist",
+			{R: 'n'}:            "next",
+			{R: 'p'}:            "previous",
 			{K: tcell.KeyCtrlO}: "open_current_context",
 		},
 		"playlist_nav": {

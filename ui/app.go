@@ -235,6 +235,20 @@ func NewApplication() *tview.Application {
 			}
 			return nil
 		}, nil),
+		"next": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			if err := spt.Next(); err != nil {
+				SendNotification(err.Error())
+				return e
+			}
+			return nil
+		}, nil),
+		"previous": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			if err := spt.Previous(); err != nil {
+				SendNotification(err.Error())
+				return e
+			}
+			return nil
+		}, nil),
 	}
 	playlistNav.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(playlistNav.PlaySelectEntry,

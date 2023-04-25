@@ -94,6 +94,8 @@ $ gspt
 1. `o` Open the Current Track's Album
 1. `O` Open the Current Track's Artist
 1. `ctrl-o` Open the Current Context (Album/Artist/Playlist)
+1. `n` Play Next Song in Queue
+1. `p` Play Previous Song in Queue
 
 ## Command-line Parameters
 

@@ -61,3 +61,11 @@ func UriToID(uri spotify.URI) (spotify.ID, error) {
 	}
 	return spotify.ID(a[2]), nil
 }
+
+func Next() error {
+	return Client.Next(ctx())
+}
+
+func Previous() error {
+	return Client.Previous(ctx())
+}
