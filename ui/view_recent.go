@@ -48,7 +48,8 @@ func (r *RecentlyPlayedView) ContextHandler() func(start, end, sel int) {
 		// (i.e Any Creation or Deletion of Playlists while the context Menu is
 		// open
 		// TODO: Better Error Handler
-		userPlaylists, err := spt.CurrentUserPlaylists(func(err error) {})
+		userPlaylists, ch := spt.CurrentUserPlaylists()
+		err := <-ch
 		if err != nil {
 			SendNotification("Error Retrieving User Playlists")
 			return

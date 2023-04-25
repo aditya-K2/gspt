@@ -33,27 +33,25 @@ func (p *PlaylistView) Content() func() [][]Content {
 		if p.currentPlaylist != nil {
 			if p.currentUserFullPlaylist == nil {
 				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", p.currentPlaylist.Name))
-				pf, err := spt.GetPlaylist(p.currentPlaylist.ID, func(err error) {
-					go func() {
-						if err != nil {
-							msg <- err.Error()
-						} else {
-							msg <- "Playlist Loaded Succesfully!"
-						}
-					}()
-				})
-				if err != nil {
-					SendNotification(fmt.Sprintf("Error Retrieving %s", p.currentPlaylist.Name))
-					return [][]Content{}
-				}
+				pf, ch := spt.GetPlaylist(p.currentPlaylist.ID)
+				go func() {
+					err := <-ch
+					if err != nil {
+						msg <- err.Error()
+					} else {
+						msg <- "Playlist Loaded Succesfully!"
+					}
+				}()
 				p.currentUserFullPlaylist = pf
 			}
-			for _, v := range *(*p.currentUserFullPlaylist).Tracks {
-				c = append(c, []Content{
-					{Content: v.Track.Name, Style: TrackStyle},
-					{Content: v.Track.Artists[0].Name, Style: ArtistStyle},
-					{Content: v.Track.Album.Name, Style: AlbumStyle},
-				})
+			if p.currentUserFullPlaylist != nil {
+				for _, v := range *(*p.currentUserFullPlaylist).Tracks {
+					c = append(c, []Content{
+						{Content: v.Track.Name, Style: TrackStyle},
+						{Content: v.Track.Artists[0].Name, Style: ArtistStyle},
+						{Content: v.Track.Album.Name, Style: AlbumStyle},
+					})
+				}
 			}
 		}
 		return c
@@ -66,7 +64,8 @@ func (p *PlaylistView) ContextHandler() func(start, end, sel int) {
 		// (i.e Any Creation or Deletion of Playlists while the context Menu is
 		// open
 		// TODO: Better Error Handling
-		userPlaylists, err := spt.CurrentUserPlaylists(func(err error) {})
+		userPlaylists, ch := spt.CurrentUserPlaylists()
+		err := <-ch
 		if err != nil {
 			SendNotification("Error Retrieving User Playlists")
 			return

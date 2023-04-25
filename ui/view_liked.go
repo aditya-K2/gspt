@@ -25,18 +25,13 @@ func (p *LikedSongsView) Content() func() [][]Content {
 		c := make([][]Content, 0)
 		if p.likedSongs == nil {
 			msg := SendNotificationWithChan("Loading Liked Songs...")
-			if err := p.refreshState(func(err error) {
-				go func() {
-					if err != nil {
-						msg <- err.Error()
-					} else {
-						msg <- "Liked Songs Loaded Succesfully!"
-					}
-				}()
-			}); err != nil {
-				SendNotification(err.Error())
-				return c
-			}
+			p.refreshState(func(err error) {
+				if err != nil {
+					msg <- err.Error()
+					return
+				}
+				msg <- "Liked Songs Loaded Succesfully!"
+			})
 		}
 		for _, v := range *p.likedSongs {
 			c = append(c, []Content{
@@ -55,7 +50,8 @@ func (l *LikedSongsView) ContextHandler() func(start, end, sel int) {
 		// (i.e Any Creation or Deletion of Playlists while the context Menu is
 		// open
 		// TODO: Better Error Handler
-		userPlaylists, err := spt.CurrentUserPlaylists(func(err error) {})
+		userPlaylists, ch := spt.CurrentUserPlaylists()
+		err := <-ch
 		if err != nil {
 			SendNotification("Error Retrieving User Playlists")
 			return
@@ -81,19 +77,24 @@ func (l *LikedSongsView) OpenEntry() {
 	}
 }
 
-func (l *LikedSongsView) refreshState(f func(error)) error {
-	pf, err := spt.CurrentUserSavedTracks(f)
-	if err == nil {
-		l.likedSongs = pf
-	}
-	return err
-}
-
 func (l *LikedSongsView) Name() string { return "LikedSongsView" }
+
+func (p *LikedSongsView) refreshState(errHandler func(error)) {
+	cl, ch := spt.CurrentUserSavedTracks()
+	go func() {
+		err := <-ch
+		errHandler(err)
+		if err == nil {
+			p.likedSongs = cl
+		}
+	}()
+}
 
 func (l *LikedSongsView) RefreshState() {
 	// TODO: Better Error Handler
-	if err := l.refreshState(func(error) {}); err != nil {
-		SendNotification(err.Error())
-	}
+	l.refreshState(func(err error) {
+		if err != nil {
+			SendNotification(err.Error())
+		}
+	})
 }

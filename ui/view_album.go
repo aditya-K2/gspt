@@ -35,17 +35,15 @@ func (a *AlbumView) Content() func() [][]Content {
 		if a.currentAlbumID != nil {
 			if a.currentFullAlbum == nil {
 				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", a.currentAlbumName))
-				al, err := spt.GetAlbum(*a.currentAlbumID, func(err error) {
+				al, ch := spt.GetAlbum(*a.currentAlbumID)
+				go func() {
+					err := <-ch
 					if err != nil {
 						msg <- err.Error()
 					} else {
 						msg <- "Album Loaded Succesfully!"
 					}
-				})
-				if err != nil {
-					SendNotification(err.Error())
-					return c
-				}
+				}()
 				a.currentFullAlbum = al
 			}
 			for _, v := range *(*a.currentFullAlbum).Tracks {
@@ -67,10 +65,10 @@ func (a *AlbumView) ContextHandler() func(start, end, sel int) {
 		// (i.e Any Creation or Deletion of Playlists while the context Menu is
 		// open
 		// TODO: Better Error Handler
-		userPlaylists, err := spt.CurrentUserPlaylists(func(err error) {})
+		userPlaylists, ch := spt.CurrentUserPlaylists()
+		err := <-ch
 		if err != nil {
 			SendNotification("Error Retrieving User Playlists")
-			return
 		}
 		sp := (*userPlaylists)[sel]
 		tracks := make([]spotify.ID, 0)
