@@ -296,6 +296,10 @@ func NewApplication() *tview.Application {
 			searchView.SelectEntry()
 			return nil
 		}, nil),
+		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			searchView.PlaySelectEntry()
+			return nil
+		}, nil),
 	}))
 	artistsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {

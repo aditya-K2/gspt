@@ -133,6 +133,18 @@ func (a *SearchView) SelectEntry() {
 	}
 }
 
+func (a *SearchView) PlaySelectEntry() {
+	r, _ := Main.Table.GetSelection()
+	switch a.searchContent[r].Type {
+	case "album", "artist", "playlist":
+		{
+			if err := spt.PlayContext(&a.searchContent[r].URI); err != nil {
+				SendNotification(err.Error())
+			}
+		}
+	}
+}
+
 func (a *SearchView) RefreshState() {
 	if a.search != "" {
 		results, err := spt.Search(a.search)

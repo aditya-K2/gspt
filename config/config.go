@@ -24,6 +24,7 @@ var (
 		},
 		"search_view": {
 			{K: tcell.KeyEnter}: "open_entry",
+			{K: tcell.KeyCtrlP}: "play_entry",
 		},
 		"global": {
 			{R: 'd'}:            "choose_device",
