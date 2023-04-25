@@ -33,12 +33,14 @@ func (p *LikedSongsView) Content() func() [][]Content {
 				msg <- "Liked Songs Loaded Succesfully!"
 			})
 		}
-		for _, v := range *p.likedSongs {
-			c = append(c, []Content{
-				{Content: v.Name, Style: TrackStyle},
-				{Content: v.Artists[0].Name, Style: ArtistStyle},
-				{Content: v.Album.Name, Style: AlbumStyle},
-			})
+		if p.likedSongs != nil {
+			for _, v := range *p.likedSongs {
+				c = append(c, []Content{
+					{Content: v.Name, Style: TrackStyle},
+					{Content: v.Artists[0].Name, Style: ArtistStyle},
+					{Content: v.Album.Name, Style: AlbumStyle},
+				})
+			}
 		}
 		return c
 	}
@@ -81,6 +83,7 @@ func (l *LikedSongsView) Name() string { return "LikedSongsView" }
 
 func (p *LikedSongsView) refreshState(errHandler func(error)) {
 	cl, ch := spt.CurrentUserSavedTracks()
+	p.likedSongs = cl
 	go func() {
 		err := <-ch
 		errHandler(err)
