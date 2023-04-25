@@ -22,26 +22,25 @@ func (a *AlbumsView) Content() func() [][]Content {
 		c := make([][]Content, 0)
 		if a.savedAlbums == nil {
 			msg := SendNotificationWithChan("Loading Albums from your Library...")
-			sa, err := spt.CurrentUserSavedAlbums(func(err error) {
-				go func() {
-					if err != nil {
-						msg <- err.Error()
-					} else {
-						msg <- "Albums loaded Succesfully!"
-					}
-				}()
-			})
-			if err != nil {
-				SendNotification(err.Error())
-			}
+			sa, ch := spt.CurrentUserSavedAlbums()
+			go func() {
+				err := <-ch
+				if err != nil {
+					msg <- err.Error()
+				} else {
+					msg <- "Albums loaded Succesfully!"
+				}
+			}()
 			a.savedAlbums = sa
 		}
-		for _, v := range *a.savedAlbums {
-			c = append(c, []Content{
-				{Content: v.Name, Style: AlbumStyle},
-				{Content: v.Artists[0].Name, Style: ArtistStyle},
-				{Content: v.ReleaseDate, Style: TimeStyle},
-			})
+		if a.savedAlbums != nil {
+			for _, v := range *a.savedAlbums {
+				c = append(c, []Content{
+					{Content: v.Name, Style: AlbumStyle},
+					{Content: v.Artists[0].Name, Style: ArtistStyle},
+					{Content: v.ReleaseDate, Style: TimeStyle},
+				})
+			}
 		}
 		return c
 	}
@@ -58,6 +57,18 @@ func (a *AlbumsView) PlaySelectEntry() {
 	if err := spt.PlayContext(&(*a.savedAlbums)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}
+}
+
+func (a *AlbumsView) QueueSelectEntry() {
+	r, _ := Main.Table.GetSelection()
+	msg := SendNotificationWithChan("Queueing Album...")
+	go func() {
+		if err := spt.QueueAlbum((*a.savedAlbums)[r].ID); err != nil {
+			msg <- err.Error()
+		} else {
+			msg <- "Album Queued"
+		}
+	}()
 }
 
 func (a *AlbumsView) Name() string { return "AlbumsView" }

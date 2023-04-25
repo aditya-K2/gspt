@@ -22,25 +22,24 @@ func (a *ArtistsView) Content() func() [][]Content {
 		c := make([][]Content, 0)
 		if a.followedArtists == nil {
 			msg := SendNotificationWithChan("Loading Artists from your Library...")
-			fa, err := spt.CurrentUserFollowedArtists(func(err error) {
-				go func() {
-					if err != nil {
-						msg <- err.Error()
-					} else {
-						msg <- "Artists loaded Succesfully!"
-					}
-				}()
-			})
-			if err != nil {
-				SendNotification(err.Error())
-			}
+			fa, ch := spt.CurrentUserFollowedArtists()
+			go func() {
+				err := <-ch
+				if err != nil {
+					msg <- err.Error()
+				} else {
+					msg <- "Artists loaded Succesfully!"
+				}
+			}()
 			a.followedArtists = fa
 		}
-		for _, v := range *a.followedArtists {
-			c = append(c, []Content{
-				{Content: v.Name, Style: ArtistStyle},
-				// {Content: v.Genres[0], Style: AlbumStyle},
-			})
+		if a.followedArtists != nil {
+			for _, v := range *a.followedArtists {
+				c = append(c, []Content{
+					{Content: v.Name, Style: ArtistStyle},
+					{Content: mergeGenres(v.Genres), Style: AlbumStyle},
+				})
+			}
 		}
 		return c
 	}

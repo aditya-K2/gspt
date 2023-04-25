@@ -88,17 +88,12 @@ func (v *PlaylistNav) PlaySelectEntry(e *tcell.EventKey) *tcell.EventKey {
 }
 
 func (v *PlaylistNav) RefreshState() {
-	done := func(err error) {
+	p, ch := spt.CurrentUserPlaylists()
+	go func() {
+		err := <-ch
 		if err != nil {
 			SendNotification(err.Error())
-			return
 		}
-		App.Draw()
-	}
-	p, err := spt.CurrentUserPlaylists(done)
-	if err != nil {
-		SendNotification(err.Error())
-		return
-	}
+	}()
 	v.Playlists = p
 }

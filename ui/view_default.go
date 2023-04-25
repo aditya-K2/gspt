@@ -54,7 +54,8 @@ func (d *DefaultView) ContextOpener() func(m *Root, s func(s int)) {
 		c := NewMenu()
 		cc := []string{}
 		// TODO: Better Error Handling
-		plist, err := spt.CurrentUserPlaylists(func(err error) {})
+		plist, ch := spt.CurrentUserPlaylists()
+		err := <-ch
 		if err != nil {
 			SendNotification(err.Error())
 			return
