@@ -66,7 +66,7 @@ func (a *AlbumsView) QueueSelectEntry() {
 		if err := spt.QueueAlbum((*a.savedAlbums)[r].ID); err != nil {
 			msg <- err.Error()
 		} else {
-			msg <- "Album Queued"
+			msg <- "Album Queued: " + ((*a.savedAlbums)[r].Name) + "!"
 		}
 	}()
 }
