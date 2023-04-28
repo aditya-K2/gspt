@@ -54,20 +54,6 @@ func NewInteractiveView() *interactiveView {
 	return i
 }
 
-func (i *interactiveView) SelectionHandler(selrow int) {
-	if i.visual {
-		i.toggleVisualMode()
-	} else {
-		// If not in visual Mode use the current row selection
-		r, _ := i.Table.GetSelection()
-		i.vrange.Start = r
-		i.vrange.End = r
-	}
-	if GetCurrentView().ContextHandler() != nil {
-		GetCurrentView().ContextHandler()(i.vrange.Start, i.vrange.End, selrow)
-	}
-}
-
 func (i *interactiveView) exitVisualMode() {
 	if i.vrange.Start < i.baseSel {
 		i.Table.Select(i.vrange.Start, -1)
@@ -165,13 +151,6 @@ func (i *interactiveView) getHandler(s string) func(e *tcell.EventKey) *tcell.Ev
 			}
 			return e
 		},
-		"openCtx": func(e *tcell.EventKey) *tcell.EventKey {
-			if GetCurrentView().ContextOpener() != nil {
-				GetCurrentView().ContextOpener()(root, Main.SelectionHandler)
-				return nil
-			}
-			return e
-		},
 	}
 	if val, ok := funcMap[s]; ok {
 		return val
@@ -205,10 +184,6 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		{
 			return i.getHandler("bottom")(e)
 		}
-	case GetCurrentView().ContextKey():
-		{
-			return i.getHandler("openCtx")(e)
-		}
 	default:
 		{
 			if e.Key() == tcell.KeyEscape {
@@ -217,6 +192,12 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 				}
 			} else if GetCurrentView().ExternalInputCapture() != nil {
 				return GetCurrentView().ExternalInputCapture()(e)
+			} else if !GetCurrentView().DisableVisualMode() &&
+				GetCurrentView().VisualCapture() != nil {
+				if i.visual {
+					i.toggleVisualMode()
+				}
+				return GetCurrentView().VisualCapture()(i.vrange.Start, i.vrange.End, e)
 			}
 			return e
 		}
@@ -250,7 +231,10 @@ func (i *interactiveView) update() {
 					selectable = false
 				}
 				i.Table.SetCell(x, y+1,
-					GetCell(s[x][y].Content, s[x][y].Style).SetMaxWidth(w/n).SetExpansion(1).SetSelectable(selectable))
+					GetCell(s[x][y].Content, s[x][y].Style).
+						SetMaxWidth(w/n).
+						SetExpansion(1).
+						SetSelectable(selectable))
 			}
 		}
 	}

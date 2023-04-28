@@ -17,11 +17,9 @@ var (
 
 type View interface {
 	Content() func() [][]Content
-	ContextOpener() func(*Root, func(int))
-	ContextKey() rune
-	ContextHandler() func(start, end, sel int)
 	DisableVisualMode() bool
 	ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey
+	VisualCapture() func(start, end int, e *tcell.EventKey) *tcell.EventKey
 	Name() string
 }
 

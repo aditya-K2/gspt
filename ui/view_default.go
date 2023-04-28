@@ -7,12 +7,18 @@ import (
 )
 
 type defView struct {
-	m       map[config.Key]string
-	actions map[string]*Action
+	m             map[config.Key]string
+	vm            map[config.Key]string
+	actions       map[string]*Action
+	visualActions map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey
 }
 
 func (d *defView) SetMappings(m map[config.Key]string) {
 	d.m = m
+}
+
+func (d *defView) SetVisualMappings(vm map[config.Key]string) {
+	d.vm = vm
 }
 
 func (d *defView) SetActions(a map[string]*Action) {
@@ -36,6 +42,23 @@ func (d *defView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey
 	}
 }
 
+func (d *defView) VisualCapture() func(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	return func(start, end int, e *tcell.EventKey) *tcell.EventKey {
+		if d.vm != nil {
+			var key config.Key
+			if e.Key() == tcell.KeyRune {
+				key = config.Key{R: e.Rune()}
+			} else {
+				key = config.Key{K: e.Key()}
+			}
+			if val, ok := d.vm[key]; ok {
+				return d.visualActions[val](start, end, e)
+			}
+		}
+		return e
+	}
+}
+
 type DefaultViewNone struct {
 	*defView
 }
@@ -44,6 +67,9 @@ func (a *DefaultViewNone) ContextOpener() func(m *Root, s func(s int)) { return 
 func (a *DefaultViewNone) ContextHandler() func(int, int, int)         { return nil }
 func (a *DefaultViewNone) ContextKey() rune                            { return 'a' }
 func (a *DefaultViewNone) DisableVisualMode() bool                     { return true }
+func (a *DefaultViewNone) VisualCapture() func(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	return nil
+}
 
 type DefaultView struct {
 	*defView
