@@ -15,58 +15,98 @@ var (
 	ConfigPath             = configDir + "/gspt"
 	Config                 = NewConfigS()
 	OnConfigChange         func()
-	DefaultMappings        = map[string]map[Key]string{
+	DefaultMappings        = map[string]map[string]map[Key]string{
 		"recently_played_view": {
-			{K: tcell.KeyEnter}: "open_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
 		},
 		"nav_menu": {
-			{K: tcell.KeyEnter}: "open_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+			},
 		},
 		"search_view": {
-			{K: tcell.KeyEnter}: "open_entry",
-			{K: tcell.KeyCtrlP}: "play_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
 		},
 		"global": {
-			{R: 'd'}:            "choose_device",
-			{R: '1'}:            "focus_nav",
-			{R: '2'}:            "focus_playlists",
-			{R: '3'}:            "focus_main_view",
-			{R: '?'}:            "focus_search",
-			{R: ' '}:            "toggle_playback",
-			{R: 'o'}:            "open_current_track_album",
-			{R: 'O'}:            "open_current_track_artist",
-			{R: 'n'}:            "next",
-			{R: 'p'}:            "previous",
-			{K: tcell.KeyCtrlO}: "open_current_context",
+			"normal": {
+				{R: 'd'}:            "choose_device",
+				{R: '1'}:            "focus_nav",
+				{R: '2'}:            "focus_playlists",
+				{R: '3'}:            "focus_main_view",
+				{R: '?'}:            "focus_search",
+				{R: ' '}:            "toggle_playback",
+				{R: 'o'}:            "open_current_track_album",
+				{R: 'O'}:            "open_current_track_artist",
+				{R: 'n'}:            "next",
+				{R: 'p'}:            "previous",
+				{K: tcell.KeyCtrlO}: "open_current_context",
+			},
 		},
 		"playlist_nav": {
-			{K: tcell.KeyEnter}: "open_entry",
-			{K: tcell.KeyCtrlP}: "play_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
 		},
 		"playlist_view": {
-			{K: tcell.KeyEnter}: "open_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
 		},
 		"top_tracks_view": {
-			{K: tcell.KeyEnter}: "open_entry",
-			{K: tcell.KeyCtrlP}: "play_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
 		},
 		"liked_songs_view": {
-			{K: tcell.KeyEnter}: "open_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
 		},
 		"artists_view": {
-			{K: tcell.KeyEnter}: "open_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+			},
 		},
 		"artist_view": {
-			{K: tcell.KeyEnter}: "open_entry",
-			{K: tcell.KeyCtrlP}: "play_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
 		},
 		"albums_view": {
-			{K: tcell.KeyEnter}: "open_entry",
-			{K: tcell.KeyCtrlP}: "play_entry",
-			{R: 'i'}:            "queue_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+				{R: 'i'}:            "queue_entry",
+			},
 		},
 		"album_view": {
-			{K: tcell.KeyEnter}: "open_entry",
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
 		},
 	}
 )
@@ -131,22 +171,22 @@ func ReadConfig() {
 	expandHome()
 }
 
-func GenerateMappings() map[string]map[Key]string {
+func GenerateMappings() map[string]map[string]map[Key]string {
 	all := viper.GetStringMap("mappings")
 	keys := DefaultMappings
-	for view, mappings := range all {
+	for view, mode := range all {
 		if keys[view] == nil {
-			keys[view] = make(map[Key]string)
+			keys[view] = make(map[string]map[Key]string)
 		}
-		if mappings != nil {
-			for function, key := range mappings.(map[string]interface{}) {
-				keys[view][NewKey(key.(string))] = function
+		for modeName, mappings := range mode.(map[string]map[string]string) {
+			for key, function := range mappings {
+				keys[view][modeName][NewKey(key)] = function
 			}
 		}
 	}
 	for k := range keys {
 		if k != "global" {
-			keys[k] = utils.MergeMaps(keys["global"], keys[k])
+			keys[k]["normal"] = utils.MergeMaps(keys["global"]["normal"], keys[k]["normal"])
 		}
 	}
 	return keys
