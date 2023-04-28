@@ -28,6 +28,10 @@ func (d *defView) SetActions(a map[string]*Action) {
 	d.actions = a
 }
 
+func (d *defView) SetVisualActions(a map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey) {
+	d.visualActions = a
+}
+
 func (d *defView) ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey {
 	return func(e *tcell.EventKey) *tcell.EventKey {
 		if d.m != nil {
