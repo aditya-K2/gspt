@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/aditya-K2/gspt/spt"
+	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 )
 
@@ -59,30 +60,18 @@ func (a *AlbumView) Content() func() [][]Content {
 	}
 }
 
-func (a *AlbumView) ContextHandler() func(start, end, sel int) {
-	return func(start, end, sel int) {
-		// Assuming that there are no external effects on the user's playlists
-		// (i.e Any Creation or Deletion of Playlists while the context Menu is
-		// open
-		// TODO: Better Error Handler
-		userPlaylists, ch := spt.CurrentUserPlaylists()
-		err := <-ch
-		if err != nil {
-			SendNotification("Error Retrieving User Playlists")
-		}
-		sp := (*userPlaylists)[sel]
-		tracks := make([]spotify.ID, 0)
-		for k := start; k <= end; k++ {
-			tracks = append(tracks, (*(*a.currentFullAlbum).Tracks)[k].ID)
-		}
-		aerr := spt.AddTracksToPlaylist(sp.ID, tracks...)
-		if aerr != nil {
-			SendNotification(aerr.Error())
-			return
-		} else {
-			SendNotification(fmt.Sprintf("Added %d tracks to %s", len(tracks), sp.Name))
-		}
+func (a *AlbumView) AddToPlaylist() {
+	r, _ := Main.Table.GetSelection()
+	addToPlaylist([]spotify.ID{(*(*a.currentFullAlbum).Tracks)[r].ID})
+}
+
+func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	tracks := make([]spotify.ID, 0)
+	for k := start; k <= end; k++ {
+		tracks = append(tracks, (*(*a.currentFullAlbum).Tracks)[k].ID)
 	}
+	addToPlaylist(tracks)
+	return nil
 }
 
 func (a *AlbumView) PlaySelectEntry() {
