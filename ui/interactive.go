@@ -57,6 +57,11 @@ func NewInteractiveView() *interactiveView {
 func (i *interactiveView) SelectionHandler(selrow int) {
 	if i.visual {
 		i.toggleVisualMode()
+	} else {
+		// If not in visual Mode use the current row selection
+		r, _ := i.Table.GetSelection()
+		i.vrange.Start = r
+		i.vrange.End = r
 	}
 	if GetCurrentView().ContextHandler() != nil {
 		GetCurrentView().ContextHandler()(i.vrange.Start, i.vrange.End, selrow)
