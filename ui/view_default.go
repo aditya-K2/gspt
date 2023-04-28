@@ -109,7 +109,11 @@ func addToPlaylist(tracks []spotify.ID) {
 			SendNotification(aerr.Error())
 			return
 		} else {
-			SendNotification(fmt.Sprintf("Added %d tracks to %s", len(tracks), sp.Name))
+			s := ""
+			if len(tracks) > 1 {
+				s = "s"
+			}
+			SendNotification(fmt.Sprintf("Added %d track%s to %s", len(tracks), s, sp.Name))
 		}
 	})
 }
