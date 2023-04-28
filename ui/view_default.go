@@ -66,10 +66,7 @@ type DefaultViewNone struct {
 	*defView
 }
 
-func (a *DefaultViewNone) ContextOpener() func(m *Root, s func(s int)) { return nil }
-func (a *DefaultViewNone) ContextHandler() func(int, int, int)         { return nil }
-func (a *DefaultViewNone) ContextKey() rune                            { return 'a' }
-func (a *DefaultViewNone) DisableVisualMode() bool                     { return true }
+func (a *DefaultViewNone) DisableVisualMode() bool { return true }
 func (a *DefaultViewNone) VisualCapture() func(start, end int, e *tcell.EventKey) *tcell.EventKey {
 	return nil
 }
