@@ -190,14 +190,14 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 				if !GetCurrentView().DisableVisualMode() {
 					return i.getHandler("exitvisual")(e)
 				}
-			} else if GetCurrentView().ExternalInputCapture() != nil {
-				return GetCurrentView().ExternalInputCapture()(e)
-			} else if !GetCurrentView().DisableVisualMode() &&
+			} else if i.visual && !GetCurrentView().DisableVisualMode() &&
 				GetCurrentView().VisualCapture() != nil {
 				if i.visual {
 					i.toggleVisualMode()
 				}
 				return GetCurrentView().VisualCapture()(i.vrange.Start, i.vrange.End, e)
+			} else if GetCurrentView().ExternalInputCapture() != nil {
+				return GetCurrentView().ExternalInputCapture()(e)
 			}
 			return e
 		}
