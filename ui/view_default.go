@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
@@ -97,4 +99,16 @@ func openPlaylistMenu(handler func(playlistId spotify.SimplePlaylist)) {
 		handler((*plist)[sel])
 	})
 	root.AddCenteredWidget(c)
+}
+
+func addToPlaylist(tracks []spotify.ID) {
+	openPlaylistMenu(func(sp spotify.SimplePlaylist) {
+		aerr := spt.AddTracksToPlaylist(sp.ID, tracks...)
+		if aerr != nil {
+			SendNotification(aerr.Error())
+			return
+		} else {
+			SendNotification(fmt.Sprintf("Added %d tracks to %s", len(tracks), sp.Name))
+		}
+	})
 }
