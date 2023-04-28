@@ -4,6 +4,7 @@ import (
 	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
+	"github.com/zmb3/spotify/v2"
 )
 
 type defView struct {
@@ -75,27 +76,25 @@ type DefaultView struct {
 	*defView
 }
 
-func (d *DefaultView) ContextOpener() func(m *Root, s func(s int)) {
-	return func(m *Root, s func(s int)) {
-		c := NewMenu()
-		cc := []string{}
-		// TODO: Better Error Handling
-		plist, ch := spt.CurrentUserPlaylists()
-		err := <-ch
-		if err != nil {
-			SendNotification(err.Error())
-			return
-		}
-		for _, v := range *(plist) {
-			cc = append(cc, v.Name)
-		}
-		c.Content(cc)
-		c.Title("Add to Playlist")
-		c.SetSelectionHandler(s)
-		m.AddCenteredWidget(c)
-	}
-}
-
-func (d *DefaultView) ContextKey() rune { return 'a' }
-
 func (d *DefaultView) DisableVisualMode() bool { return false }
+
+func openPlaylistMenu(handler func(playlistId spotify.SimplePlaylist)) {
+	c := NewMenu()
+	cc := []string{}
+	// TODO: Better Error Handling
+	plist, ch := spt.CurrentUserPlaylists()
+	err := <-ch
+	if err != nil {
+		SendNotification(err.Error())
+		return
+	}
+	for _, v := range *(plist) {
+		cc = append(cc, v.Name)
+	}
+	c.Content(cc)
+	c.Title("Add to Playlist")
+	c.SetSelectionHandler(func(sel int) {
+		handler((*plist)[sel])
+	})
+	root.AddCenteredWidget(c)
+}
