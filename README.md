@@ -170,12 +170,19 @@ colors:
 # Key mappings has the following API
 mappings:
     view:
-    function: key_mapping
+        mode: # normal/visual
+            function: key_mapping
 
 # for e.g
 mappings:
     recently_played_view:
-        open_entry: "ctrl-p"
+        normal:
+            play_entry: "ctrl-p"
+        visual:
+            add_to_playlist: "a"
+
+# Visual Mode is similar to vim. Only some views support it.
+# (viz. playlist_view, recently_played_view, liked_songs_view, album_view)
 
 # For the default mappings for each view please see:
 # https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md

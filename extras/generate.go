@@ -54,13 +54,16 @@ func main() {
 	}
 
 	s := ""
-	for k, v := range config.DefaultMappings {
-		s += fmt.Sprintf("    %s:\n", k)
-		for x, y := range v {
-			if x.R != 0 {
-				s += fmt.Sprintf("        %s: \"%s\"\n", y, string(x.R))
-			} else {
-				s += fmt.Sprintf("        %s: \"%s\"\n", y, _m[x.K])
+	for view, modes := range config.DefaultMappings {
+		s += fmt.Sprintf("    %s:\n", view)
+		for mode, mappings := range modes {
+			s += fmt.Sprintf("        %s:\n", mode)
+			for key, function := range mappings {
+				if key.R != 0 {
+					s += fmt.Sprintf("            %s: \"%s\"\n", function, string(key.R))
+				} else {
+					s += fmt.Sprintf("            %s: \"%s\"\n", function, _m[key.K])
+				}
 			}
 		}
 	}

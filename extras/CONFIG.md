@@ -67,62 +67,87 @@ image_width_extra_y: 0
 hide_image: false
 rounded_corners: false
 mappings:
-    top_tracks_view:
-        open_entry: "ctrl-m"
-        play_entry: "ctrl-p"
-    liked_songs_view:
-        open_entry: "ctrl-m"
-    albums_view:
-        open_entry: "ctrl-m"
-        play_entry: "ctrl-p"
     artists_view:
-        open_entry: "ctrl-m"
+        normal:
+            open_entry: "ctrl-m"
     artist_view:
-        open_entry: "ctrl-m"
-        play_entry: "ctrl-p"
+        normal:
+            open_entry: "ctrl-m"
+            play_entry: "ctrl-p"
+    albums_view:
+        normal:
+            queue_entry: "i"
+            open_entry: "ctrl-m"
+            play_entry: "ctrl-p"
     recently_played_view:
-        open_entry: "ctrl-m"
-    nav_menu:
-        open_entry: "ctrl-m"
-    search_view:
-        open_entry: "ctrl-m"
-        play_entry: "ctrl-p"
+        normal:
+            add_to_playlist: "a"
+            open_entry: "ctrl-m"
+        visual:
+            add_to_playlist: "a"
     global:
-        focus_playlists: "2"
-        focus_main_view: "3"
-        focus_search: "?"
-        open_current_track_album: "o"
-        open_current_track_artist: "O"
-        next: "n"
-        previous: "p"
-        choose_device: "d"
-        toggle_playback: " "
-        open_current_context: "ctrl-o"
-        focus_nav: "1"
+        normal:
+            focus_nav: "1"
+            focus_main_view: "3"
+            focus_search: "?"
+            open_current_track_artist: "O"
+            previous: "p"
+            open_current_context: "ctrl-o"
+            choose_device: "d"
+            focus_playlists: "2"
+            toggle_playback: " "
+            open_current_track_album: "o"
+            next: "n"
     playlist_nav:
-        open_entry: "ctrl-m"
-        play_entry: "ctrl-p"
+        normal:
+            open_entry: "ctrl-m"
+            play_entry: "ctrl-p"
     playlist_view:
-        open_entry: "ctrl-m"
+        normal:
+            open_entry: "ctrl-m"
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
     album_view:
-        open_entry: "ctrl-m"
+        normal:
+            open_entry: "ctrl-m"
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
+    nav_menu:
+        normal:
+            open_entry: "ctrl-m"
+    search_view:
+        normal:
+            open_entry: "ctrl-m"
+            play_entry: "ctrl-p"
+    top_tracks_view:
+        normal:
+            play_entry: "ctrl-p"
+            open_entry: "ctrl-m"
+    liked_songs_view:
+        normal:
+            open_entry: "ctrl-m"
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
 ```
 ## Keys available to map
 |||
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>., [, ], @, &, *, (, _,  , $, ), =, \|:, +, >, ", %, ?, {, ;, !, ^, -, ,, <, }, #, /, \, '</kbd> | <kbd>enter</kbd> |
-| <kbd>down</kbd> | <kbd>up_left</kbd> |
-| <kbd>pause</kbd> | <kbd>escape</kbd> |
-| <kbd>esc</kbd> | <kbd>print</kbd> |
-| <kbd>center</kbd> | <kbd>home</kbd> |
-| <kbd>tab</kbd> | <kbd>pgup</kbd> |
-| <kbd>backspace</kbd> | <kbd>backtab</kbd> |
-| <kbd>up</kbd> | <kbd>exit</kbd> |
-| <kbd>right</kbd> | <kbd>up_right</kbd> |
-| <kbd>end</kbd> | <kbd>down_right</kbd> |
-| <kbd>pgdn</kbd> | <kbd>insert</kbd> |
-| <kbd>backspace2</kbd> | <kbd>left</kbd> |
-| <kbd>help</kbd> | <kbd>clear</kbd> |
-| <kbd>delete</kbd> | <kbd>cancel</kbd> |
+| <kbd>{, ), ,, ., <, ^, (, :, ', =, \|;, ", #, *, [, ], \, ?, }, $, &, -, _, +, !, %, >, /,  , @</kbd> | <kbd>exit</kbd> |
+| <kbd>tab</kbd> | <kbd>pause</kbd> |
+| <kbd>right</kbd> | <kbd>home</kbd> |
+| <kbd>enter</kbd> | <kbd>down_right</kbd> |
+| <kbd>end</kbd> | <kbd>help</kbd> |
+| <kbd>escape</kbd> | <kbd>clear</kbd> |
+| <kbd>print</kbd> | <kbd>down</kbd> |
+| <kbd>backtab</kbd> | <kbd>backspace2</kbd> |
+| <kbd>pgup</kbd> | <kbd>pgdn</kbd> |
+| <kbd>center</kbd> | <kbd>up</kbd> |
+| <kbd>left</kbd> | <kbd>up_left</kbd> |
+| <kbd>up_right</kbd> | <kbd>delete</kbd> |
+| <kbd>cancel</kbd> | <kbd>insert</kbd> |
+| <kbd>down_left</kbd> | <kbd>esc</kbd> |
