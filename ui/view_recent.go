@@ -2,9 +2,9 @@ package ui
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/aditya-K2/gspt/spt"
+	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 )
@@ -28,11 +28,6 @@ func NewRecentlyPlayedView() *RecentlyPlayedView {
 	return r
 }
 
-func format(t time.Duration) string {
-	z := time.Unix(0, 0).UTC()
-	return z.Add(t).Format("04:05")
-}
-
 func (r *RecentlyPlayedView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
@@ -40,7 +35,7 @@ func (r *RecentlyPlayedView) Content() func() [][]Content {
 			c = append(c, []Content{
 				{Content: v.Track.Name, Style: TrackStyle},
 				{Content: v.Track.Artists[0].Name, Style: ArtistStyle},
-				{Content: format(time.Duration(v.Track.Duration)), Style: TimeStyle},
+				{Content: utils.StrTime(float64(v.Track.Duration / 1000)), Style: TimeStyle},
 			})
 		}
 		return c
