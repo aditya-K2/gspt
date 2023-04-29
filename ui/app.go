@@ -353,6 +353,7 @@ func NewApplication() *tview.Application {
 			return nil
 		}, nil),
 	}))
+
 	// Visual Actions
 	albumView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": albumView.AddToPlaylistVisual,
@@ -370,25 +371,19 @@ func NewApplication() *tview.Application {
 	mappings := config.GenerateMappings()
 
 	// Map Actions
-	playlistNav.SetMappings(mappings["playlist_nav"]["normal"])
+	playlistNav.SetMappings(mappings["playlist_nav"])
 	playlistNav.Table.SetInputCapture(playlistNav.ExternalInputCapture())
-	navMenu.SetMappings(mappings["nav_menu"]["normal"])
+	navMenu.SetMappings(mappings["nav_menu"])
 	navMenu.Table.SetInputCapture(navMenu.ExternalInputCapture())
-	playlistView.SetMappings(mappings["playlist_view"]["normal"])
-	recentlyPlayedView.SetMappings(mappings["recently_played_view"]["normal"])
-	topTracksView.SetMappings(mappings["top_tracks_view"]["normal"])
-	likedSongsView.SetMappings(mappings["liked_songs_view"]["normal"])
-	albumsView.SetMappings(mappings["albums_view"]["normal"])
-	albumView.SetMappings(mappings["album_view"]["normal"])
-	artistsView.SetMappings(mappings["artists_view"]["normal"])
-	artistView.SetMappings(mappings["artist_view"]["normal"])
-	searchView.SetMappings(mappings["search_view"]["normal"])
-
-	// Map Visual Actions
-	albumView.SetVisualMappings(mappings["album_view"]["visual"])
-	recentlyPlayedView.SetVisualMappings(mappings["recently_played_view"]["visual"])
-	likedSongsView.SetVisualMappings(mappings["liked_songs_view"]["visual"])
-	playlistView.SetVisualMappings(mappings["playlist_view"]["visual"])
+	playlistView.SetMappings(mappings["playlist_view"])
+	recentlyPlayedView.SetMappings(mappings["recently_played_view"])
+	topTracksView.SetMappings(mappings["top_tracks_view"])
+	likedSongsView.SetMappings(mappings["liked_songs_view"])
+	albumsView.SetMappings(mappings["albums_view"])
+	albumView.SetMappings(mappings["album_view"])
+	artistsView.SetMappings(mappings["artists_view"])
+	artistView.SetMappings(mappings["artist_view"])
+	searchView.SetMappings(mappings["search_view"])
 
 	// Set up UI
 	navFlex := tview.NewFlex().SetDirection(tview.FlexRow).
