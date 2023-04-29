@@ -62,13 +62,15 @@ func (a *AlbumView) Content() func() [][]Content {
 
 func (a *AlbumView) AddToPlaylist() {
 	r, _ := Main.Table.GetSelection()
-	addToPlaylist([]spotify.ID{(*(*a.currentFullAlbum).Tracks)[r].ID})
+	track := (*(*a.currentFullAlbum).Tracks)[r]
+	addToPlaylist([]spotify.ID{track.ID})
 }
 
 func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
 	tracks := make([]spotify.ID, 0)
+	sTracks := (*(*a.currentFullAlbum).Tracks)
 	for k := start; k <= end; k++ {
-		tracks = append(tracks, (*(*a.currentFullAlbum).Tracks)[k].ID)
+		tracks = append(tracks, sTracks[k].ID)
 	}
 	addToPlaylist(tracks)
 	return nil

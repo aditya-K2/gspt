@@ -66,8 +66,9 @@ func (p *PlaylistView) AddToPlaylist() {
 
 func (p *PlaylistView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
 	tracks := make([]spotify.ID, 0)
+	sTracks := (*(*p.currentUserFullPlaylist).Tracks)
 	for k := start; k <= end; k++ {
-		tracks = append(tracks, (*(*p.currentUserFullPlaylist).Tracks)[k].Track.ID)
+		tracks = append(tracks, sTracks[k].Track.ID)
 	}
 	addToPlaylist(tracks)
 	return nil

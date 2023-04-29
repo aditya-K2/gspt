@@ -61,12 +61,13 @@ func (a *AlbumsView) PlaySelectEntry() {
 
 func (a *AlbumsView) QueueSelectEntry() {
 	r, _ := Main.Table.GetSelection()
-	msg := SendNotificationWithChan("Queueing Album...")
+	alb := (*a.savedAlbums)[r]
+	msg := SendNotificationWithChan("Queueing " + alb.Name + "...")
 	go func() {
-		if err := spt.QueueAlbum((*a.savedAlbums)[r].ID); err != nil {
+		if err := spt.QueueAlbum(alb.ID); err != nil {
 			msg <- err.Error()
 		} else {
-			msg <- "Album Queued: " + ((*a.savedAlbums)[r].Name) + "!"
+			msg <- (alb.Name) + " queued succesfully!"
 		}
 	}()
 }

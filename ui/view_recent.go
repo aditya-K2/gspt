@@ -67,13 +67,14 @@ func (r *RecentlyPlayedView) RefreshState() {
 
 func (re *RecentlyPlayedView) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
 	r, _ := Main.Table.GetSelection()
+	trackUri := re.recentlyPlayed[r].Track.URI
 	contextUri := re.recentlyPlayed[r].PlaybackContext.URI
 	if string(contextUri) != "" {
-		if err := spt.PlaySongWithContextURI(&re.recentlyPlayed[r].PlaybackContext.URI, &re.recentlyPlayed[r].Track.URI); err != nil {
+		if err := spt.PlaySongWithContextURI(&contextUri, &trackUri); err != nil {
 			SendNotification(err.Error())
 		}
 	} else {
-		if err := spt.PlaySong(re.recentlyPlayed[r].Track.URI); err != nil {
+		if err := spt.PlaySong(trackUri); err != nil {
 			SendNotification(err.Error())
 		}
 	}
