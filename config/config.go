@@ -174,13 +174,13 @@ func ReadConfig() {
 func GenerateMappings() map[string]map[string]map[Key]string {
 	all := viper.GetStringMap("mappings")
 	keys := DefaultMappings
-	for view, mode := range all {
+	for view, modes := range all {
 		if keys[view] == nil {
 			keys[view] = make(map[string]map[Key]string)
 		}
-		for modeName, mappings := range mode.(map[string]map[string]string) {
-			for key, function := range mappings {
-				keys[view][modeName][NewKey(key)] = function
+		for mode, mappings := range modes.(map[string]interface{}) {
+			for function, key := range mappings.(map[string]interface{}) {
+				keys[view][mode][NewKey(key.(string))] = function
 			}
 		}
 	}
