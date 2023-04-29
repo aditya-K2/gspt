@@ -96,7 +96,7 @@ var (
 			"normal": {
 				{K: tcell.KeyEnter}: "open_entry",
 				{K: tcell.KeyCtrlP}: "play_entry",
-				{R: 'i'}:            "queue_entry",
+				{R: 'q'}:            "queue_entry",
 			},
 		},
 		"album_view": {
