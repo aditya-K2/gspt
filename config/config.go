@@ -172,9 +172,9 @@ func ReadConfig() {
 }
 
 func GenerateMappings() map[string]map[string]map[Key]string {
-	all := viper.GetStringMap("mappings")
+	userMaps := viper.GetStringMap("mappings")
 	keys := DefaultMappings
-	for view, modes := range all {
+	for view, modes := range userMaps {
 		if keys[view] == nil {
 			keys[view] = make(map[string]map[Key]string)
 		}
