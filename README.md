@@ -306,16 +306,16 @@ Which looks perfect. 🎉
 
 ## Roadmap
 
+- [x] Rounded Corners
+- [x] Key Mappings
 - [ ] Multiple Image rendering backends
     - [ ] Sixel
     - [ ] tview Images
     - [ ] Kitty Images
-- [x] Rounded Corners
 - [ ] Customisable UI
 - [ ] Wayland Support for Image rendering
 - [ ] Queue Support
 - [ ] Windows Support
-- [x] Key Mappings
 
 ### Special thanks to
 
