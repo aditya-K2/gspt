@@ -1,8 +1,6 @@
 package ui
 
 import (
-	"fmt"
-
 	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
@@ -108,7 +106,7 @@ func addToPlaylist(tracks []spotify.ID) {
 			if len(tracks) > 1 {
 				s = "s"
 			}
-			SendNotification(fmt.Sprintf("Added %d track%s to %s", len(tracks), s, sp.Name))
+			SendNotification("Added %d track%s to %s", len(tracks), s, sp.Name)
 		}
 	})
 }

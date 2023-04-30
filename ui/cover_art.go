@@ -110,14 +110,14 @@ func (c *CoverArt) RefreshState() {
 				// Open the Image
 				uimg, err := getImg(file)
 				if err != nil {
-					SendNotification(fmt.Sprintf("Error Rendering Image: %s", err.Error()))
+					SendNotification("Error Rendering Image: %s", err.Error())
 					return
 				}
 				im, err := ueberzug.NewImage(uimg,
 					int(ImgX*fw)+config.Config.AdditionalPaddingX,
 					int(ImgY*fh)+config.Config.AdditionalPaddingY)
 				if err != nil {
-					SendNotification(fmt.Sprintf("Error Rendering Image: %s", err.Error()))
+					SendNotification("Error Rendering Image: %s", err.Error())
 					return
 				}
 				c.image = im

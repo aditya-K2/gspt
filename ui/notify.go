@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -153,13 +154,13 @@ func notify(n *notification) {
 	}()
 }
 
-func SendNotification(text string) {
-	SendNotificationWithTimer(text, time.Second)
+func SendNotification(format string, args ...any) {
+	SendNotificationWithTimer(time.Second, fmt.Sprintf(format, args...))
 }
 
-func SendNotificationWithTimer(text string, t time.Duration) {
+func SendNotificationWithTimer(t time.Duration, format string, args ...any) {
 	go func() {
-		c <- newNotificationWithTimer(text, t)
+		c <- newNotificationWithTimer(fmt.Sprintf(format, args...), t)
 	}()
 }
 
@@ -167,10 +168,10 @@ func SendNotificationWithTimer(text string, t time.Duration) {
 // an update message isn't sent over the channel that it returns. The message
 // string received over the channel is then displayed for half a second and the
 // notification is then removed.
-func SendNotificationWithChan(text string) chan string {
+func SendNotificationWithChan(format string, args ...any) chan string {
 	close := make(chan string)
 	go func() {
-		c <- newNotificationWithChan(text, close)
+		c <- newNotificationWithChan(fmt.Sprintf(format, args...), close)
 	}()
 	return close
 }

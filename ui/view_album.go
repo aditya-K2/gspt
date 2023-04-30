@@ -1,8 +1,6 @@
 package ui
 
 import (
-	"fmt"
-
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -35,7 +33,7 @@ func (a *AlbumView) Content() func() [][]Content {
 
 		if a.currentAlbumID != nil {
 			if a.currentFullAlbum == nil {
-				msg := SendNotificationWithChan(fmt.Sprintf("Loading %s....", a.currentAlbumName))
+				msg := SendNotificationWithChan("Loading %s....", a.currentAlbumName)
 				al, ch := spt.GetAlbum(*a.currentAlbumID)
 				go func() {
 					err := <-ch
