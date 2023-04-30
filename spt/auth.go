@@ -79,8 +79,8 @@ func InitClient() error {
 		}()
 		url := auth.AuthURL(state)
 
-		utils.Print("BLUE", "Please log in to Spotify by visiting the following page in your browser: ")
-		utils.Print("GREEN", url)
+		fmt.Println("Please log in to Spotify by visiting the following page in your browser: ")
+		fmt.Println(url)
 
 		// wait for auth to complete
 		payload := <-ch
