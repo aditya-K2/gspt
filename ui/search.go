@@ -22,14 +22,14 @@ func NewSearchBar() *tview.InputField {
 		switch k {
 		case tcell.KeyEscape:
 			{
-				App.SetFocus(Main.Table)
+				App.SetFocus(Main)
 				T.SetText("")
 			}
 		case tcell.KeyEnter:
 			{
 				searchView.SetSearch(T.GetText())
 				SetCurrentView(searchView)
-				App.SetFocus(Main.Table)
+				App.SetFocus(Main)
 				T.SetText("")
 			}
 		}

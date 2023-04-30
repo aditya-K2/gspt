@@ -25,7 +25,7 @@ type interactiveView struct {
 	visual  bool
 	vrange  *_range
 	baseSel int
-	Table   *tview.Table
+	*tview.Table
 }
 
 func NewInteractiveView() *interactiveView {

@@ -47,20 +47,20 @@ func (a *AlbumsView) Content() func() [][]Content {
 }
 
 func (a *AlbumsView) OpenAlbum() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	albumView.SetAlbum((*a.savedAlbums)[r].Name, &(*a.savedAlbums)[r].ID)
 	SetCurrentView(albumView)
 }
 
 func (a *AlbumsView) PlaySelectEntry() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	if err := spt.PlayContext(&(*a.savedAlbums)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}
 }
 
 func (a *AlbumsView) QueueSelectEntry() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	alb := (*a.savedAlbums)[r]
 	msg := SendNotificationWithChan("Queueing " + alb.Name + "...")
 	go func() {

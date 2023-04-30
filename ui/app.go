@@ -115,36 +115,36 @@ func NewApplication() *tview.Application {
 	root = NewRoot()
 	coverArt = newCoverArt()
 	Main = NewInteractiveView()
-	Main.Table.SetBorder(true)
+	Main.SetBorder(true)
 
 	progressBar := NewProgressBar().SetProgressFunc(progressFunc)
 	searchbar := NewSearchBar()
 	navMenu := NewNavMenu([]navItem{
 		{"Albums", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			SetCurrentView(albumsView)
-			App.SetFocus(Main.Table)
+			App.SetFocus(Main)
 			return nil
 		}, nil)},
 		{"Artists", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			SetCurrentView(artistsView)
-			App.SetFocus(Main.Table)
+			App.SetFocus(Main)
 			return nil
 		}, nil)},
 		{"Liked Songs", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			SetCurrentView(likedSongsView)
-			App.SetFocus(Main.Table)
+			App.SetFocus(Main)
 			return nil
 		}, nil)},
 		{"Recently Played", NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			recentlyPlayedView.RefreshState()
 			SetCurrentView(recentlyPlayedView)
-			App.SetFocus(Main.Table)
+			App.SetFocus(Main)
 			return nil
 		}, nil)},
 	})
 	playlistNav := NewPlaylistNav()
 
-	root.AfterContextClose(func() { App.SetFocus(Main.Table) })
+	root.AfterContextClose(func() { App.SetFocus(Main) })
 
 	// Define Actions
 	openCurrentArtist := func() {
@@ -152,7 +152,7 @@ func NewApplication() *tview.Application {
 			if len(state.Item.Artists) != 0 {
 				artistView.SetArtist(&state.Item.Artists[0].ID)
 				SetCurrentView(artistView)
-				App.SetFocus(Main.Table)
+				App.SetFocus(Main)
 			} else {
 				SendNotification("No Artist Found!")
 			}
@@ -162,7 +162,7 @@ func NewApplication() *tview.Application {
 		if state != nil && state.Item != nil {
 			albumView.SetAlbum(state.Item.Album.Name, &state.Item.Album.ID)
 			SetCurrentView(albumView)
-			App.SetFocus(Main.Table)
+			App.SetFocus(Main)
 		}
 	}
 	globalActions := map[string]*Action{
@@ -181,15 +181,15 @@ func NewApplication() *tview.Application {
 			return nil
 		}, nil),
 		"focus_nav": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			App.SetFocus(navMenu.Table)
+			App.SetFocus(navMenu)
 			return nil
 		}, nil),
 		"focus_playlists": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			App.SetFocus(playlistNav.Table)
+			App.SetFocus(playlistNav)
 			return nil
 		}, nil),
 		"focus_main_view": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			App.SetFocus(Main.Table)
+			App.SetFocus(Main)
 			return nil
 		}, nil),
 		"open_current_track_album": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -225,7 +225,7 @@ func NewApplication() *tview.Application {
 						}
 						playlistView.SetPlaylist(&p.SimplePlaylist)
 						SetCurrentView(playlistView)
-						App.SetFocus(Main.Table)
+						App.SetFocus(Main)
 					}
 				default:
 					{
@@ -254,10 +254,10 @@ func NewApplication() *tview.Application {
 		"play_entry": NewAction(playlistNav.PlaySelectEntry,
 			progressBar),
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			r, _ := playlistNav.Table.GetSelection()
+			r, _ := playlistNav.GetSelection()
 			playlistView.SetPlaylist(&(*playlistNav.Playlists)[r])
 			SetCurrentView(playlistView)
-			App.SetFocus(Main.Table)
+			App.SetFocus(Main)
 			return nil
 		}, nil),
 	}))
@@ -372,9 +372,9 @@ func NewApplication() *tview.Application {
 
 	// Map Actions
 	playlistNav.SetMappings(mappings["playlist_nav"])
-	playlistNav.Table.SetInputCapture(playlistNav.ExternalInputCapture())
+	playlistNav.SetInputCapture(playlistNav.ExternalInputCapture())
 	navMenu.SetMappings(mappings["nav_menu"])
-	navMenu.Table.SetInputCapture(navMenu.ExternalInputCapture())
+	navMenu.SetInputCapture(navMenu.ExternalInputCapture())
 	playlistView.SetMappings(mappings["playlist_view"])
 	recentlyPlayedView.SetMappings(mappings["recently_played_view"])
 	topTracksView.SetMappings(mappings["top_tracks_view"])
@@ -387,8 +387,8 @@ func NewApplication() *tview.Application {
 
 	// Set up UI
 	navFlex := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(navMenu.Table, 6, 3, false).
-		AddItem(playlistNav.Table, 0, 6, false)
+		AddItem(navMenu, 6, 3, false).
+		AddItem(playlistNav, 0, 6, false)
 
 	if !config.Config.HideImage {
 		navFlex.AddItem(coverArt, 9, 3, false)
@@ -397,7 +397,7 @@ func NewApplication() *tview.Application {
 	// mid
 	mFlex := tview.NewFlex().
 		AddItem(navFlex, 17, 1, false).
-		AddItem(Main.Table, 0, 4, false)
+		AddItem(Main, 0, 4, false)
 
 	// mid + top
 	tFlex := tview.NewFlex().SetDirection(tview.FlexRow).
@@ -409,7 +409,7 @@ func NewApplication() *tview.Application {
 		AddItem(progressBar, 5, 1, false)
 
 	root.Primitive("Main", mainFlex)
-	App.SetRoot(root.Root, true).SetFocus(Main.Table)
+	App.SetRoot(root.Root, true).SetFocus(Main)
 
 	// Start Routines
 	InitNotifier()

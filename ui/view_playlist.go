@@ -60,7 +60,7 @@ func (p *PlaylistView) Content() func() [][]Content {
 }
 
 func (p *PlaylistView) AddToPlaylist() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	addToPlaylist([]spotify.ID{(*(*p.currentUserFullPlaylist).Tracks)[r].Track.ID})
 }
 
@@ -75,7 +75,7 @@ func (p *PlaylistView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *t
 }
 
 func (p *PlaylistView) PlaySelectEntry() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	if err := spt.PlaySongWithContext(&p.currentPlaylist.URI, r); err != nil {
 		SendNotification(err.Error())
 	}

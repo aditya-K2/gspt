@@ -13,8 +13,8 @@ type navItem struct {
 
 type NavMenu struct {
 	*defView
-	Table *tview.Table
-	m     []navItem
+	*tview.Table
+	m []navItem
 }
 
 func NewNavMenu(m []navItem) *NavMenu {
@@ -46,7 +46,7 @@ func (n *NavMenu) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
 
 type PlaylistNav struct {
 	*defView
-	Table     *tview.Table
+	*tview.Table
 	Playlists *spt.UserPlaylists
 	c         chan bool
 	done      func(error)
@@ -63,20 +63,16 @@ func NewPlaylistNav() *PlaylistNav {
 		}
 	}}
 	T.SetDrawFunc(func(s tcell.Screen, x, y, w, h int) (int, int, int, int) {
-		v.Draw()
+		if v.Playlists == nil {
+			v.RefreshState()
+		}
+		for k, p := range *v.Playlists {
+			v.Table.SetCell(k, 0,
+				GetCell(p.Name, PlaylistNavStyle))
+		}
 		return T.GetInnerRect()
 	})
 	return v
-}
-
-func (v *PlaylistNav) Draw() {
-	if v.Playlists == nil {
-		v.RefreshState()
-	}
-	for k, p := range *v.Playlists {
-		v.Table.SetCell(k, 0,
-			GetCell(p.Name, PlaylistNavStyle))
-	}
 }
 
 func (v *PlaylistNav) PlaySelectEntry(e *tcell.EventKey) *tcell.EventKey {

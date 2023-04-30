@@ -102,7 +102,7 @@ func (a *SearchView) Content() func() [][]Content {
 }
 
 func (a *SearchView) SelectEntry() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	switch a.searchContent[r].Type {
 	case "track":
 		{
@@ -134,7 +134,7 @@ func (a *SearchView) SelectEntry() {
 }
 
 func (a *SearchView) PlaySelectEntry() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	switch a.searchContent[r].Type {
 	case "album", "artist", "playlist":
 		{

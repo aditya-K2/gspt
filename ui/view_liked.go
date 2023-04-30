@@ -46,7 +46,7 @@ func (p *LikedSongsView) Content() func() [][]Content {
 }
 
 func (l *LikedSongsView) AddToPlaylist() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	addToPlaylist([]spotify.ID{(*l.likedSongs)[r].ID})
 }
 
@@ -60,7 +60,7 @@ func (l *LikedSongsView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) 
 }
 
 func (l *LikedSongsView) OpenEntry() {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	if err := spt.PlaySong((*l.likedSongs)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}

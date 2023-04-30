@@ -41,7 +41,7 @@ func (r *RecentlyPlayedView) Content() func() [][]Content {
 }
 
 func (r *RecentlyPlayedView) AddToPlaylist() {
-	_r, _ := Main.Table.GetSelection()
+	_r, _ := Main.GetSelection()
 	addToPlaylist([]spotify.ID{r.recentlyPlayed[_r].Track.ID})
 }
 
@@ -66,7 +66,7 @@ func (r *RecentlyPlayedView) RefreshState() {
 }
 
 func (re *RecentlyPlayedView) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
-	r, _ := Main.Table.GetSelection()
+	r, _ := Main.GetSelection()
 	trackUri := re.recentlyPlayed[r].Track.URI
 	contextUri := re.recentlyPlayed[r].PlaybackContext.URI
 	if string(contextUri) != "" {
