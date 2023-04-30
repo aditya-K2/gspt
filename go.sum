@@ -51,6 +51,8 @@ github.com/aditya-K2/tview v0.0.0-20230417172909-ddde9f885af5 h1:TrvopcMV90y1ztR
 github.com/aditya-K2/tview v0.0.0-20230417172909-ddde9f885af5/go.mod h1:4mQQQ0q5F3GvKXtwNkViuvng/bNxt3Y3c95rGlULlv4=
 github.com/aditya-K2/utils v0.0.0-20230416002345-2f8487d8c111 h1:nRszo2Av5WTgmZa3TX86Ohs3Fi73YOgMEKbmTZ3CJoE=
 github.com/aditya-K2/utils v0.0.0-20230416002345-2f8487d8c111/go.mod h1:M5vD+szIYMn9sAmBGSzwTiwfI63qtzCwguujFy8wybI=
+github.com/aditya-K2/utils v0.0.0-20230430194152-89e230eeaa50 h1:OM3O9MzS2+33I3HmwCGXPM2r1Bsoj1SHSmpGsQgCSy4=
+github.com/aditya-K2/utils v0.0.0-20230430194152-89e230eeaa50/go.mod h1:M5vD+szIYMn9sAmBGSzwTiwfI63qtzCwguujFy8wybI=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
