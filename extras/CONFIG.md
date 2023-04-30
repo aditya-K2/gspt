@@ -1,4 +1,6 @@
 ***This file is auto generated. If you find any bugs please open an issue***
+
+***`ctrl-m` in mappings refers to the `enter` key.***
 ## Default Configuration
 ```yml
 cache_dir: $XDG_CACHE_HOME
@@ -67,87 +69,87 @@ image_width_extra_y: 0
 hide_image: false
 rounded_corners: false
 mappings:
-    artists_view:
-        normal:
-            open_entry: "ctrl-m"
     artist_view:
         normal:
-            open_entry: "ctrl-m"
+            open_entry: "enter"
             play_entry: "ctrl-p"
-    albums_view:
+    global:
         normal:
-            open_entry: "ctrl-m"
+            focus_playlists: "2"
+            focus_search: "?"
+            open_current_track_artist: "O"
+            previous: "p"
+            open_current_context: "ctrl-o"
+            choose_device: "d"
+            focus_nav: "1"
+            focus_main_view: "3"
+            toggle_playback: " "
+            open_current_track_album: "o"
+            next: "n"
+    playlist_nav:
+        normal:
+            open_entry: "enter"
             play_entry: "ctrl-p"
-            queue_entry: "q"
+    playlist_view:
+        normal:
+            open_entry: "enter"
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
+    top_tracks_view:
+        normal:
+            open_entry: "enter"
+            play_entry: "ctrl-p"
+    liked_songs_view:
+        normal:
+            add_to_playlist: "a"
+            open_entry: "enter"
+        visual:
+            add_to_playlist: "a"
     album_view:
         normal:
-            open_entry: "ctrl-m"
+            open_entry: "enter"
             add_to_playlist: "a"
         visual:
             add_to_playlist: "a"
     recently_played_view:
         normal:
-            open_entry: "ctrl-m"
+            open_entry: "enter"
             add_to_playlist: "a"
-        visual:
-            add_to_playlist: "a"
-    search_view:
-        normal:
-            open_entry: "ctrl-m"
-            play_entry: "ctrl-p"
-    top_tracks_view:
-        normal:
-            play_entry: "ctrl-p"
-            open_entry: "ctrl-m"
-    liked_songs_view:
-        normal:
-            add_to_playlist: "a"
-            open_entry: "ctrl-m"
         visual:
             add_to_playlist: "a"
     nav_menu:
         normal:
-            open_entry: "ctrl-m"
-    global:
+            open_entry: "enter"
+    search_view:
         normal:
-            choose_device: "d"
-            toggle_playback: " "
-            next: "n"
-            previous: "p"
-            open_current_context: "ctrl-o"
-            focus_nav: "1"
-            focus_playlists: "2"
-            focus_main_view: "3"
-            focus_search: "?"
-            open_current_track_album: "o"
-            open_current_track_artist: "O"
-    playlist_nav:
-        normal:
-            open_entry: "ctrl-m"
+            open_entry: "enter"
             play_entry: "ctrl-p"
-    playlist_view:
+    artists_view:
         normal:
-            open_entry: "ctrl-m"
-            add_to_playlist: "a"
-        visual:
-            add_to_playlist: "a"
+            open_entry: "enter"
+    albums_view:
+        normal:
+            open_entry: "enter"
+            play_entry: "ctrl-p"
+            queue_entry: "q"
 ```
 ## Keys available to map
 |||
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>=, ', ], #, $, (, ., [, +, <, },  , /, ?, ;, ", ^, &, ), _, >, :, @, *, -, {, \, !, %, ,, \|</kbd> | <kbd>end</kbd> |
-| <kbd>left</kbd> | <kbd>pause</kbd> |
-| <kbd>enter</kbd> | <kbd>right</kbd> |
-| <kbd>center</kbd> | <kbd>pgup</kbd> |
-| <kbd>insert</kbd> | <kbd>up</kbd> |
-| <kbd>print</kbd> | <kbd>pgdn</kbd> |
-| <kbd>home</kbd> | <kbd>cancel</kbd> |
-| <kbd>tab</kbd> | <kbd>esc</kbd> |
-| <kbd>up_left</kbd> | <kbd>up_right</kbd> |
-| <kbd>down_right</kbd> | <kbd>delete</kbd> |
-| <kbd>exit</kbd> | <kbd>help</kbd> |
-| <kbd>backtab</kbd> | <kbd>clear</kbd> |
-| <kbd>escape</kbd> | <kbd>down</kbd> |
-| <kbd>down_left</kbd> | <kbd>backspace</kbd> |
+| <kbd>*, -, /, ?, ], &, =, _, \|$, %, (, ., :, ", @, #, <, {,  , !, }, ,, >, [, ), +, \, ;, ', ^</kbd> | <kbd>end</kbd> |
+| <kbd>cancel</kbd> | <kbd>esc</kbd> |
+| <kbd>down</kbd> | <kbd>pgdn</kbd> |
+| <kbd>clear</kbd> | <kbd>pause</kbd> |
+| <kbd>backspace2</kbd> | <kbd>tab</kbd> |
+| <kbd>up_right</kbd> | <kbd>down_right</kbd> |
+| <kbd>insert</kbd> | <kbd>escape</kbd> |
+| <kbd>home</kbd> | <kbd>help</kbd> |
+| <kbd>backspace</kbd> | <kbd>pgup</kbd> |
+| <kbd>up</kbd> | <kbd>print</kbd> |
+| <kbd>right</kbd> | <kbd>center</kbd> |
+| <kbd>left</kbd> | <kbd>down_left</kbd> |
+| <kbd>delete</kbd> | <kbd>exit</kbd> |
+| <kbd>backtab</kbd> | <kbd>enter</kbd> |
