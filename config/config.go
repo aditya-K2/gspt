@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/aditya-K2/utils"
 	"github.com/fsnotify/fsnotify"
@@ -12,7 +13,7 @@ import (
 var (
 	configDir, configErr   = os.UserConfigDir()
 	userCacheDir, cacheErr = os.UserCacheDir()
-	ConfigPath             = configDir + "/gspt"
+	UserConfigPath         = filepath.Join(configDir, "gspt")
 	Config                 = NewConfigS()
 	OnConfigChange         func()
 	DefaultMappings        = map[string]map[string]map[Key]string{
@@ -146,7 +147,7 @@ func ReadConfig() {
 	}
 
 	viper.SetConfigName("config")
-	viper.AddConfigPath(ConfigPath)
+	viper.AddConfigPath(UserConfigPath)
 
 	if err := viper.ReadInConfig(); err != nil {
 		utils.Print("RED", "Could Not Read Config file.\n")

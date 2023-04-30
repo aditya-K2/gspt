@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image"
 	"os"
+	"path/filepath"
 
 	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/tview"
@@ -52,7 +53,7 @@ func getImg(uri string) (image.Image, error) {
 }
 
 func fileName(a spotify.SimpleAlbum) string {
-	return fmt.Sprintf(config.Config.CacheDir+"/%s.jpg", a.ID)
+	return fmt.Sprintf(filepath.Join(config.Config.CacheDir, "%s.jpg"), a.ID)
 }
 
 func getFontWidth() (int, int, error) {
