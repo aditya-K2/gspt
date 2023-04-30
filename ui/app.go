@@ -35,6 +35,7 @@ var (
 	coverArt *CoverArt
 	Main     *interactiveView
 	root     *Root
+	Flex     *tview.Flex
 )
 
 func setStyles() {
@@ -404,11 +405,11 @@ func NewApplication() *tview.Application {
 		AddItem(searchbar, 3, 1, false).
 		AddItem(mFlex, 0, 1, false)
 
-	mainFlex := tview.NewFlex().SetDirection(tview.FlexRow).
+	Flex = tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(tFlex, 0, 8, false).
 		AddItem(progressBar, 5, 1, false)
 
-	root.Primitive("Main", mainFlex)
+	root.Primitive("Main", Flex)
 	App.SetRoot(root.Root, true).SetFocus(Main)
 
 	// Start Routines

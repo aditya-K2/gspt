@@ -5,8 +5,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aditya-K2/utils"
-
 	"github.com/aditya-K2/tview"
 	"github.com/gdamore/tcell/v2"
 )
@@ -95,11 +93,10 @@ func newNotificationWithChan(s string, c chan string) *notification {
 
 // Draw Function for the Notification Primitive
 func (self *notification) Draw(screen tcell.Screen) {
-	termDetails := utils.GetWidth()
 	pos := (self.position*3 + self.position + 1)
 
 	var (
-		COL          int = int(termDetails.Col)
+		_, _, COL, _ int = Flex.GetRect()
 		TEXTLENGTH   int = len(self.text)
 		HEIGHT       int = 3
 		TextPosition int = 1
