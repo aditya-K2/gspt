@@ -79,7 +79,9 @@ func main() {
 	f.Truncate(0)
 
 	// Write
-	write("***This file is auto generated. If you find any bugs please open an issue***\n")
+	write("***This file is auto generated. If you find any bugs please open an issue***\n\n")
+
+	write("***`ctrl-m` in mappings refers to the `enter` key.***\n")
 
 	write("## Default Configuration\n```yml\n" + string(c) + "mappings:\n" + s + "```\n")
 
