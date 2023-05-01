@@ -3,7 +3,7 @@ module github.com/aditya-K2/gspt
 go 1.19
 
 require (
-	github.com/aditya-K2/tview v0.0.0-20230417172909-ddde9f885af5
+	github.com/aditya-K2/tview v0.0.0-20230501091922-5da3458d3dff
 	github.com/aditya-K2/utils v0.0.0-20230430194152-89e230eeaa50
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gdamore/tcell/v2 v2.6.0

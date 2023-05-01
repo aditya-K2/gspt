@@ -49,6 +49,8 @@ github.com/BurntSushi/xgbutil v0.0.0-20190907113008-ad855c713046 h1:O/r2Sj+8QcMF
 github.com/BurntSushi/xgbutil v0.0.0-20190907113008-ad855c713046/go.mod h1:uw9h2sd4WWHOPdJ13MQpwK5qYWKYDumDqxWWIknEQ+k=
 github.com/aditya-K2/tview v0.0.0-20230417172909-ddde9f885af5 h1:TrvopcMV90y1ztRNsmGsglbHeBQB/w2+FWG0r1A8xR4=
 github.com/aditya-K2/tview v0.0.0-20230417172909-ddde9f885af5/go.mod h1:4mQQQ0q5F3GvKXtwNkViuvng/bNxt3Y3c95rGlULlv4=
+github.com/aditya-K2/tview v0.0.0-20230501091922-5da3458d3dff h1:ppQVp6+4XxXb0ypMIt5cItlc3+F1eouzVjYif/Err20=
+github.com/aditya-K2/tview v0.0.0-20230501091922-5da3458d3dff/go.mod h1:4mQQQ0q5F3GvKXtwNkViuvng/bNxt3Y3c95rGlULlv4=
 github.com/aditya-K2/utils v0.0.0-20230416002345-2f8487d8c111 h1:nRszo2Av5WTgmZa3TX86Ohs3Fi73YOgMEKbmTZ3CJoE=
 github.com/aditya-K2/utils v0.0.0-20230416002345-2f8487d8c111/go.mod h1:M5vD+szIYMn9sAmBGSzwTiwfI63qtzCwguujFy8wybI=
 github.com/aditya-K2/utils v0.0.0-20230430194152-89e230eeaa50 h1:OM3O9MzS2+33I3HmwCGXPM2r1Bsoj1SHSmpGsQgCSy4=
