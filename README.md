@@ -181,6 +181,24 @@ mappings:
         visual:
             add_to_playlist: "a"
 
+# "global" mappings are special mappings that are not view specific
+# ( "toggle_playback", "next", "previous", etc.)
+# These mappings can be changed for different views.
+# for e.g
+
+mappings:
+    global:
+        normal:
+            previous: "N"
+    recently_played_view:
+        normal:
+            previous: "P"
+
+# As you can assume, here "N" will be globally mapped to the "previous" function,
+# and then "P" will too be mapped to "previous" in the recently_played_view (keep
+# in mind that "N" will still be mapped to the "previous" function i.e "N" and
+# "P" will both be mapped to the same function in recently_played_view)
+
 # Visual Mode is similar to vim. Only some views support it.
 # (viz. playlist_view, recently_played_view, liked_songs_view, album_view)
 

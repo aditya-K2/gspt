@@ -55,6 +55,9 @@ func main() {
 
 	s := ""
 	for view, modes := range config.DefaultMappings {
+		if len(modes) == 0 {
+			continue
+		}
 		s += fmt.Sprintf("    %s:\n", view)
 		for mode, mappings := range modes {
 			s += fmt.Sprintf("        %s:\n", mode)
