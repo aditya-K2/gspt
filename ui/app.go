@@ -389,7 +389,7 @@ func NewApplication() *tview.Application {
 		AddItem(progressBar, 5, 1, false)
 
 	root.Primitive("Main", Flex)
-	App.SetRoot(root.Root, true).SetFocus(Main)
+	App.SetRoot(root, true).SetFocus(Main)
 
 	// Start Routines
 	InitNotifier()

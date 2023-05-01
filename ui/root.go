@@ -4,26 +4,21 @@ import (
 	"time"
 
 	"github.com/aditya-K2/gspt/config"
-	"github.com/gdamore/tcell/v2"
 	"github.com/aditya-K2/tview"
+	"github.com/gdamore/tcell/v2"
 )
 
 type Root struct {
-	Root  *tview.Pages
+	*tview.Pages
 	after func()
 }
 
 func NewRoot() *Root {
-	m := &Root{}
-
-	Root := tview.NewPages()
-
-	m.Root = Root
-	return m
+	return &Root{tview.NewPages(), nil}
 }
 
 func (m *Root) Primitive(name string, t tview.Primitive) {
-	m.Root.AddPage(name, t, true, true)
+	m.AddPage(name, t, true, true)
 }
 
 func (m *Root) AfterContextClose(f func()) {
@@ -42,16 +37,16 @@ func (m *Root) AddCenteredWidget(t CenteredWidget) {
 	closec := make(chan bool)
 	currentTime := time.Now().String()
 	sHandler := t.SelectionHandler()
-	_, _, w, h := m.Root.GetRect()
+	_, _, w, h := m.GetRect()
 
 	closeCtx := func() {
-		m.Root.RemovePage(currentTime)
+		m.RemovePage(currentTime)
 		if m.after != nil {
 			m.after()
 		}
 	}
 	drawCtx := func() {
-		m.Root.AddPage(currentTime, t.Primitive(), false, true)
+		m.AddPage(currentTime, t.Primitive(), false, true)
 		p.SetRect(t.Size(w, h))
 	}
 	redraw := func() {
@@ -87,7 +82,7 @@ func (m *Root) AddCenteredWidget(t CenteredWidget) {
 				select {
 				case <-tck.C:
 					{
-						_, _, _w, _h := m.Root.GetRect()
+						_, _, _w, _h := m.GetRect()
 						if _w != w || _h != h {
 							w = _w
 							h = _h

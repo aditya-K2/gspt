@@ -136,7 +136,7 @@ func notify(n *notification) {
 			npos = posArr.GetNextPosition()
 		}
 		n.position = npos
-		root.Root.AddPage(currentTime, n, false, true)
+		root.AddPage(currentTime, n, false, true)
 		App.Draw()
 		App.SetFocus(Main)
 		if n.msg != nil {
@@ -144,7 +144,7 @@ func notify(n *notification) {
 			App.Draw()
 		}
 		time.Sleep(n.timer)
-		root.Root.RemovePage(currentTime)
+		root.RemovePage(currentTime)
 		posArr.Free(npos)
 		App.SetFocus(Main)
 		App.Draw()
