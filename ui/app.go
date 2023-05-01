@@ -157,7 +157,7 @@ func NewApplication() *tview.Application {
 			return nil
 		}, progressBar),
 		"choose_device": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			OpenDeviceMenu()
+			openDeviceMenu()
 			return nil
 		}, nil),
 		"focus_nav": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
