@@ -21,6 +21,7 @@ type View interface {
 	ExternalInputCapture() func(e *tcell.EventKey) *tcell.EventKey
 	VisualCapture() func(start, end int, e *tcell.EventKey) *tcell.EventKey
 	Name() string
+	OpenEntry()
 }
 
 func SetCurrentView(v View) {

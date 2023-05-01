@@ -13,21 +13,14 @@ var (
 	DefaultMappings = map[string]map[string]map[Key]string{
 		"recently_played_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
-				{R: 'a'}:            "add_to_playlist",
+				{R: 'a'}: "add_to_playlist",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
 			},
 		},
-		"nav_menu": {
-			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
-			},
-		},
 		"search_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
 				{K: tcell.KeyCtrlP}: "play_entry",
 			},
 		},
@@ -44,18 +37,17 @@ var (
 				{R: 'n'}:            "next",
 				{R: 'p'}:            "previous",
 				{K: tcell.KeyCtrlO}: "open_current_context",
+				{K: tcell.KeyEnter}: "open_entry",
 			},
 		},
 		"playlist_nav": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
 				{K: tcell.KeyCtrlP}: "play_entry",
 			},
 		},
 		"playlist_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
-				{R: 'a'}:            "add_to_playlist",
+				{R: 'a'}: "add_to_playlist",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
@@ -63,14 +55,12 @@ var (
 		},
 		"top_tracks_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
 				{K: tcell.KeyCtrlP}: "play_entry",
 			},
 		},
 		"liked_songs_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
-				{R: 'a'}:            "add_to_playlist",
+				{R: 'a'}: "add_to_playlist",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
@@ -78,32 +68,29 @@ var (
 		},
 		"artists_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
 				{K: tcell.KeyCtrlP}: "play_entry",
 			},
 		},
 		"artist_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
 				{K: tcell.KeyCtrlP}: "play_entry",
 			},
 		},
 		"albums_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
 				{K: tcell.KeyCtrlP}: "play_entry",
 				{R: 'q'}:            "queue_entry",
 			},
 		},
 		"album_view": {
 			"normal": {
-				{K: tcell.KeyEnter}: "open_entry",
-				{R: 'a'}:            "add_to_playlist",
+				{R: 'a'}: "add_to_playlist",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
 			},
 		},
+		"nav_menu": {},
 	}
 )
 

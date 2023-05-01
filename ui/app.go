@@ -127,6 +127,10 @@ func NewApplication() *tview.Application {
 
 	// Define Actions
 	globalActions := map[string]*Action{
+		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			GetCurrentView().OpenEntry()
+			return nil
+		}, progressBar),
 		"focus_search": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			App.SetFocus(searchbar)
 			return nil
@@ -227,81 +231,48 @@ func NewApplication() *tview.Application {
 			nil),
 	}))
 	playlistView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
-			playlistView.OpenEntry()
-			return nil
-		}, progressBar),
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			playlistView.AddToPlaylist()
 			return nil
 		}, nil),
 	}))
 	recentlyPlayedView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
-			recentlyPlayedView.OpenEntry()
-			return nil
-		},
-			progressBar),
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			recentlyPlayedView.AddToPlaylist()
 			return nil
 		}, nil),
 	}))
 	topTracksView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			topTracksView.OpenEntry()
-			return nil
-		}, progressBar),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			topTracksView.PlaySelectedEntry()
 			return nil
 		}, progressBar),
 	}))
 	likedSongsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			likedSongsView.OpenEntry()
-			return nil
-		}, progressBar),
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			likedSongsView.AddToPlaylist()
 			return nil
 		}, nil),
 	}))
 	searchView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			searchView.OpenEntry()
-			return nil
-		}, nil),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			searchView.PlayEntry()
 			return nil
 		}, progressBar),
 	}))
 	artistsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			artistsView.OpenEntry()
-			return nil
-		}, nil),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistsView.PlayEntry()
 			return nil
 		}, nil),
 	}))
 	artistView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			artistView.OpenEntry()
-			return nil
-		}, progressBar),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			artistView.PlayEntry()
 			return nil
 		}, progressBar),
 	}))
 	albumsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			albumsView.OpenEntry()
-			return nil
-		}, nil),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumsView.PlayEntry()
 			return nil
@@ -312,10 +283,6 @@ func NewApplication() *tview.Application {
 		}, progressBar),
 	}))
 	albumView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			albumView.OpenEntry()
-			return nil
-		}, progressBar),
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumView.AddToPlaylist()
 			return nil
