@@ -79,6 +79,7 @@ var (
 		"artists_view": {
 			"normal": {
 				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
 			},
 		},
 		"artist_view": {

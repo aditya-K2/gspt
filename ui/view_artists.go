@@ -45,10 +45,17 @@ func (a *ArtistsView) Content() func() [][]Content {
 	}
 }
 
-func (a *ArtistsView) OpenArtist() {
+func (a *ArtistsView) OpenEntry() {
 	r, _ := Main.GetSelection()
 	artistView.SetArtist(&(*a.followedArtists)[r].ID)
 	SetCurrentView(artistView)
+}
+
+func (a *ArtistsView) PlayEntry() {
+	r, _ := Main.GetSelection()
+	if err := spt.PlayContext(&(*a.followedArtists)[r].URI); err != nil {
+		SendNotification(err.Error())
+	}
 }
 
 func (a *ArtistsView) Name() string { return "ArtistsView" }

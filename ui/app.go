@@ -278,7 +278,11 @@ func NewApplication() *tview.Application {
 	}))
 	artistsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			artistsView.OpenArtist()
+			artistsView.OpenEntry()
+			return nil
+		}, nil),
+		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			artistsView.PlayEntry()
 			return nil
 		}, nil),
 	}))
