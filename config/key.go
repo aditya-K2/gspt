@@ -10,6 +10,103 @@ type Key struct {
 }
 
 var (
+	DefaultMappings = map[string]map[string]map[Key]string{
+		"recently_played_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
+		},
+		"nav_menu": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+			},
+		},
+		"search_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
+		},
+		"global": {
+			"normal": {
+				{R: 'd'}:            "choose_device",
+				{R: '1'}:            "focus_nav",
+				{R: '2'}:            "focus_playlists",
+				{R: '3'}:            "focus_main_view",
+				{R: '?'}:            "focus_search",
+				{R: ' '}:            "toggle_playback",
+				{R: 'o'}:            "open_current_track_album",
+				{R: 'O'}:            "open_current_track_artist",
+				{R: 'n'}:            "next",
+				{R: 'p'}:            "previous",
+				{K: tcell.KeyCtrlO}: "open_current_context",
+			},
+		},
+		"playlist_nav": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
+		},
+		"playlist_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
+		},
+		"top_tracks_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
+		},
+		"liked_songs_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
+		},
+		"artists_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+			},
+		},
+		"artist_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+			},
+		},
+		"albums_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{K: tcell.KeyCtrlP}: "play_entry",
+				{R: 'q'}:            "queue_entry",
+			},
+		},
+		"album_view": {
+			"normal": {
+				{K: tcell.KeyEnter}: "open_entry",
+				{R: 'a'}:            "add_to_playlist",
+			},
+			"visual": {
+				{R: 'a'}: "add_to_playlist",
+			},
+		},
+	}
+)
+
+var (
 	M = map[string]tcell.Key{
 		"backspace":       tcell.KeyBackspace,
 		"tab":             tcell.KeyTab,
