@@ -1,18 +1,15 @@
 package ui
 
 import (
-	"errors"
 	"fmt"
 	"image"
 	"os"
-	"path/filepath"
 
 	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/tview"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/nfnt/resize"
-	"github.com/zmb3/spotify/v2"
 	"gitlab.com/diamondburned/ueberzug-go"
 )
 
@@ -50,24 +47,6 @@ func getImg(uri string) (image.Image, error) {
 		resize.Bilinear,
 	)
 	return img, nil
-}
-
-func fileName(a spotify.SimpleAlbum) string {
-	return fmt.Sprintf(filepath.Join(config.Config.CacheDir, "%s.jpg"), a.ID)
-}
-
-func getFontWidth() (int, int, error) {
-	w, h, err := ueberzug.GetParentSize()
-	if err != nil {
-		return 0, 0, err
-	}
-	_, _, rw, rh := root.Root.GetRect()
-	if rw == 0 || rh == 0 {
-		return 0, 0, errors.New("Unable to get row width and height")
-	}
-	fw := w / rw
-	fh := h / rh
-	return fw, fh, nil
 }
 
 func (c *CoverArt) RefreshState() {

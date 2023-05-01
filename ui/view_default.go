@@ -2,9 +2,7 @@ package ui
 
 import (
 	"github.com/aditya-K2/gspt/config"
-	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
-	"github.com/zmb3/spotify/v2"
 )
 
 type defView struct {
@@ -73,40 +71,3 @@ type DefaultView struct {
 }
 
 func (d *DefaultView) DisableVisualMode() bool { return false }
-
-func openPlaylistMenu(handler func(playlistId spotify.SimplePlaylist)) {
-	c := NewMenu()
-	cc := []string{}
-	// TODO: Better Error Handling
-	plist, ch := spt.CurrentUserPlaylists()
-	err := <-ch
-	if err != nil {
-		SendNotification(err.Error())
-		return
-	}
-	for _, v := range *(plist) {
-		cc = append(cc, v.Name)
-	}
-	c.Content(cc)
-	c.Title("Add to Playlist")
-	c.SetSelectionHandler(func(sel int) {
-		handler((*plist)[sel])
-	})
-	root.AddCenteredWidget(c)
-}
-
-func addToPlaylist(tracks []spotify.ID) {
-	openPlaylistMenu(func(sp spotify.SimplePlaylist) {
-		aerr := spt.AddTracksToPlaylist(sp.ID, tracks...)
-		if aerr != nil {
-			SendNotification(aerr.Error())
-			return
-		} else {
-			s := ""
-			if len(tracks) > 1 {
-				s = "s"
-			}
-			SendNotification("Added %d track%s to %s", len(tracks), s, sp.Name)
-		}
-	})
-}

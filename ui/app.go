@@ -38,34 +38,13 @@ var (
 	Flex     *tview.Flex
 )
 
-func setStyles() {
-	TrackStyle = config.Config.Colors.Track.Style()
-	AlbumStyle = config.Config.Colors.Album.Style()
-	ArtistStyle = config.Config.Colors.Artist.Style()
-	TimeStyle = config.Config.Colors.Timestamp.Style()
-	GenreStyle = config.Config.Colors.Genre.Style()
-	PlaylistNavStyle = config.Config.Colors.PlaylistNav.Style()
-	NavStyle = config.Config.Colors.Nav.Style()
-	ContextMenuStyle = config.Config.Colors.ContextMenu.Style()
-	NotSelectableStyle = config.Config.Colors.Null.Style()
+func onConfigChange() {
+	setStyles()
+
+	setBorderRunes()
+
 	if coverArt != nil {
 		coverArt.RefreshState()
-	}
-	if config.Config.RoundedCorners {
-		tview.Borders.TopLeft = '╭'
-		tview.Borders.TopRight = '╮'
-		tview.Borders.BottomRight = '╯'
-		tview.Borders.BottomLeft = '╰'
-		tview.Borders.Vertical = '│'
-		tview.Borders.Horizontal = '─'
-		tview.Borders.TopLeftFocus = '╭'
-		tview.Borders.TopRightFocus = '╮'
-		tview.Borders.BottomRightFocus = '╯'
-		tview.Borders.BottomLeftFocus = '╰'
-		tview.Borders.VerticalFocus = '│'
-		tview.Borders.HorizontalFocus = '─'
-		tview.Styles.BorderColorFocus = config.Config.Colors.BorderFocus.Foreground()
-		tview.Styles.BorderColor = config.Config.Colors.Border.Foreground()
 	}
 
 }
@@ -109,8 +88,8 @@ func rectWatcher() {
 }
 
 func NewApplication() *tview.Application {
-	setStyles()
-	config.OnConfigChange = setStyles
+	onConfigChange()
+	config.OnConfigChange = onConfigChange
 
 	App = tview.NewApplication()
 	root = NewRoot()
