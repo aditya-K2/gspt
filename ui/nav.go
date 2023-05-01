@@ -36,7 +36,7 @@ func NewNavMenu(m []navItem) *NavMenu {
 	return n
 }
 
-func (n *NavMenu) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
+func (n *NavMenu) OpenEntry(e *tcell.EventKey) *tcell.EventKey {
 	r, _ := n.Table.GetSelection()
 	if r < len(n.m) {
 		return (*n.m[r].action).Func()(e)
@@ -75,7 +75,7 @@ func NewPlaylistNav() *PlaylistNav {
 	return v
 }
 
-func (v *PlaylistNav) PlaySelectEntry(e *tcell.EventKey) *tcell.EventKey {
+func (v *PlaylistNav) PlayEntry(e *tcell.EventKey) *tcell.EventKey {
 	r, _ := v.Table.GetSelection()
 	if err := spt.PlayContext(&(*v.Playlists)[r].URI); err != nil {
 		SendNotification(err.Error())

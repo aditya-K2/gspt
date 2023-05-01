@@ -9,7 +9,7 @@ import (
 
 var (
 	RecentlyPlayedViewActions = map[string]*Action{
-		"selectEntry": NewAction(recentlyPlayedView.SelectEntry, nil),
+		"selectEntry": NewAction(recentlyPlayedView.OpenEntry, nil),
 	}
 )
 
@@ -65,7 +65,7 @@ func (r *RecentlyPlayedView) RefreshState() {
 	r.recentlyPlayed = _r
 }
 
-func (re *RecentlyPlayedView) SelectEntry(e *tcell.EventKey) *tcell.EventKey {
+func (re *RecentlyPlayedView) OpenEntry(e *tcell.EventKey) *tcell.EventKey {
 	r, _ := Main.GetSelection()
 	trackUri := re.recentlyPlayed[r].Track.URI
 	contextUri := re.recentlyPlayed[r].PlaybackContext.URI

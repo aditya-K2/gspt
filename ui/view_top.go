@@ -81,7 +81,7 @@ func (a *TopTracksView) PlaySelectedEntry() {
 
 }
 
-func (a *TopTracksView) OpenSelectEntry() {
+func (a *TopTracksView) OpenEntry() {
 	r, _ := Main.GetSelection()
 	if r > 0 {
 		if r < (len(a.topArtists) + 1) {

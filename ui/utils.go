@@ -88,3 +88,23 @@ func getFontWidth() (int, int, error) {
 	fh := h / rh
 	return fw, fh, nil
 }
+
+func openCurrentArtist() {
+	if state != nil && state.Item != nil {
+		if len(state.Item.Artists) != 0 {
+			artistView.SetArtist(&state.Item.Artists[0].ID)
+			SetCurrentView(artistView)
+			App.SetFocus(Main)
+		} else {
+			SendNotification("No Artist Found!")
+		}
+	}
+}
+
+func openCurrentAlbum() {
+	if state != nil && state.Item != nil {
+		albumView.SetAlbum(state.Item.Album.Name, &state.Item.Album.ID)
+		SetCurrentView(albumView)
+		App.SetFocus(Main)
+	}
+}
