@@ -122,7 +122,7 @@ func (a *SearchView) OpenEntry() {
 		}
 	case "playlist":
 		{
-			if p, err := spt.GetFullPlaylist(&a.searchContent[r].ID); err != nil {
+			if p, err := spt.GetFullPlaylist(a.searchContent[r].ID); err != nil {
 				SendNotification("Error Opening the playlists: " + err.Error())
 				return
 			} else {
@@ -138,7 +138,7 @@ func (a *SearchView) PlayEntry() {
 	switch a.searchContent[r].Type {
 	case "album", "artist", "playlist":
 		{
-			if err := spt.PlayContext(&a.searchContent[r].URI); err != nil {
+			if err := spt.PlayContext(a.searchContent[r].URI); err != nil {
 				SendNotification(err.Error())
 			}
 		}

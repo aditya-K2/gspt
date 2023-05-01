@@ -46,7 +46,7 @@ func (a *AlbumsView) Content() func() [][]Content {
 	}
 }
 
-func (a *AlbumsView) OpenAlbum() {
+func (a *AlbumsView) OpenEntry() {
 	r, _ := Main.GetSelection()
 	albumView.SetAlbum((*a.savedAlbums)[r].Name, &(*a.savedAlbums)[r].ID)
 	SetCurrentView(albumView)
@@ -54,7 +54,7 @@ func (a *AlbumsView) OpenAlbum() {
 
 func (a *AlbumsView) PlayEntry() {
 	r, _ := Main.GetSelection()
-	if err := spt.PlayContext(&(*a.savedAlbums)[r].URI); err != nil {
+	if err := spt.PlayContext((*a.savedAlbums)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}
 }

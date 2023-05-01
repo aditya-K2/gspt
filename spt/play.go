@@ -17,23 +17,23 @@ func PlaySong(uri spotify.URI) error {
 	})
 }
 
-func PlaySongWithContext(context *spotify.URI, position int) error {
+func PlaySongWithContext(context spotify.URI, position int) error {
 	return play(&spotify.PlayOptions{
-		PlaybackContext: context,
+		PlaybackContext: &context,
 		PlaybackOffset:  &spotify.PlaybackOffset{Position: &position},
 	})
 }
 
-func PlaySongWithContextURI(context, uri *spotify.URI) error {
+func PlaySongWithContextURI(context, uri spotify.URI) error {
 	return play(&spotify.PlayOptions{
-		PlaybackContext: context,
-		PlaybackOffset:  &spotify.PlaybackOffset{URI: *uri},
+		PlaybackContext: &context,
+		PlaybackOffset:  &spotify.PlaybackOffset{URI: uri},
 	})
 }
 
-func PlayContext(context *spotify.URI) error {
+func PlayContext(context spotify.URI) error {
 	return play(&spotify.PlayOptions{
-		PlaybackContext: context,
+		PlaybackContext: &context,
 	})
 }
 

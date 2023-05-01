@@ -41,13 +41,11 @@ var (
 
 func onConfigChange() {
 	setStyles()
-
 	setBorderRunes()
-
-	if coverArt != nil {
+	if coverArt != nil && !cfg.HideImage {
+		SendNotification("HERE")
 		coverArt.RefreshState()
 	}
-
 }
 
 func rectWatcher() {
@@ -181,7 +179,7 @@ func NewApplication() *tview.Application {
 							SendNotification("Error switching contexts: " + err.Error())
 							return e
 						}
-						p, err := spt.GetFullPlaylist(&id)
+						p, err := spt.GetFullPlaylist(id)
 						if err != nil {
 							SendNotification("Error switching contexts: " + err.Error())
 							return e
@@ -239,7 +237,10 @@ func NewApplication() *tview.Application {
 		}, nil),
 	}))
 	recentlyPlayedView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
-		"open_entry": NewAction(recentlyPlayedView.OpenEntry,
+		"open_entry": NewAction(func(*tcell.EventKey) *tcell.EventKey {
+			recentlyPlayedView.OpenEntry()
+			return nil
+		},
 			progressBar),
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			recentlyPlayedView.AddToPlaylist()
@@ -298,7 +299,7 @@ func NewApplication() *tview.Application {
 	}))
 	albumsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			albumsView.OpenAlbum()
+			albumsView.OpenEntry()
 			return nil
 		}, nil),
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
@@ -312,7 +313,7 @@ func NewApplication() *tview.Application {
 	}))
 	albumView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			albumView.PlayEntry()
+			albumView.OpenEntry()
 			return nil
 		}, progressBar),
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {

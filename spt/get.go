@@ -305,6 +305,6 @@ func TransferPlayback(deviceId spotify.ID) error {
 	return Client.TransferPlayback(ctx(), deviceId, true)
 }
 
-func GetFullPlaylist(id *spotify.ID) (*spotify.FullPlaylist, error) {
-	return Client.GetPlaylist(ctx(), *id)
+func GetFullPlaylist(id spotify.ID) (*spotify.FullPlaylist, error) {
+	return Client.GetPlaylist(ctx(), id)
 }

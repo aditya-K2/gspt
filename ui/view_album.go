@@ -74,9 +74,9 @@ func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcel
 	return nil
 }
 
-func (a *AlbumView) PlayEntry() {
+func (a *AlbumView) OpenEntry() {
 	r, _ := Main.GetSelection()
-	if err := spt.PlaySongWithContext(&a.currentFullAlbum.URI, r); err != nil {
+	if err := spt.PlaySongWithContext(a.currentFullAlbum.URI, r); err != nil {
 		SendNotification(err.Error())
 	}
 }

@@ -12,7 +12,7 @@ func AddTracksToPlaylist(playlistId spotify.ID, t ...spotify.ID) error {
 	return err
 }
 
-func addToQueue(ids ...spotify.SimpleTrack) error {
+func QueueTracks(ids ...spotify.SimpleTrack) error {
 	count := 0
 	_ctx := ctx()
 	for _, v := range ids {
@@ -32,7 +32,7 @@ func QueueAlbum(id spotify.ID) error {
 	if err != nil {
 		return err
 	}
-	if err := addToQueue(*album.Tracks...); err != nil {
+	if err := QueueTracks(*album.Tracks...); err != nil {
 		return err
 	}
 	return nil

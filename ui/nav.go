@@ -77,7 +77,7 @@ func NewPlaylistNav() *PlaylistNav {
 
 func (v *PlaylistNav) PlayEntry(e *tcell.EventKey) *tcell.EventKey {
 	r, _ := v.Table.GetSelection()
-	if err := spt.PlayContext(&(*v.Playlists)[r].URI); err != nil {
+	if err := spt.PlayContext((*v.Playlists)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}
 	return nil

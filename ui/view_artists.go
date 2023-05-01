@@ -53,7 +53,7 @@ func (a *ArtistsView) OpenEntry() {
 
 func (a *ArtistsView) PlayEntry() {
 	r, _ := Main.GetSelection()
-	if err := spt.PlayContext(&(*a.followedArtists)[r].URI); err != nil {
+	if err := spt.PlayContext((*a.followedArtists)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}
 }

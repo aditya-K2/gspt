@@ -7,12 +7,6 @@ import (
 	"github.com/zmb3/spotify/v2"
 )
 
-var (
-	RecentlyPlayedViewActions = map[string]*Action{
-		"selectEntry": NewAction(recentlyPlayedView.OpenEntry, nil),
-	}
-)
-
 type RecentlyPlayedView struct {
 	*DefaultView
 	recentlyPlayed []spotify.RecentlyPlayedItem
@@ -65,12 +59,12 @@ func (r *RecentlyPlayedView) RefreshState() {
 	r.recentlyPlayed = _r
 }
 
-func (re *RecentlyPlayedView) OpenEntry(e *tcell.EventKey) *tcell.EventKey {
+func (re *RecentlyPlayedView) OpenEntry() {
 	r, _ := Main.GetSelection()
 	trackUri := re.recentlyPlayed[r].Track.URI
 	contextUri := re.recentlyPlayed[r].PlaybackContext.URI
 	if string(contextUri) != "" {
-		if err := spt.PlaySongWithContextURI(&contextUri, &trackUri); err != nil {
+		if err := spt.PlaySongWithContextURI(contextUri, trackUri); err != nil {
 			SendNotification(err.Error())
 		}
 	} else {
@@ -78,5 +72,4 @@ func (re *RecentlyPlayedView) OpenEntry(e *tcell.EventKey) *tcell.EventKey {
 			SendNotification(err.Error())
 		}
 	}
-	return nil
 }

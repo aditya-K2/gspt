@@ -73,7 +73,7 @@ func (a *TopTracksView) PlaySelectedEntry() {
 	r, _ := Main.GetSelection()
 	if r > 0 {
 		if r < (len(a.topArtists) + 1) {
-			if err := spt.PlayContext(&a.topArtists[r-1].URI); err != nil {
+			if err := spt.PlayContext(a.topArtists[r-1].URI); err != nil {
 				SendNotification(err.Error())
 			}
 		}

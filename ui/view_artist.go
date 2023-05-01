@@ -75,7 +75,7 @@ func (a *ArtistView) PlayEntry() {
 	r, _ := Main.GetSelection()
 	if r > 0 {
 		if r < (len(a.albums) + 1) {
-			if err := spt.PlayContext(&a.albums[r-1].URI); err != nil {
+			if err := spt.PlayContext(a.albums[r-1].URI); err != nil {
 				SendNotification(err.Error())
 			}
 		}
