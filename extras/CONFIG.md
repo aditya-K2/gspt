@@ -69,88 +69,76 @@ image_width_extra_y: 0
 hide_image: false
 rounded_corners: false
 mappings:
-    artists_view:
-        normal:
-            open_entry: "ctrl-m"
-            play_entry: "ctrl-p"
-    artist_view:
-        normal:
-            open_entry: "ctrl-m"
-            play_entry: "ctrl-p"
-    recently_played_view:
-        normal:
-            open_entry: "ctrl-m"
-            add_to_playlist: "a"
-        visual:
-            add_to_playlist: "a"
-    nav_menu:
-        normal:
-            open_entry: "ctrl-m"
-    global:
-        normal:
-            open_current_track_album: "o"
-            next: "n"
-            previous: "p"
-            choose_device: "d"
-            focus_playlists: "2"
-            focus_main_view: "3"
-            open_current_track_artist: "O"
-            open_current_context: "ctrl-o"
-            focus_nav: "1"
-            focus_search: "?"
-            toggle_playback: " "
     playlist_nav:
         normal:
-            open_entry: "ctrl-m"
             play_entry: "ctrl-p"
     playlist_view:
         normal:
-            open_entry: "ctrl-m"
             add_to_playlist: "a"
         visual:
             add_to_playlist: "a"
     top_tracks_view:
         normal:
             play_entry: "ctrl-p"
-            open_entry: "ctrl-m"
-    search_view:
-        normal:
-            open_entry: "ctrl-m"
-            play_entry: "ctrl-p"
     liked_songs_view:
+        visual:
+            add_to_playlist: "a"
         normal:
-            open_entry: "ctrl-m"
+            add_to_playlist: "a"
+    artists_view:
+        normal:
+            play_entry: "ctrl-p"
+    artist_view:
+        normal:
+            play_entry: "ctrl-p"
+    recently_played_view:
+        visual:
+            add_to_playlist: "a"
+        normal:
+            add_to_playlist: "a"
+    global:
+        normal:
+            focus_playlists: "2"
+            focus_search: "?"
+            next: "n"
+            previous: "p"
+            choose_device: "d"
+            focus_nav: "1"
+            focus_main_view: "3"
+            toggle_playback: " "
+            open_current_track_album: "o"
+            open_current_track_artist: "O"
+            open_current_context: "ctrl-o"
+            open_entry: "enter"
+    album_view:
+        normal:
             add_to_playlist: "a"
         visual:
             add_to_playlist: "a"
+    search_view:
+        normal:
+            play_entry: "ctrl-p"
     albums_view:
         normal:
             play_entry: "ctrl-p"
             queue_entry: "q"
-            open_entry: "ctrl-m"
-    album_view:
-        normal:
-            open_entry: "ctrl-m"
-            add_to_playlist: "a"
-        visual:
-            add_to_playlist: "a"
 ```
 ## Keys available to map
 |||
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>), :, ', ., ?, }, \|;, #, ^, >, $, -, _, +, @, &, ,, \, %, ], (, =, {, ",  , !, *, <, /, [</kbd> | <kbd>left</kbd> |
-| <kbd>end</kbd> | <kbd>center</kbd> |
-| <kbd>print</kbd> | <kbd>cancel</kbd> |
-| <kbd>backtab</kbd> | <kbd>esc</kbd> |
-| <kbd>insert</kbd> | <kbd>pgdn</kbd> |
-| <kbd>exit</kbd> | <kbd>escape</kbd> |
-| <kbd>right</kbd> | <kbd>up_right</kbd> |
-| <kbd>down_right</kbd> | <kbd>pause</kbd> |
-| <kbd>enter</kbd> | <kbd>home</kbd> |
-| <kbd>delete</kbd> | <kbd>help</kbd> |
-| <kbd>up</kbd> | <kbd>clear</kbd> |
-| <kbd>tab</kbd> | <kbd>pgup</kbd> |
-| <kbd>down</kbd> | <kbd>backspace</kbd> |
-| <kbd>backspace2</kbd> | <kbd>up_left</kbd> |
+| <kbd>;, ", }, ', !, -, ?, \, *, %, +, >, :, #, ), /, [, ], @, =, _,  , $, <, ., &, (, ,, {, \|^</kbd> | <kbd>help</kbd> |
+| <kbd>exit</kbd> | <kbd>up_left</kbd> |
+| <kbd>pgup</kbd> | <kbd>pause</kbd> |
+| <kbd>right</kbd> | <kbd>end</kbd> |
+| <kbd>delete</kbd> | <kbd>left</kbd> |
+| <kbd>backtab</kbd> | <kbd>backspace2</kbd> |
+| <kbd>down_right</kbd> | <kbd>cancel</kbd> |
+| <kbd>down_left</kbd> | <kbd>center</kbd> |
+| <kbd>down</kbd> | <kbd>home</kbd> |
+| <kbd>insert</kbd> | <kbd>escape</kbd> |
+| <kbd>up</kbd> | <kbd>pgdn</kbd> |
+| <kbd>backspace</kbd> | <kbd>esc</kbd> |
+| <kbd>enter</kbd> | <kbd>clear</kbd> |
+| <kbd>tab</kbd> | <kbd>up_right</kbd> |
