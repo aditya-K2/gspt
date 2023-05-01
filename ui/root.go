@@ -3,7 +3,6 @@ package ui
 import (
 	"time"
 
-	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/tview"
 	"github.com/gdamore/tcell/v2"
 )
@@ -75,7 +74,7 @@ func (m *Root) AddCenteredWidget(t CenteredWidget) {
 	t.ContentHandler()
 
 	resizeHandler := func() {
-		dur := config.Config.RedrawInterval
+		dur := cfg.RedrawInterval
 		tck := time.NewTicker(time.Duration(dur) * time.Millisecond)
 		go func() {
 			for {

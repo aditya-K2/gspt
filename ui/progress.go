@@ -8,7 +8,6 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
 
-	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/aditya-K2/tview"
 	"github.com/aditya-K2/utils"
@@ -101,7 +100,7 @@ func RefreshProgress(force bool) {
 			if state.Item != nil {
 				ctrackId = state.Item.ID
 			}
-			if !config.Config.HideImage {
+			if !cfg.HideImage {
 				coverArt.RefreshState()
 			}
 		}
@@ -156,8 +155,8 @@ func progressFunc() (string, string, string, float64) {
 		barTopTitle = fmt.Sprintf("[%s Device: %s Shuffle: %t Repeat: %s]", playing, state.Device.Name, state.ShuffleState, state.RepeatState)
 		if state.Item != nil {
 			barTitle = fmt.Sprintf("%s%s[-:-:-] - %s%s",
-				config.Config.Colors.PBarTrack.String(), state.Item.Name,
-				config.Config.Colors.PBarArtist.String(), state.Item.Artists[0].Name)
+				cfg.Colors.PBarTrack.String(), state.Item.Name,
+				cfg.Colors.PBarArtist.String(), state.Item.Artists[0].Name)
 			barText = utils.StrTime(float64(state.Progress/1000)) + "/" + utils.StrTime(float64(state.Item.Duration/1000))
 			percentage = (float64(state.Progress) / float64(state.Item.Duration)) * 100
 		}

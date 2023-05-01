@@ -5,7 +5,6 @@ import (
 	"image"
 	"os"
 
-	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/tview"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
@@ -41,8 +40,8 @@ func getImg(uri string) (image.Image, error) {
 		return nil, err
 	}
 	img = resize.Resize(
-		uint((ImgW*fw)+config.Config.ImageWidthExtraX),
-		uint((ImgH*fh)+config.Config.ImageWidthExtraY),
+		uint((ImgW*fw)+cfg.ImageWidthExtraX),
+		uint((ImgH*fh)+cfg.ImageWidthExtraY),
 		img,
 		resize.Bilinear,
 	)
@@ -93,8 +92,8 @@ func (c *CoverArt) RefreshState() {
 					return
 				}
 				im, err := ueberzug.NewImage(uimg,
-					int(ImgX*fw)+config.Config.AdditionalPaddingX,
-					int(ImgY*fh)+config.Config.AdditionalPaddingY)
+					int(ImgX*fw)+cfg.AdditionalPaddingX,
+					int(ImgY*fh)+cfg.AdditionalPaddingY)
 				if err != nil {
 					SendNotification("Error Rendering Image: %s", err.Error())
 					return

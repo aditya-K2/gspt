@@ -36,6 +36,7 @@ var (
 	Main     *interactiveView
 	root     *Root
 	Flex     *tview.Flex
+	cfg      = config.Config
 )
 
 func onConfigChange() {
@@ -80,7 +81,7 @@ func rectWatcher() {
 						ImgH = _ImgH
 						coverArt.RefreshState()
 					}
-					time.Sleep(time.Millisecond * time.Duration(config.Config.RedrawInterval))
+					time.Sleep(time.Millisecond * time.Duration(cfg.RedrawInterval))
 				}
 			}()
 		}
@@ -370,7 +371,7 @@ func NewApplication() *tview.Application {
 		AddItem(navMenu, 6, 3, false).
 		AddItem(playlistNav, 0, 6, false)
 
-	if !config.Config.HideImage {
+	if !cfg.HideImage {
 		navFlex.AddItem(coverArt, 9, 3, false)
 	}
 
@@ -393,7 +394,7 @@ func NewApplication() *tview.Application {
 
 	// Start Routines
 	InitNotifier()
-	if !config.Config.HideImage {
+	if !cfg.HideImage {
 		go rectWatcher()
 	} else {
 		// Start Progress Routine directly

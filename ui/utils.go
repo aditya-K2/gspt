@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/zmb3/spotify/v2"
 	"gitlab.com/diamondburned/ueberzug-go"
@@ -73,7 +72,7 @@ func addToPlaylist(tracks []spotify.ID) {
 }
 
 func fileName(a spotify.SimpleAlbum) string {
-	return fmt.Sprintf(filepath.Join(config.Config.CacheDir, "%s.jpg"), a.ID)
+	return fmt.Sprintf(filepath.Join(cfg.CacheDir, "%s.jpg"), a.ID)
 }
 
 func getFontWidth() (int, int, error) {

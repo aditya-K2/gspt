@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/tview"
 )
 
@@ -39,30 +38,30 @@ var (
 )
 
 func setBorderRunes() {
-	tview.Borders.TopLeft = borders[config.Config.RoundedCorners]["TopLeft"]
-	tview.Borders.TopRight = borders[config.Config.RoundedCorners]["TopRight"]
-	tview.Borders.BottomRight = borders[config.Config.RoundedCorners]["BottomRight"]
-	tview.Borders.BottomLeft = borders[config.Config.RoundedCorners]["BottomLeft"]
-	tview.Borders.Vertical = borders[config.Config.RoundedCorners]["Vertical"]
-	tview.Borders.Horizontal = borders[config.Config.RoundedCorners]["Horizontal"]
-	tview.Borders.TopLeftFocus = borders[config.Config.RoundedCorners]["TopLeftFocus"]
-	tview.Borders.TopRightFocus = borders[config.Config.RoundedCorners]["TopRightFocus"]
-	tview.Borders.BottomRightFocus = borders[config.Config.RoundedCorners]["BottomRightFocus"]
-	tview.Borders.BottomLeftFocus = borders[config.Config.RoundedCorners]["BottomLeftFocus"]
-	tview.Borders.VerticalFocus = borders[config.Config.RoundedCorners]["VerticalFocus"]
-	tview.Borders.HorizontalFocus = borders[config.Config.RoundedCorners]["HorizontalFocus"]
+	tview.Borders.TopLeft = borders[cfg.RoundedCorners]["TopLeft"]
+	tview.Borders.TopRight = borders[cfg.RoundedCorners]["TopRight"]
+	tview.Borders.BottomRight = borders[cfg.RoundedCorners]["BottomRight"]
+	tview.Borders.BottomLeft = borders[cfg.RoundedCorners]["BottomLeft"]
+	tview.Borders.Vertical = borders[cfg.RoundedCorners]["Vertical"]
+	tview.Borders.Horizontal = borders[cfg.RoundedCorners]["Horizontal"]
+	tview.Borders.TopLeftFocus = borders[cfg.RoundedCorners]["TopLeftFocus"]
+	tview.Borders.TopRightFocus = borders[cfg.RoundedCorners]["TopRightFocus"]
+	tview.Borders.BottomRightFocus = borders[cfg.RoundedCorners]["BottomRightFocus"]
+	tview.Borders.BottomLeftFocus = borders[cfg.RoundedCorners]["BottomLeftFocus"]
+	tview.Borders.VerticalFocus = borders[cfg.RoundedCorners]["VerticalFocus"]
+	tview.Borders.HorizontalFocus = borders[cfg.RoundedCorners]["HorizontalFocus"]
 }
 
 func setStyles() {
-	TrackStyle = config.Config.Colors.Track.Style()
-	AlbumStyle = config.Config.Colors.Album.Style()
-	ArtistStyle = config.Config.Colors.Artist.Style()
-	TimeStyle = config.Config.Colors.Timestamp.Style()
-	GenreStyle = config.Config.Colors.Genre.Style()
-	PlaylistNavStyle = config.Config.Colors.PlaylistNav.Style()
-	NavStyle = config.Config.Colors.Nav.Style()
-	ContextMenuStyle = config.Config.Colors.ContextMenu.Style()
-	NotSelectableStyle = config.Config.Colors.Null.Style()
-	tview.Styles.BorderColorFocus = config.Config.Colors.BorderFocus.Foreground()
-	tview.Styles.BorderColor = config.Config.Colors.Border.Foreground()
+	TrackStyle = cfg.Colors.Track.Style()
+	AlbumStyle = cfg.Colors.Album.Style()
+	ArtistStyle = cfg.Colors.Artist.Style()
+	TimeStyle = cfg.Colors.Timestamp.Style()
+	GenreStyle = cfg.Colors.Genre.Style()
+	PlaylistNavStyle = cfg.Colors.PlaylistNav.Style()
+	NavStyle = cfg.Colors.Nav.Style()
+	ContextMenuStyle = cfg.Colors.ContextMenu.Style()
+	NotSelectableStyle = cfg.Colors.Null.Style()
+	tview.Styles.BorderColorFocus = cfg.Colors.BorderFocus.Foreground()
+	tview.Styles.BorderColor = cfg.Colors.Border.Foreground()
 }
