@@ -27,7 +27,3 @@ type View interface {
 func SetCurrentView(v View) {
 	CurrentView = v
 }
-
-func GetCurrentView() View {
-	return CurrentView
-}

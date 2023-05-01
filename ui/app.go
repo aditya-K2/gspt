@@ -128,7 +128,7 @@ func NewApplication() *tview.Application {
 	// Define Actions
 	globalActions := map[string]*Action{
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			GetCurrentView().OpenEntry()
+			CurrentView.OpenEntry()
 			return nil
 		}, progressBar),
 		"focus_search": NewAction(func(e *tcell.EventKey) *tcell.EventKey {

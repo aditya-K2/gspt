@@ -171,7 +171,7 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 		}
 	case 'v':
 		{
-			if !GetCurrentView().DisableVisualMode() {
+			if !CurrentView.DisableVisualMode() {
 				i.toggleVisualMode()
 			}
 			return nil
@@ -187,17 +187,17 @@ func (i *interactiveView) capture(e *tcell.EventKey) *tcell.EventKey {
 	default:
 		{
 			if e.Key() == tcell.KeyEscape {
-				if !GetCurrentView().DisableVisualMode() {
+				if !CurrentView.DisableVisualMode() {
 					return i.getHandler("exitvisual")(e)
 				}
-			} else if i.visual && !GetCurrentView().DisableVisualMode() &&
-				GetCurrentView().VisualCapture() != nil {
+			} else if i.visual && !CurrentView.DisableVisualMode() &&
+				CurrentView.VisualCapture() != nil {
 				if i.visual {
 					i.toggleVisualMode()
 				}
-				return GetCurrentView().VisualCapture()(i.vrange.Start, i.vrange.End, e)
-			} else if GetCurrentView().ExternalInputCapture() != nil {
-				return GetCurrentView().ExternalInputCapture()(e)
+				return CurrentView.VisualCapture()(i.vrange.Start, i.vrange.End, e)
+			} else if CurrentView.ExternalInputCapture() != nil {
+				return CurrentView.ExternalInputCapture()(e)
 			}
 			return e
 		}
@@ -213,8 +213,8 @@ func GetCell(text string, st tcell.Style) *tview.TableCell {
 func (i *interactiveView) update() {
 	n := 3
 	i.Table.Clear()
-	if GetCurrentView().Content() != nil {
-		s := GetCurrentView().Content()()
+	if CurrentView.Content() != nil {
+		s := CurrentView.Content()()
 		_, _, w, _ := i.Table.GetInnerRect()
 		for x := range s {
 			b := ""
