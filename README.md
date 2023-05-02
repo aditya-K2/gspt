@@ -19,29 +19,44 @@
 ### Please Note
 
 - You will need Spotify Premium.
-- "gspt" uses the [Web API](https://developer.spotify.com/documentation/web-api)
+- `gspt` uses the [Web API](https://developer.spotify.com/documentation/web-api)
   from Spotify, which doesn't handle streaming itself. So you'll need either
   an official Spotify client open or a lighter weight alternative such as
   [spotifyd](https://github.com/Spotifyd/spotifyd).
 - Images are rendered using the X child windows. Currently there is ***no support*** for Wayland.
+- Everything except **Image Rendering** works on Windows and Mac
+
+## Table of Contents
+  * [Setup](#setup)
+    + [Installing](#installing)
+    + [Afer Installation Steps](#afer-installation-steps)
+    + [Default Key Mappings](#default-key-mappings)
+  * [Command-line Parameters](#command-line-parameters)
+  * [Configuration](#configuration)
+  * [Image Rendering Related Parameters](#image-rendering-related-parameters)
+    + [Configuring Additional Padding and Image Width.](#configuring-additional-padding-and-image-width)
 
 ## Setup
 
 ### Installing
 
 ```bash
+# If you have Go Path set up you can directly install gspt using
+$ go install github.com/aditya-K2/gspt
+
+# Alternately
 $ git clone https://github.com/aditya-K2/gspt.git # Cloning
 $ cd gspt
 $ go build -v # Building
-$ sudo install -D gspt -t "/usr/bin/" # Installing
+$ sudo install gspt -t "/usr/bin/" # Linux/Mac
 
-# You can merge them into a one liner
+# You can merge this into a one liner
 $ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install -D gspt -t "/usr/bin/"
 ```
 
 ### Afer Installation Steps
 
-- #### Generate an API Key from Spotify Dashboard
+#### Generate an API Key from Spotify Dashboard
 
 
 If you want to use Spotify's API to create applications that interact with
@@ -65,7 +80,7 @@ and log in with your Spotify account credentials.
    "Show Client Secret" button. You will now see your Client ID and Client
    Secret. You will need both of these to use the Spotify API in "gspt"
 
-- #### Using the Generated Credentials
+#### Using the Generated Credentials
 
 1. Set the following environment variables from the credentials you generated.
 
@@ -115,7 +130,8 @@ The configuration is done through `$XDG_CONFIG_HOME/gspt/config.yml`
 or the path to the folder provided by the `-c` flag before starting the app.
 See [Command-line Parameters](#command-line-parameters)
 
-Also, Configuration is live updated when you make a change except for the Key Mappings.
+Also, Configuration is live updated when you make a change except for some parts
+*(Key Mappings, Border Colors)*.
 
 #### Config Parameters
 
@@ -322,19 +338,6 @@ image_width_extra_x : -8
 
 Which looks perfect. 🎉
 
-## Roadmap
+---
 
-- [x] Rounded Corners
-- [x] Key Mappings
-- [ ] Multiple Image rendering backends
-    - [ ] Sixel
-    - [ ] tview Images
-    - [ ] Kitty Images
-- [ ] Customisable UI
-- [ ] Wayland Support for Image rendering
-- [ ] Queue Support
-- [ ] Windows Support
-
-### Special thanks to
-
-- [spotify-tui](https://github.com/Rigellute/spotify-tui)
+### Special thanks to [spotify-tui](https://github.com/Rigellute/spotify-tui)
