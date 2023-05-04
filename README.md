@@ -85,8 +85,9 @@ and log in with your Spotify account credentials.
 1. Set the following environment variables from the credentials you generated.
 
 ```bash
-$ export SPOTIFY_ID= # client id
-$ export SPOTIFY_SECRET= # client secret
+# Add this to ~/.bashrc (or your $SHELL equivalent)
+export SPOTIFY_ID= # client id
+export SPOTIFY_SECRET= # client secret
 ```
 
 2. After this you can just run `gspt`. And follow the link that it generates, and Login.
