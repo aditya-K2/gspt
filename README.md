@@ -40,6 +40,14 @@
 
 ### Installing
 
+###### AUR [<img src="https://img.shields.io/aur/version/gspt-git">](https://aur.archlinux.org/packages/gspt-git/)
+
+```bash
+$ yay -S gspt-git
+```
+
+###### Manually
+
 ```bash
 # If you have Go Path set up you can directly install gspt using
 $ go install github.com/aditya-K2/gspt
