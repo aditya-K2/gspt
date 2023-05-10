@@ -69,9 +69,6 @@ image_width_extra_y: 0
 hide_image: false
 rounded_corners: false
 mappings:
-    playlist_nav:
-        normal:
-            play_entry: "ctrl-p"
     playlist_view:
         normal:
             add_to_playlist: "a"
@@ -80,65 +77,68 @@ mappings:
     top_tracks_view:
         normal:
             play_entry: "ctrl-p"
-    liked_songs_view:
-        visual:
-            add_to_playlist: "a"
-        normal:
-            add_to_playlist: "a"
-    artists_view:
-        normal:
-            play_entry: "ctrl-p"
-    artist_view:
-        normal:
-            play_entry: "ctrl-p"
-    recently_played_view:
-        visual:
-            add_to_playlist: "a"
-        normal:
-            add_to_playlist: "a"
-    global:
-        normal:
-            focus_playlists: "2"
-            focus_search: "?"
-            next: "n"
-            previous: "p"
-            choose_device: "d"
-            focus_nav: "1"
-            focus_main_view: "3"
-            toggle_playback: " "
-            open_current_track_album: "o"
-            open_current_track_artist: "O"
-            open_current_context: "ctrl-o"
-            open_entry: "enter"
     album_view:
         normal:
             add_to_playlist: "a"
         visual:
             add_to_playlist: "a"
-    search_view:
+    recently_played_view:
+        normal:
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
+    global:
+        normal:
+            focus_playlists: "2"
+            focus_main_view: "3"
+            focus_search: "?"
+            previous: "p"
+            open_entry: "ctrl-m"
+            next: "n"
+            open_current_context: "ctrl-o"
+            choose_device: "d"
+            focus_nav: "1"
+            toggle_playback: " "
+            open_current_track_album: "o"
+            open_current_track_artist: "O"
+    playlist_nav:
+        normal:
+            play_entry: "ctrl-p"
+    artist_view:
         normal:
             play_entry: "ctrl-p"
     albums_view:
         normal:
             play_entry: "ctrl-p"
             queue_entry: "q"
+    search_view:
+        normal:
+            play_entry: "ctrl-p"
+    liked_songs_view:
+        normal:
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
+    artists_view:
+        normal:
+            play_entry: "ctrl-p"
 ```
 ## Keys available to map
 |||
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>;, ", }, ', !, -, ?, \, *, %, +, >, :, #, ), /, [, ], @, =, _,  , $, <, ., &, (, ,, {, \|^</kbd> | <kbd>help</kbd> |
-| <kbd>exit</kbd> | <kbd>up_left</kbd> |
-| <kbd>pgup</kbd> | <kbd>pause</kbd> |
-| <kbd>right</kbd> | <kbd>end</kbd> |
-| <kbd>delete</kbd> | <kbd>left</kbd> |
-| <kbd>backtab</kbd> | <kbd>backspace2</kbd> |
-| <kbd>down_right</kbd> | <kbd>cancel</kbd> |
-| <kbd>down_left</kbd> | <kbd>center</kbd> |
-| <kbd>down</kbd> | <kbd>home</kbd> |
-| <kbd>insert</kbd> | <kbd>escape</kbd> |
-| <kbd>up</kbd> | <kbd>pgdn</kbd> |
-| <kbd>backspace</kbd> | <kbd>esc</kbd> |
-| <kbd>enter</kbd> | <kbd>clear</kbd> |
-| <kbd>tab</kbd> | <kbd>up_right</kbd> |
+| <kbd>(, ., [, {, :, @, $, %, *, =, _, ?,  , ^, }, +, >, /, ', #, ,, !, -, ], \, &, ), <, \|;, "</kbd> | <kbd>down_left</kbd> |
+| <kbd>pgup</kbd> | <kbd>exit</kbd> |
+| <kbd>cancel</kbd> | <kbd>backspace2</kbd> |
+| <kbd>left</kbd> | <kbd>pgdn</kbd> |
+| <kbd>insert</kbd> | <kbd>up_left</kbd> |
+| <kbd>backtab</kbd> | <kbd>escape</kbd> |
+| <kbd>esc</kbd> | <kbd>down_right</kbd> |
+| <kbd>print</kbd> | <kbd>center</kbd> |
+| <kbd>end</kbd> | <kbd>clear</kbd> |
+| <kbd>down</kbd> | <kbd>up_right</kbd> |
+| <kbd>up</kbd> | <kbd>backspace</kbd> |
+| <kbd>home</kbd> | <kbd>tab</kbd> |
+| <kbd>right</kbd> | <kbd>delete</kbd> |
+| <kbd>enter</kbd> | <kbd>help</kbd> |
