@@ -4,12 +4,22 @@ import (
 	"flag"
 )
 
+var (
+	Flags = &Flag{}
+)
+
+type Flag struct {
+	ConfigPath     string
+	HideImage      bool
+	RoundedCorners bool
+}
+
 func parseFlags() {
-	flag.StringVar(&UserConfigPath, "c", UserConfigPath,
+	flag.StringVar(&Flags.ConfigPath, "c", UserConfigPath,
 		"Specify The Directory to check for config.yml file.")
-	flag.BoolVar(&Config.HideImage, "hide-image", Config.HideImage,
+	flag.BoolVar(&Flags.HideImage, "hide-image", Config.HideImage,
 		"Do not display the cover art image.")
-	flag.BoolVar(&Config.RoundedCorners, "rounded-corners", Config.RoundedCorners,
+	flag.BoolVar(&Flags.RoundedCorners, "rounded-corners", Config.RoundedCorners,
 		"Enable Rounded Corners")
 	flag.Parse()
 }

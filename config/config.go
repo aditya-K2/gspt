@@ -41,6 +41,12 @@ func NewConfigS() *ConfigS {
 
 func ReadConfig() {
 	parseFlags()
+
+	// If config path is provided through command-line use that
+	if Flags.ConfigPath != "" {
+		UserConfigPath = Flags.ConfigPath
+	}
+
 	if configErr != nil {
 		utils.Print("RED", "Couldn't get $XDG_CONFIG!")
 		panic(configErr)
@@ -52,7 +58,7 @@ func ReadConfig() {
 	}
 
 	viper.SetConfigName("config")
-	viper.AddConfigPath(UserConfigPath)
+	viper.AddConfigPath(utils.ExpandHomeDir(UserConfigPath))
 
 	if err := viper.ReadInConfig(); err != nil {
 		utils.Print("RED", "Could Not Read Config file.\n")
@@ -64,6 +70,17 @@ func ReadConfig() {
 	expandHome := func() {
 		Config.CacheDir = utils.ExpandHomeDir(Config.CacheDir)
 	}
+
+	// Flags have precedence over config values
+	useFlags := func() {
+		if Flags.HideImage != false {
+			Config.HideImage = Flags.HideImage
+		}
+		if Flags.RoundedCorners != false {
+			Config.RoundedCorners = Flags.RoundedCorners
+		}
+	}
+	useFlags()
 
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		viper.Unmarshal(Config)

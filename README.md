@@ -124,6 +124,8 @@ $ gspt
 ## Command-line Parameters
 
 ```
+NOTE: Command-line flags take priority over config values.
+
 Usage of ./gspt:
   -c string
         Specify The Directory to check for config.yml file. (default "$XDG_CONFIG_HOME/gspt")
