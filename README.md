@@ -256,6 +256,13 @@ it only affects the right side of the image.
 2. After you have made the changes according to your needs you can save the config
 by pressing <kbd>ctrl-s</kbd>
 
+<details>
+    <summary>
+        Video Example
+    </summary>
+    <video src="https://github.com/aditya-K2/gspt/assets/51816057/1904a0f7-c0e6-4ba3-b13e-5f09119fc71a">
+</details>
+
 ---
 
 ### Special thanks to [spotify-tui](https://github.com/Rigellute/spotify-tui)
