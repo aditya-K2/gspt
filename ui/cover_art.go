@@ -4,12 +4,17 @@ import (
 	"fmt"
 	"image"
 	"os"
+	"sync"
 
 	"github.com/aditya-K2/tview"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/nfnt/resize"
 	"gitlab.com/diamondburned/ueberzug-go"
+)
+
+var (
+	cm sync.Mutex
 )
 
 type CoverArt struct {
@@ -49,6 +54,7 @@ func getImg(uri string) (image.Image, error) {
 }
 
 func (c *CoverArt) RefreshState() {
+	cm.Lock()
 	if c.image != nil {
 		c.image.Clear()
 	}
@@ -102,4 +108,5 @@ func (c *CoverArt) RefreshState() {
 			}
 		}
 	}
+	cm.Unlock()
 }
