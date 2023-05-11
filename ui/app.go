@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aditya-K2/gspt/config"
@@ -126,6 +127,14 @@ func NewApplication() *tview.Application {
 
 	// Define Actions
 	globalActions := map[string]*Action{
+		"save_config": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			msg := "Config Saved Successfully!"
+			if err := config.WriteConfig(); err != nil {
+				msg = fmt.Sprintf("Error Writing Config: %s", err.Error())
+			}
+			SendNotification(msg)
+			return nil
+		}, nil),
 		"open_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			CurrentView.OpenEntry()
 			return nil
@@ -214,6 +223,46 @@ func NewApplication() *tview.Application {
 			return nil
 		}, progressBar),
 	}
+
+	imageActions := map[string]*Action{
+		"increase_image_height": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.ImageWidthExtraY += 1
+			return nil
+		}, coverArt),
+		"increase_image_width": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.ImageWidthExtraX += 1
+			return nil
+		}, coverArt),
+		"decrease_image_height": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.ImageWidthExtraY -= 1
+			return nil
+		}, coverArt),
+		"decrease_image_width": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.ImageWidthExtraX -= 1
+			return nil
+		}, coverArt),
+		"move_image_right": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.AdditionalPaddingX += 1
+			return nil
+		}, coverArt),
+		"move_image_left": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.AdditionalPaddingX -= 1
+			return nil
+		}, coverArt),
+		"move_image_up": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.AdditionalPaddingY -= 1
+			return nil
+		}, coverArt),
+		"move_image_down": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			cfg.AdditionalPaddingY += 1
+			return nil
+		}, coverArt),
+	}
+
+	if !cfg.HideImage {
+		globalActions = utils.MergeMaps(globalActions, imageActions)
+	}
+
 	playlistNav.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(playlistNav.PlayEntry,
 			progressBar),

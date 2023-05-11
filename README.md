@@ -33,8 +33,7 @@
     + [Default Key Mappings](#default-key-mappings)
   * [Command-line Parameters](#command-line-parameters)
   * [Configuration](#configuration)
-  * [Image Rendering Related Parameters](#image-rendering-related-parameters)
-    + [Configuring Additional Padding and Image Width.](#configuring-additional-padding-and-image-width)
+  * [Calibrating Image Placement](#calibrating-image-placement)
 
 ## Setup
 
@@ -163,7 +162,8 @@ hide_image: false
 # Enable Rounded Corners
 rounded_corners: false
 
-# Image Drawing related parameters. See next section for an in-detail explanation.
+# Image Drawing related parameters. You aren't supposed to define them manually.
+# See the next section to see how you can calibrate the Image placement.
 additional_padding_x : 0
 additional_padding_y : 0
 image_width_extra_x  : 0
@@ -233,121 +233,28 @@ mappings:
 # https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md
 ```
 
-## Image Rendering Related Parameters
+## Calibrating Image Placement
 
-The position of the image without any configuration may vary in different
-terminals due to font or terminal padding. The app tries to calculate
-the position based on rows and columns and font width of you terminal
-but the exact position can't be defined. Therefore, it is recommended to define
-extra padding and your own image width ratio in the config file.
-***Additional Padding*** can be positive or negative and can be used to move the
-image up, down, left, or right. ***Extra Image width*** can be adjusted by defining the
-extra width to be added or subtracted from the original image width.
+1. To make it easier for users to adjust the position and size of the image
+preview box, we have added key mappings to the application. These mappings
+allow you to move the image up, down, left, or right, as well as adjust its
+height and width. The mappings are as follows:
 
-<details>
-    <p>
-        The <code>additional_padding_x</code> and <code>additional_padding_y</code>
-        configuration parameters allow you to add extra padding to the placement of
-        the image within the terminal window. This additional padding can be set to
-        positive or negative values, which will shift the position of the image
-        accordingly.
-    </p>
-    <p>
-        Note that the <code>additional_padding_x</code> parameter affects the
-        horizontal placement of the image, with negative values shifting the image
-        to the right and positive values shifting it to the left. Similarly, the
-        <code>additional_padding_y</code> parameter affects the vertical placement
-        of the image, with negative values shifting the image up and positive
-        values shifting it down.
-    </p>
-    <p>
-        To adjust the <code>additional_padding_x</code> and
-        <code>additional_padding_y</code> parameters, simply modify the
-        configuration file according to your needs. Keep in mind that adding too
-        much padding may cause the image to overlap with other terminal content,
-        while adding too little padding may cause the image to be cut off.
-        Experiment with different values until you find the perfect placement
-        for your image.
-    </p>
-    <summary><b>Additional Padding</b></summary>
-    <img src="./extras/info_padding.png">
-</details>
-<details>
-    <p>
-        By default, the app assumes that the image preview box has no font or
-        terminal padding or margin, so the image will be rendered at different
-        positions in different terminals. To ensure that the image fits
-        perfectly within the preview box, you can add extra width to the image
-        using the <code>image_width_extra_x</code> and
-        <code>image_width_extra_y</code> configuration parameters. These
-        parameters can be set to positive or negative values to increase or
-        decrease the size of the image, respectively. To add extra width to the
-        image, the app takes into account the font width specified by the
-        variables.
-    </p>
-    <p>
-        To adjust the <code>image_width_extra_x</code> and
-        <code>image_width_extra_y</code> parameters, simply modify the
-        configuration file according to your needs. Note that these parameters
-        act like a chunk that is either added or subtracted from the original
-        image width. Therefore, if the image is flowing outside the preview
-        box, you may need to adjust the parameters to increase or decrease the
-        chunk size until the image fits perfectly within the box.
-    </p>
-    <summary><b>Extra Image Width</b></summary>
-    <img src="./extras/info_width.png">
-</details>
+    - <kbd>ctrl+h</kbd> Move the image left
+    - <kbd>ctrl+j</kbd> Move the image down
+    - <kbd>ctrl+k</kbd> Move the image up
+    - <kbd>ctrl+l</kbd> Move the image right
+    - <kbd>H</kbd> Decrease the width of the image (from the right)
+    - <kbd>J</kbd> Increase the height of the image (from the bottom)
+    - <kbd>K</kbd> Decrease the height of the image (from the bottom)
+    - <kbd>L</kbd> Increase the width of the image (from the right)
 
----
+Note that when you increase or decrease the image height, it only affects the
+bottom of the image. Similarly, when you increase or decrease the image width,
+it only affects the right side of the image.
 
-### Configuring Additional Padding and Image Width.
-
-###### Please read about [Image Rendering Related Parameters](#image-rendering-related-parameters) first.
-
-Let's say upon opening "gspt" for the first time and your image is rendered this way.
-
-![Cover Art Position](./extras/default.png)
-
-Here, the image is placed too high, so we will start by adding
-`additional_padding_y` so that it will be moved down.
-
-The configuration becomes:
-
-```yml
-additional_padding_y: 36 # you will need to use trial and error
-```
-and the image appears like this:
-
-![PADDING Y](./extras/paddingy.png)
-
-Now the image overflows the image box, we need to decrease the image's width, hence
-will change `image_width_extra_y` first
-
-```yml
-image_width_extra_y : -16
-```
-
-![WIDTH Y](./extras/widthy.png)
-
-Now the image  overflows from the left side, hence we will change `additional_padding_x`
-to move the image to the right
-
-```yml
-additional_padding_x: 6
-```
-
-![PADDING X](./extras/paddingx.png)
-
-The last thing we will do is to decrease the `image_width_extra_x` so that it will
-be placed correctly in the box
-
-```yml
-image_width_extra_x : -8
-```
-
-![WIDTH X](./extras/widthx.png)
-
-Which looks perfect. 🎉
+2. After you have made the changes according to your needs you can save the config
+by pressing <kbd>ctrl-s</kbd>
 
 ---
 

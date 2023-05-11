@@ -114,3 +114,11 @@ func GenerateMappings() map[string]map[string]map[Key]string {
 	}
 	return keys
 }
+
+func WriteConfig() error {
+	viper.Set("additional_padding_x", Config.AdditionalPaddingX)
+	viper.Set("additional_padding_y", Config.AdditionalPaddingY)
+	viper.Set("image_width_extra_x", Config.ImageWidthExtraX)
+	viper.Set("image_width_extra_y", Config.ImageWidthExtraY)
+	return viper.WriteConfig()
+}
