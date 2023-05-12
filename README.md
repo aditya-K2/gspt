@@ -125,11 +125,13 @@ $ gspt
 ```
 NOTE: Command-line flags take priority over config values.
 
-Usage of ./gspt:
+Usage of gspt:
   -c string
         Specify The Directory to check for config.yml file. (default "$XDG_CONFIG_HOME/gspt")
   -hide-image
         Do not display the cover art image.
+  -nerd-icons
+        Use Nerd Icons
   -rounded-corners
         Enable Rounded Corners
 ```
@@ -161,6 +163,9 @@ hide_image: false
 
 # Enable Rounded Corners
 rounded_corners: false
+
+# Use Nerd Icons
+use_nerd_icons: false
 
 # Image Drawing related parameters. You aren't supposed to define them manually.
 # See the next section to see how you can calibrate the Image placement.
@@ -231,6 +236,21 @@ mappings:
 
 # For the default mappings for each view please see:
 # https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md
+
+---
+
+# Icons have the following API
+icons:
+    icon_name: "icon_string"
+
+# for e.g
+icons:
+    computer: "🖥️"
+
+# Note: icons are used only if `use_nerd_icons` is true
+# For the default icons used and all available icon names please see:
+# https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md
+
 ```
 
 ## Calibrating Image Placement
