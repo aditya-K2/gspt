@@ -47,7 +47,7 @@ func (p *PlaylistView) Content() func() [][]Content {
 				for _, v := range *(*p.currentUserFullPlaylist).Tracks {
 					c = append(c, []Content{
 						{Content: v.Track.Name, Style: TrackStyle},
-						{Content: v.Track.Artists[0].Name, Style: ArtistStyle},
+						{Content: artistName(v.Track.Artists), Style: ArtistStyle},
 						{Content: v.Track.Album.Name, Style: AlbumStyle},
 					})
 				}

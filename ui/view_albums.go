@@ -37,7 +37,7 @@ func (a *AlbumsView) Content() func() [][]Content {
 			for _, v := range *a.savedAlbums {
 				c = append(c, []Content{
 					{Content: v.Name, Style: AlbumStyle},
-					{Content: v.Artists[0].Name, Style: ArtistStyle},
+					{Content: artistName(v.Artists), Style: ArtistStyle},
 					{Content: v.ReleaseDate, Style: TimeStyle},
 				})
 			}

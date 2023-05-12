@@ -156,7 +156,7 @@ func progressFunc() (string, string, string, float64) {
 		if state.Item != nil {
 			barTitle = fmt.Sprintf("%s%s[-:-:-] - %s%s",
 				cfg.Colors.PBarTrack.String(), state.Item.Name,
-				cfg.Colors.PBarArtist.String(), state.Item.Artists[0].Name)
+				cfg.Colors.PBarArtist.String(), artistName(state.Item.Artists))
 			barText = utils.StrTime(float64(state.Progress/1000)) + "/" + utils.StrTime(float64(state.Item.Duration/1000))
 			percentage = (float64(state.Progress) / float64(state.Item.Duration)) * 100
 		}

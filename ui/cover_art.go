@@ -79,6 +79,10 @@ func (c *CoverArt) RefreshState() {
 						}()
 						return
 					}
+					if len(state.Item.Album.Images) == 0 {
+						SendNotification("No Cover Art found for album: %s!", state.Item.Album.Name)
+						return
+					}
 					err = state.Item.Album.Images[0].Download(f)
 					if err != nil {
 						go func() {

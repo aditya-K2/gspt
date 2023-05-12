@@ -26,7 +26,7 @@ func (r *RecentlyPlayedView) Content() func() [][]Content {
 		for _, v := range r.recentlyPlayed {
 			c = append(c, []Content{
 				{Content: v.Track.Name, Style: TrackStyle},
-				{Content: v.Track.Artists[0].Name, Style: ArtistStyle},
+				{Content: artistName(v.Track.Artists), Style: ArtistStyle},
 				{Content: utils.StrTime(float64(v.Track.Duration / 1000)), Style: TimeStyle},
 			})
 		}

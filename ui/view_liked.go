@@ -36,7 +36,7 @@ func (p *LikedSongsView) Content() func() [][]Content {
 			for _, v := range *p.likedSongs {
 				c = append(c, []Content{
 					{Content: v.Name, Style: TrackStyle},
-					{Content: v.Artists[0].Name, Style: ArtistStyle},
+					{Content: artistName(v.Artists), Style: ArtistStyle},
 					{Content: v.Album.Name, Style: AlbumStyle},
 				})
 			}

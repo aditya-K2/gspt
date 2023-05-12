@@ -108,3 +108,22 @@ func openCurrentAlbum() {
 		App.SetFocus(Main)
 	}
 }
+
+func mergeGenres(g []string) string {
+	s := ""
+	for k, v := range g {
+		sep := ","
+		if k == 0 {
+			sep = ""
+		}
+		s += sep + v
+	}
+	return s
+}
+
+func artistName(s []spotify.SimpleArtist) string {
+	if len(s) != 0 {
+		return s[0].Name
+	}
+	return ""
+}
