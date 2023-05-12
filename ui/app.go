@@ -42,6 +42,7 @@ var (
 
 func onConfigChange() {
 	setStyles()
+	setIcons()
 	setBorderRunes()
 	if coverArt != nil && !cfg.HideImage {
 		coverArt.RefreshState()

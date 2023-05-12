@@ -14,35 +14,12 @@ import (
 )
 
 var (
-	state    *spotify.PlayerState
-	ctrackId spotify.ID
-	devices  = map[string]string{
-		"computer":     "󰍹",
-		"tablet":       "",
-		"smartphone":   "󰄜",
-		"speaker":      "󰓃",
-		"tv":           "",
-		"avr":          "󰤽",
-		"stb":          "󰤽",
-		"audio_dongle": "󱡬",
-		"game_console": "󰺵",
-		"cast_video":   "󰄙",
-		"cast_audio":   "󰄙",
-		"automobile":   "",
-	}
-	playIcons = map[bool]string{
-		true:  "",
-		false: "",
-	}
-	shuffleIcons = map[bool]string{
-		true:  "󰒟",
-		false: "󰒞",
-	}
-	repeatIcons = map[string]string{
-		"track":   "󰑘",
-		"off":     "󰑗",
-		"context": "󰑖",
-	}
+	state        *spotify.PlayerState
+	ctrackId     spotify.ID
+	devices      map[string]string
+	playIcons    map[bool]string
+	shuffleIcons map[bool]string
+	repeatIcons  map[string]string
 )
 
 // ProgressBar is a two-lined Box. First line is the BarTitle
@@ -199,6 +176,36 @@ func topTitle(playing, shuffle bool, repeat string, device spotify.PlayerDevice)
 	deviceName = device.Name
 	repeatState = repeat
 	return
+}
+
+func setIcons() {
+	devices = map[string]string{
+		"computer":     cfg.Icons.Computer,
+		"tablet":       cfg.Icons.Tablet,
+		"smartphone":   cfg.Icons.Smartphone,
+		"speaker":      cfg.Icons.Speaker,
+		"tv":           cfg.Icons.Tv,
+		"avr":          cfg.Icons.Avr,
+		"stb":          cfg.Icons.Stb,
+		"audio_dongle": cfg.Icons.AudioDongle,
+		"game_console": cfg.Icons.GameConsole,
+		"cast_video":   cfg.Icons.CastVideo,
+		"cast_audio":   cfg.Icons.CastAudio,
+		"automobile":   cfg.Icons.Automobile,
+	}
+	playIcons = map[bool]string{
+		true:  cfg.Icons.Playing,
+		false: cfg.Icons.Paused,
+	}
+	shuffleIcons = map[bool]string{
+		true:  cfg.Icons.ShuffleOn,
+		false: cfg.Icons.ShuffleOff,
+	}
+	repeatIcons = map[string]string{
+		"track":   cfg.Icons.RepeatOne,
+		"off":     cfg.Icons.RepeatAll,
+		"context": cfg.Icons.RepeatOff,
+	}
 }
 
 func progressFunc() (barTitle, barTopTitle, barText string, percentage float64) {
