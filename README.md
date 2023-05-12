@@ -58,7 +58,7 @@ $ go build -v # Building
 $ sudo install gspt -t "/usr/bin/" # Linux/Mac
 
 # You can merge this into a one liner
-$ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install -D gspt -t "/usr/bin/"
+$ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install gspt -t "/usr/bin/"
 ```
 
 ### Afer Installation Steps
