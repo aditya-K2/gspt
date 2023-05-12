@@ -84,7 +84,9 @@ func main() {
 	// Write
 	write("***This file is auto generated. If you find any bugs please open an issue***\n\n")
 
-	write("***`ctrl-m` in mappings refers to the `enter` key.***\n")
+	write("***`ctrl-m` in mappings refers to the `enter` key.***\n\n")
+
+	write("***Some Icons won't be visible in the config.***\n")
 
 	write("## Default Configuration\n```yml\n" + string(c) + "mappings:\n" + s + "```\n")
 
