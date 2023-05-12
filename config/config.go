@@ -21,6 +21,7 @@ type ConfigS struct {
 	CacheDir           string  `yaml:"cache_dir" mapstructure:"cache_dir"`
 	RedrawInterval     int     `yaml:"redraw_interval" mapstructure:"redraw_interval"`
 	Colors             *Colors `mapstructure:"colors"`
+	Icons              *Icons  `mapstructure:"icons"`
 	AdditionalPaddingX int     `yaml:"additional_padding_x" mapstructure:"additional_padding_x"`
 	AdditionalPaddingY int     `yaml:"additional_padding_y" mapstructure:"additional_padding_y"`
 	ImageWidthExtraX   int     `yaml:"image_width_extra_x" mapstructure:"image_width_extra_x"`
@@ -35,6 +36,7 @@ func NewConfigS() *ConfigS {
 		CacheDir:       utils.CheckDirectoryFmt(userCacheDir),
 		RedrawInterval: 500,
 		Colors:         NewColors(),
+		Icons:          NewIcons(),
 	}
 }
 
