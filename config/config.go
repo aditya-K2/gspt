@@ -80,6 +80,9 @@ func ReadConfig() {
 		if Flags.RoundedCorners != false {
 			Config.RoundedCorners = Flags.RoundedCorners
 		}
+		if Flags.UseNerdIcons != false {
+			Config.UseNerdIcons = Flags.UseNerdIcons
+		}
 	}
 	useFlags()
 
