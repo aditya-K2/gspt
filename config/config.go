@@ -27,6 +27,7 @@ type ConfigS struct {
 	ImageWidthExtraY   int     `yaml:"image_width_extra_y" mapstructure:"image_width_extra_y"`
 	HideImage          bool    `yaml:"hide_image" mapstructure:"hide_image"`
 	RoundedCorners     bool    `yaml:"rounded_corners" mapstructure:"rounded_corners"`
+	UseNerdIcons       bool    `yaml:"use_nerd_icons" mapstructure:"use_nerd_icons"`
 }
 
 func NewConfigS() *ConfigS {
@@ -34,8 +35,6 @@ func NewConfigS() *ConfigS {
 		CacheDir:       utils.CheckDirectoryFmt(userCacheDir),
 		RedrawInterval: 500,
 		Colors:         NewColors(),
-		HideImage:      false,
-		RoundedCorners: false,
 	}
 }
 

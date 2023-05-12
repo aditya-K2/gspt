@@ -127,3 +127,7 @@ func artistName(s []spotify.SimpleArtist) string {
 	}
 	return ""
 }
+
+func wrap(args ...interface{}) []interface{} {
+	return args
+}
