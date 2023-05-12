@@ -8,18 +8,18 @@ type Icons struct {
 	Tv          string `mapstructure:"tv"`
 	Avr         string `mapstructure:"avr"`
 	Stb         string `mapstructure:"stb"`
-	AudioDongle string `mapstructure:"audio_dongle"`
-	GameConsole string `mapstructure:"game_console"`
-	CastVideo   string `mapstructure:"cast_video"`
-	CastAudio   string `mapstructure:"cast_audio"`
+	AudioDongle string `yaml:"audio_dongle" mapstructure:"audio_dongle"`
+	GameConsole string `yaml:"game_console" mapstructure:"game_console"`
+	CastVideo   string `yaml:"cast_video" mapstructure:"cast_video"`
+	CastAudio   string `yaml:"cast_audio" mapstructure:"cast_audio"`
 	Automobile  string `mapstructure:"automobile"`
 	Playing     string `mapstructure:"playing"`
 	Paused      string `mapstructure:"paused"`
-	ShuffleOn   string `mapstructure:"shuffle_on"`
-	ShuffleOff  string `mapstructure:"shuffle_off"`
-	RepeatOne   string `mapstructure:"repeat_one"`
-	RepeatAll   string `mapstructure:"repeat_all"`
-	RepeatOff   string `mapstructure:"repeat_off"`
+	ShuffleOn   string `yaml:"shuffle_on" mapstructure:"shuffle_on"`
+	ShuffleOff  string `yaml:"shuffle_off" mapstructure:"shuffle_off"`
+	RepeatOne   string `yaml:"repeat_one" mapstructure:"repeat_one"`
+	RepeatAll   string `yaml:"repeat_all" mapstructure:"repeat_all"`
+	RepeatOff   string `yaml:"repeat_off" mapstructure:"repeat_off"`
 }
 
 func NewIcons() *Icons {
