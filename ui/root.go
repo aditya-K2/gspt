@@ -64,7 +64,7 @@ func (m *Root) AddCenteredWidget(t CenteredWidget) {
 		} else if e.Key() == tcell.KeyEnter {
 			r, _ := p.GetSelection()
 			sHandler(r)
-			closeCtx()
+			deleteCtx()
 			return nil
 		}
 		return e
