@@ -12,7 +12,7 @@ type Flag struct {
 	ConfigPath     string
 	HideImage      bool
 	RoundedCorners bool
-	UseNerdIcons   bool
+	UseIcons       bool
 }
 
 func parseFlags() {
@@ -22,7 +22,7 @@ func parseFlags() {
 		"Do not display the cover art image.")
 	flag.BoolVar(&Flags.RoundedCorners, "rounded-corners", Config.RoundedCorners,
 		"Enable Rounded Corners")
-	flag.BoolVar(&Flags.UseNerdIcons, "nerd-icons", Config.UseNerdIcons,
-		"Use Nerd Icons")
+	flag.BoolVar(&Flags.UseIcons, "icons", Config.UseIcons,
+		"Use Icons")
 	flag.Parse()
 }

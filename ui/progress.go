@@ -147,7 +147,7 @@ func progressRoutine() {
 }
 
 func deviceIcon(d spotify.PlayerDevice) string {
-	if val, ok := devices[strings.ToLower(d.Type)]; cfg.UseNerdIcons && ok {
+	if val, ok := devices[strings.ToLower(d.Type)]; cfg.UseIcons && ok {
 		return val
 	}
 	return "Device:"
@@ -164,7 +164,7 @@ func topTitle(playing, shuffle bool, repeat string, device spotify.PlayerDevice)
 		playState = "Playing"
 	}
 
-	if cfg.UseNerdIcons {
+	if cfg.UseIcons {
 		icon = playIcons[playing]
 		icon += " "
 		repeat = repeatIcons[repeat]

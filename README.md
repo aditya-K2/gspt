@@ -130,8 +130,8 @@ Usage of gspt:
         Specify The Directory to check for config.yml file. (default "$XDG_CONFIG_HOME/gspt")
   -hide-image
         Do not display the cover art image.
-  -nerd-icons
-        Use Nerd Icons
+  -icons
+        Use Icons
   -rounded-corners
         Enable Rounded Corners
 ```
@@ -164,8 +164,8 @@ hide_image: false
 # Enable Rounded Corners
 rounded_corners: false
 
-# Use Nerd Icons
-use_nerd_icons: false
+# Use Special Characters to display information
+use_icons: false
 
 # Image Drawing related parameters. You aren't supposed to define them manually.
 # See the next section to see how you can calibrate the Image placement.
@@ -247,7 +247,7 @@ icons:
 icons:
     computer: "🖥️"
 
-# Note: icons are used only if `use_nerd_icons` is true
+# Note: icons are used only if `use_icons` is true
 # For the default icons used and all available icon names please see:
 # https://github.com/aditya-K2/gspt/blob/master/extras/CONFIG.md
 
