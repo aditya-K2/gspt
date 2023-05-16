@@ -128,6 +128,18 @@ func NewApplication() *tview.Application {
 
 	// Define Actions
 	globalActions := map[string]*Action{
+		"shuffle": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			if err := spt.Shuffle(); err != nil {
+				SendNotification(err.Error())
+			}
+			return nil
+		}, progressBar),
+		"repeat": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			if err := spt.Repeat(); err != nil {
+				SendNotification(err.Error())
+			}
+			return nil
+		}, progressBar),
 		"save_config": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			msg := "Config Saved Successfully!"
 			if err := config.WriteConfig(); err != nil {

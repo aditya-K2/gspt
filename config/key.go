@@ -47,6 +47,8 @@ var (
 				{R: 'K'}:            "decrease_image_height",
 				{R: 'L'}:            "increase_image_width",
 				{K: tcell.KeyCtrlS}: "save_config",
+				{R: 'z'}:            "shuffle",
+				{R: 'r'}:            "repeat",
 			},
 		},
 		"playlist_nav": {
