@@ -92,39 +92,34 @@ hide_image: false
 rounded_corners: false
 use_icons: false
 mappings:
-    album_view:
-        visual:
-            add_to_playlist: "a"
-        normal:
-            add_to_playlist: "a"
-    recently_played_view:
-        normal:
-            add_to_playlist: "a"
-        visual:
-            add_to_playlist: "a"
     global:
         normal:
-            focus_search: "?"
-            increase_image_width: "L"
-            move_image_up: "ctrl-k"
-            move_image_right: "ctrl-l"
-            open_current_context: "ctrl-o"
-            move_image_left: "backspace"
-            focus_main_view: "3"
-            toggle_playback: " "
-            previous: "p"
-            open_entry: "enter"
-            increase_image_height: "J"
-            decrease_image_height: "K"
-            choose_device: "d"
-            focus_nav: "1"
-            open_current_track_artist: "O"
             next: "n"
             move_image_down: "ctrl-j"
-            decrease_image_width: "H"
-            save_config: "ctrl-s"
-            focus_playlists: "2"
+            move_image_up: "ctrl-k"
+            decrease_image_height: "K"
+            repeat: "r"
             open_current_track_album: "o"
+            toggle_playback: " "
+            open_current_track_artist: "O"
+            move_image_right: "ctrl-l"
+            decrease_image_width: "H"
+            increase_image_width: "L"
+            save_config: "ctrl-s"
+            choose_device: "d"
+            focus_playlists: "2"
+            focus_main_view: "3"
+            focus_search: "?"
+            previous: "p"
+            move_image_left: "backspace"
+            focus_nav: "1"
+            open_entry: "enter"
+            increase_image_height: "J"
+            shuffle: "z"
+            open_current_context: "ctrl-o"
+    playlist_nav:
+        normal:
+            play_entry: "ctrl-p"
     playlist_view:
         normal:
             add_to_playlist: "a"
@@ -133,17 +128,24 @@ mappings:
     top_tracks_view:
         normal:
             play_entry: "ctrl-p"
-    artists_view:
-        normal:
-            play_entry: "ctrl-p"
     albums_view:
         normal:
-            queue_entry: "q"
             play_entry: "ctrl-p"
+            queue_entry: "q"
+    album_view:
+        normal:
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
+    recently_played_view:
+        visual:
+            add_to_playlist: "a"
+        normal:
+            add_to_playlist: "a"
     search_view:
         normal:
             play_entry: "ctrl-p"
-    playlist_nav:
+    artist_view:
         normal:
             play_entry: "ctrl-p"
     liked_songs_view:
@@ -151,7 +153,7 @@ mappings:
             add_to_playlist: "a"
         visual:
             add_to_playlist: "a"
-    artist_view:
+    artists_view:
         normal:
             play_entry: "ctrl-p"
 ```
@@ -160,17 +162,17 @@ mappings:
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>^, (, {, $, ], \|", ), >, }, :, ', &, *, -, =, _, /, %, +, ;, !, ?, #, ,, <, \,  , @, ., [</kbd> | <kbd>exit</kbd> |
-| <kbd>pgup</kbd> | <kbd>cancel</kbd> |
-| <kbd>backtab</kbd> | <kbd>esc</kbd> |
-| <kbd>backspace2</kbd> | <kbd>home</kbd> |
-| <kbd>help</kbd> | <kbd>escape</kbd> |
-| <kbd>enter</kbd> | <kbd>up</kbd> |
-| <kbd>up_left</kbd> | <kbd>up_right</kbd> |
-| <kbd>pgdn</kbd> | <kbd>left</kbd> |
-| <kbd>print</kbd> | <kbd>pause</kbd> |
-| <kbd>right</kbd> | <kbd>delete</kbd> |
-| <kbd>clear</kbd> | <kbd>tab</kbd> |
-| <kbd>insert</kbd> | <kbd>backspace</kbd> |
-| <kbd>down_left</kbd> | <kbd>down_right</kbd> |
-| <kbd>end</kbd> | <kbd>center</kbd> |
+| <kbd> , +, }, <, ;, @, *, [, :, (, ,, >, \, =, ., /, ', ), #, &, -, _, ], {, ", !, ^, ?, \|$, %</kbd> | <kbd>center</kbd> |
+| <kbd>pgup</kbd> | <kbd>delete</kbd> |
+| <kbd>end</kbd> | <kbd>down_left</kbd> |
+| <kbd>backspace2</kbd> | <kbd>right</kbd> |
+| <kbd>insert</kbd> | <kbd>cancel</kbd> |
+| <kbd>down</kbd> | <kbd>down_right</kbd> |
+| <kbd>pgdn</kbd> | <kbd>print</kbd> |
+| <kbd>home</kbd> | <kbd>exit</kbd> |
+| <kbd>up_right</kbd> | <kbd>escape</kbd> |
+| <kbd>clear</kbd> | <kbd>esc</kbd> |
+| <kbd>up</kbd> | <kbd>up_left</kbd> |
+| <kbd>help</kbd> | <kbd>backtab</kbd> |
+| <kbd>pause</kbd> | <kbd>backspace</kbd> |
+| <kbd>tab</kbd> | <kbd>enter</kbd> |
