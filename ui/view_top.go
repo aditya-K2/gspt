@@ -64,11 +64,11 @@ func (a *TopTracksView) handle(trackHandler, artistHandler func(r int)) {
 	if r > 0 {
 		if r < (len(a.topArtists) + 1) {
 			if artistHandler != nil {
-				artistHandler(r)
+				artistHandler(r - 1)
 			}
 		} else if r != len(a.topArtists)+1 {
 			if trackHandler != nil {
-				trackHandler(r)
+				trackHandler(r - 2 - len(a.topArtists))
 			}
 		}
 	}
@@ -76,7 +76,7 @@ func (a *TopTracksView) handle(trackHandler, artistHandler func(r int)) {
 
 func (a *TopTracksView) PlayEntry() {
 	a.handle(nil, func(r int) {
-		if err := spt.PlayContext(a.topArtists[r-1].URI); err != nil {
+		if err := spt.PlayContext(a.topArtists[r].URI); err != nil {
 			SendNotification(err.Error())
 		}
 	})
@@ -85,11 +85,11 @@ func (a *TopTracksView) PlayEntry() {
 
 func (a *TopTracksView) OpenEntry() {
 	artistHandler := func(r int) {
-		artistView.SetArtist(&(a.topArtists)[r-1].ID)
+		artistView.SetArtist(&(a.topArtists)[r].ID)
 		SetCurrentView(artistView)
 	}
 	trackHandler := func(r int) {
-		if err := spt.PlaySong(a.topTracks[r-2-len(a.topArtists)].URI); err != nil {
+		if err := spt.PlaySong(a.topTracks[r].URI); err != nil {
 			SendNotification(err.Error())
 		}
 	}
@@ -98,8 +98,8 @@ func (a *TopTracksView) OpenEntry() {
 
 func (a *TopTracksView) QueueEntry() {
 	a.handle(func(r int) {
-		msg := fmt.Sprintf("%s Queued Succesfully!", a.topTracks[r-2-len(a.topArtists)].Name)
-		if err := spt.QueueTracks(a.topTracks[r-2-len(a.topArtists)].ID); err != nil {
+		msg := fmt.Sprintf("%s Queued Succesfully!", a.topTracks[r].Name)
+		if err := spt.QueueTracks(a.topTracks[r].ID); err != nil {
 			msg = err.Error()
 		}
 		SendNotification(msg)
