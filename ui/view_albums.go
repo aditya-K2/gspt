@@ -66,9 +66,9 @@ func (a *AlbumsView) QueueEntry() {
 	go func() {
 		if err := spt.QueueAlbum(alb.ID); err != nil {
 			msg <- err.Error()
-		} else {
-			msg <- (alb.Name) + " queued succesfully!"
+			return
 		}
+		msg <- (alb.Name) + " queued succesfully!"
 	}()
 }
 
