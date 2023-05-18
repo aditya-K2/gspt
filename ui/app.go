@@ -302,6 +302,10 @@ func NewApplication() *tview.Application {
 			recentlyPlayedView.AddToPlaylist()
 			return nil
 		}, nil),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			recentlyPlayedView.QueueEntry()
+			return nil
+		}, nil),
 	}))
 	topTracksView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {

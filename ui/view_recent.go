@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
@@ -72,4 +74,14 @@ func (re *RecentlyPlayedView) OpenEntry() {
 			SendNotification(err.Error())
 		}
 	}
+}
+
+func (re *RecentlyPlayedView) QueueEntry() {
+	r, _ := Main.GetSelection()
+	track := re.recentlyPlayed[r].Track
+	msg := fmt.Sprintf("%s Queued Succesfully!", track.Name)
+	if err := spt.QueueTracks(track.ID); err != nil {
+		msg = err.Error()
+	}
+	SendNotification(msg)
 }
