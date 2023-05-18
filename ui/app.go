@@ -286,6 +286,7 @@ func NewApplication() *tview.Application {
 			App.SetFocus(Main)
 			return nil
 		}, nil),
+		"queue_entry": NewAction(playlistNav.QueueEntry, nil),
 	}))
 	navMenu.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(navMenu.OpenEntry,

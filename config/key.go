@@ -55,6 +55,7 @@ var (
 		"playlist_nav": {
 			"normal": {
 				{K: tcell.KeyCtrlP}: "play_entry",
+				{R: 'q'}:            "queue_entry",
 			},
 		},
 		"playlist_view": {
