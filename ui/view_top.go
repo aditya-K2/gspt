@@ -57,30 +57,41 @@ func (a *TopTracksView) Content() func() [][]Content {
 	}
 }
 
-func (a *TopTracksView) PlaySelectedEntry() {
+func (a *TopTracksView) handle(trackHandler, artistHandler func(r int)) {
 	r, _ := Main.GetSelection()
 	if r > 0 {
 		if r < (len(a.topArtists) + 1) {
-			if err := spt.PlayContext(a.topArtists[r-1].URI); err != nil {
-				SendNotification(err.Error())
+			if artistHandler != nil {
+				artistHandler(r)
+			}
+		} else if r != len(a.topArtists)+1 {
+			if trackHandler != nil {
+				trackHandler(r)
 			}
 		}
 	}
+}
+
+func (a *TopTracksView) PlaySelectedEntry() {
+	a.handle(nil, func(r int) {
+		if err := spt.PlayContext(a.topArtists[r-1].URI); err != nil {
+			SendNotification(err.Error())
+		}
+	})
 
 }
 
 func (a *TopTracksView) OpenEntry() {
-	r, _ := Main.GetSelection()
-	if r > 0 {
-		if r < (len(a.topArtists) + 1) {
-			artistView.SetArtist(&(a.topArtists)[r-1].ID)
-			SetCurrentView(artistView)
-		} else if r != len(a.topArtists)+1 {
-			if err := spt.PlaySong(a.topTracks[r-2-len(a.topArtists)].URI); err != nil {
-				SendNotification(err.Error())
-			}
+	artistHandler := func(r int) {
+		artistView.SetArtist(&(a.topArtists)[r-1].ID)
+		SetCurrentView(artistView)
+	}
+	trackHandler := func(r int) {
+		if err := spt.PlaySong(a.topTracks[r-2-len(a.topArtists)].URI); err != nil {
+			SendNotification(err.Error())
 		}
 	}
+	a.handle(trackHandler, artistHandler)
 }
 
 func (a *TopTracksView) Name() string { return "TopTracksView" }
