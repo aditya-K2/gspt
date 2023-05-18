@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/zmb3/spotify/v2"
 )
@@ -92,6 +94,17 @@ func (a *TopTracksView) OpenEntry() {
 		}
 	}
 	a.handle(trackHandler, artistHandler)
+}
+
+func (a *TopTracksView) QueueSelectedEntry() {
+	a.handle(func(r int) {
+		msg := fmt.Sprintf("%s Queued Succesfully!", a.topTracks[r-2-len(a.topArtists)].Name)
+		if err := spt.QueueTracks(a.topTracks[r-2-len(a.topArtists)].ID); err != nil {
+			msg = err.Error()
+		}
+		SendNotification(msg)
+	}, func(int) { SendNotification("Artists can not be queued!") })
+
 }
 
 func (a *TopTracksView) Name() string { return "TopTracksView" }

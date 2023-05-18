@@ -67,6 +67,7 @@ var (
 		"top_tracks_view": {
 			"normal": {
 				{K: tcell.KeyCtrlP}: "play_entry",
+				{R: 'q'}:            "queue_entry",
 			},
 		},
 		"liked_songs_view": {
