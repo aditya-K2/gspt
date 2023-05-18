@@ -305,11 +305,11 @@ func NewApplication() *tview.Application {
 	}))
 	topTracksView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			topTracksView.PlaySelectedEntry()
+			topTracksView.PlayEntry()
 			return nil
 		}, progressBar),
 		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			topTracksView.QueueSelectedEntry()
+			topTracksView.QueueEntry()
 			return nil
 		}, nil),
 	}))
@@ -343,7 +343,7 @@ func NewApplication() *tview.Application {
 			return nil
 		}, progressBar),
 		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			albumsView.QueueSelectEntry()
+			albumsView.QueueEntry()
 			return nil
 		}, progressBar),
 	}))

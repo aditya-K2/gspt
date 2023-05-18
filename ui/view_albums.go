@@ -59,7 +59,7 @@ func (a *AlbumsView) PlayEntry() {
 	}
 }
 
-func (a *AlbumsView) QueueSelectEntry() {
+func (a *AlbumsView) QueueEntry() {
 	r, _ := Main.GetSelection()
 	alb := (*a.savedAlbums)[r]
 	msg := SendNotificationWithChan("Queueing " + alb.Name + "...")
