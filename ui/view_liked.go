@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -64,6 +66,16 @@ func (l *LikedSongsView) OpenEntry() {
 	if err := spt.PlaySong((*l.likedSongs)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}
+}
+
+func (l *LikedSongsView) QueueEntry() {
+	r, _ := Main.GetSelection()
+	track := (*l.likedSongs)[r]
+	msg := fmt.Sprintf("%s Queued Succesfully!", track.Name)
+	if err := spt.QueueTracks(track.ID); err != nil {
+		msg = err.Error()
+	}
+	SendNotification(msg)
 }
 
 func (l *LikedSongsView) Name() string { return "LikedSongsView" }
