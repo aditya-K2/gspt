@@ -39,26 +39,21 @@
 
 ### Installing
 
-###### AUR [<img src="https://img.shields.io/aur/version/gspt-git">](https://aur.archlinux.org/packages/gspt-git/)
+##### AUR [<img src="https://img.shields.io/aur/version/gspt-git">](https://aur.archlinux.org/packages/gspt-git/)
 
 ```bash
 $ yay -S gspt-git
 ```
 
-###### Manually
+###### Pre-built Binaries are available [here](https://github.com/aditya-K2/gspt/releases/tag/pre-release)
+
+##### Manually
 
 ```bash
-# If you have Go Path set up you can directly install gspt using
-$ go install github.com/aditya-K2/gspt
-
-# Alternately
+# Install go, git, make before this.
 $ git clone https://github.com/aditya-K2/gspt.git # Cloning
 $ cd gspt
-$ go build -v # Building
-$ sudo install gspt -t "/usr/bin/" # Linux/Mac
-
-# You can merge this into a one liner
-$ git clone https://github.com/aditya-K2/gspt && cd gspt && GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw" go build -v && sudo install gspt -t "/usr/bin/"
+$ sudo make install
 ```
 
 ### Afer Installation Steps
