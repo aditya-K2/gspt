@@ -48,6 +48,7 @@ func ReadConfig() {
 
 	if Flags.Version {
 		fmt.Printf("gspt %s \nBuild Date: %s\n", Version, BuildDate)
+		os.Exit(0)
 	}
 
 	// If config path is provided through command-line use that
