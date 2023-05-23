@@ -10,6 +10,7 @@ var (
 
 type Flag struct {
 	ConfigPath     string
+	Version        bool
 	HideImage      bool
 	RoundedCorners bool
 	UseIcons       bool
@@ -19,6 +20,10 @@ func parseFlags() {
 	flag.StringVar(&Flags.ConfigPath, "c", UserConfigPath,
 		"Specify The Directory to check for config.yml file.")
 	flag.BoolVar(&Flags.HideImage, "hide-image", Config.HideImage,
+		"Do not display the cover art image.")
+	flag.BoolVar(&Flags.Version, "v", false,
+		"Do not display the cover art image.")
+	flag.BoolVar(&Flags.Version, "version", false,
 		"Do not display the cover art image.")
 	flag.BoolVar(&Flags.RoundedCorners, "rounded-corners", Config.RoundedCorners,
 		"Enable Rounded Corners")

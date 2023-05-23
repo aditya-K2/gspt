@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -15,6 +16,8 @@ var (
 	UserConfigPath         = filepath.Join(configDir, "gspt")
 	Config                 = NewConfigS()
 	OnConfigChange         func()
+	Version                = "unknown"
+	BuildDate              = "unknown"
 )
 
 type ConfigS struct {
@@ -42,6 +45,10 @@ func NewConfigS() *ConfigS {
 
 func ReadConfig() {
 	parseFlags()
+
+	if Flags.Version {
+		fmt.Printf("gspt %s \nBuild Date: %s\n", Version, BuildDate)
+	}
 
 	// If config path is provided through command-line use that
 	if Flags.ConfigPath != "" {
