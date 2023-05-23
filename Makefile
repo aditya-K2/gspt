@@ -13,7 +13,7 @@ BUILD := ${GC} build ${LDFLAGS} ${VERBOSE}
 all: linux-amd64 linux-arm64 linux-arm darwin-amd64 darwin-arm64 windows-amd64.exe
 
 install: gspt
-	install gspt -t "/usr/bin/"
+	install bin/gspt -t "/usr/bin/"
 
 gspt:
 	${BUILD} -o bin/gspt
