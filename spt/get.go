@@ -39,7 +39,7 @@ type Playable interface {
 }
 
 var (
-	ctx           = func() context.Context { return context.Background() }
+	ctx           = context.Background()
 	Client        *spotify.Client
 	playlistCache map[spotify.ID]*Playlist = make(map[spotify.ID]*Playlist)
 	albumCache    map[spotify.ID]*Album    = make(map[spotify.ID]*Album)
@@ -48,7 +48,7 @@ var (
 
 func GetPlaylist(playlistId spotify.ID) (*Playlist, chan error) {
 	c := make(chan error)
-	if fp, err := Client.GetPlaylist(ctx(), playlistId); err != nil {
+	if fp, err := Client.GetPlaylist(ctx, playlistId); err != nil {
 		go func() { c <- err }()
 		return nil, c
 	} else {
@@ -60,7 +60,7 @@ func GetPlaylist(playlistId spotify.ID) (*Playlist, chan error) {
 			addTracks()
 			go func() {
 				for page := 1; ; page++ {
-					if perr := Client.NextPage(ctx(), &fp.Tracks); perr == spotify.ErrNoMorePages {
+					if perr := Client.NextPage(ctx, &fp.Tracks); perr == spotify.ErrNoMorePages {
 						c <- nil
 						break
 					} else if perr != nil {
@@ -86,7 +86,7 @@ func GetPlaylist(playlistId spotify.ID) (*Playlist, chan error) {
 func GetAlbum(albumID spotify.ID) (*Album, chan error) {
 	c := make(chan error)
 	if _, ok := albumCache[albumID]; !ok {
-		fa, err := Client.GetAlbum(ctx(), albumID)
+		fa, err := Client.GetAlbum(ctx, albumID)
 		if err != nil {
 			go func() { c <- err }()
 			return nil, c
@@ -98,7 +98,7 @@ func GetAlbum(albumID spotify.ID) (*Album, chan error) {
 		addTracks()
 		go func() {
 			for page := 1; ; page++ {
-				if perr := Client.NextPage(ctx(), &fa.Tracks); perr == spotify.ErrNoMorePages {
+				if perr := Client.NextPage(ctx, &fa.Tracks); perr == spotify.ErrNoMorePages {
 					c <- nil
 					break
 				} else if perr != nil {
@@ -125,7 +125,7 @@ func CurrentUserSavedAlbums() (*SavedAlbums, chan error) {
 	c := make(chan error)
 	_a := make(SavedAlbums, 0)
 	albums := &_a
-	if sp, err := Client.CurrentUsersAlbums(ctx()); err != nil {
+	if sp, err := Client.CurrentUsersAlbums(ctx); err != nil {
 		go func() { c <- err }()
 		return nil, c
 	} else {
@@ -135,7 +135,7 @@ func CurrentUserSavedAlbums() (*SavedAlbums, chan error) {
 		addAlbums()
 		go func() {
 			for page := 1; ; page++ {
-				if perr := Client.NextPage(ctx(), sp); perr == spotify.ErrNoMorePages {
+				if perr := Client.NextPage(ctx, sp); perr == spotify.ErrNoMorePages {
 					c <- nil
 					break
 				} else if perr != nil {
@@ -153,7 +153,7 @@ func CurrentUserPlaylists() (*UserPlaylists, chan error) {
 	c := make(chan error)
 	_p := make(UserPlaylists, 0)
 	playlists := &_p
-	if spp, err := Client.CurrentUsersPlaylists(ctx()); err != nil {
+	if spp, err := Client.CurrentUsersPlaylists(ctx); err != nil {
 		go func() { c <- err }()
 		return nil, c
 	} else {
@@ -163,7 +163,7 @@ func CurrentUserPlaylists() (*UserPlaylists, chan error) {
 		addPlaylists()
 		go func() {
 			for page := 1; ; page++ {
-				if perr := Client.NextPage(ctx(), spp); perr == spotify.ErrNoMorePages {
+				if perr := Client.NextPage(ctx, spp); perr == spotify.ErrNoMorePages {
 					c <- nil
 					break
 				} else if perr != nil {
@@ -181,7 +181,7 @@ func CurrentUserSavedTracks() (*LikedSongs, chan error) {
 	c := make(chan error)
 	_p := make(LikedSongs, 0)
 	playlists := &_p
-	if ls, err := Client.CurrentUsersTracks(ctx()); err != nil {
+	if ls, err := Client.CurrentUsersTracks(ctx); err != nil {
 		go func() { c <- err }()
 		return nil, c
 	} else {
@@ -191,7 +191,7 @@ func CurrentUserSavedTracks() (*LikedSongs, chan error) {
 		addTracks()
 		go func() {
 			for page := 1; ; page++ {
-				if perr := Client.NextPage(ctx(), ls); perr == spotify.ErrNoMorePages {
+				if perr := Client.NextPage(ctx, ls); perr == spotify.ErrNoMorePages {
 					c <- nil
 					break
 				} else if perr != nil {
@@ -210,7 +210,7 @@ func CurrentUserFollowedArtists() (*FollowedArtists, chan error) {
 	// TODO: Check if this is the proper implementation
 	_a := make(FollowedArtists, 0)
 	artists := &_a
-	if ar, err := Client.CurrentUsersFollowedArtists(ctx()); err != nil {
+	if ar, err := Client.CurrentUsersFollowedArtists(ctx); err != nil {
 		go func() { c <- err }()
 		return nil, c
 	} else {
@@ -225,7 +225,7 @@ func CurrentUserFollowedArtists() (*FollowedArtists, chan error) {
 				if len(ar.Artists) == 0 {
 					c <- nil
 				}
-				if ar, err = Client.CurrentUsersFollowedArtists(ctx(), spotify.After(string(ap))); err != nil {
+				if ar, err = Client.CurrentUsersFollowedArtists(ctx, spotify.After(string(ap))); err != nil {
 					if err == spotify.ErrNoMorePages {
 						c <- nil
 						break
@@ -243,15 +243,15 @@ func CurrentUserFollowedArtists() (*FollowedArtists, chan error) {
 }
 
 func RecentlyPlayed() ([]spotify.RecentlyPlayedItem, error) {
-	return Client.PlayerRecentlyPlayedOpt(ctx(), &spotify.RecentlyPlayedOptions{Limit: 50})
+	return Client.PlayerRecentlyPlayedOpt(ctx, &spotify.RecentlyPlayedOptions{Limit: 50})
 }
 
 func GetPlayerState() (*spotify.PlayerState, error) {
-	return Client.PlayerState(ctx())
+	return Client.PlayerState(ctx)
 }
 
 func GetTopTracks() ([]spotify.FullTrack, error) {
-	c, err := Client.CurrentUsersTopTracks(ctx(), spotify.Limit(topTracksLimit))
+	c, err := Client.CurrentUsersTopTracks(ctx, spotify.Limit(topTracksLimit))
 	if c != nil {
 		return c.Tracks, err
 	} else {
@@ -260,7 +260,7 @@ func GetTopTracks() ([]spotify.FullTrack, error) {
 }
 
 func GetTopArtists() ([]spotify.FullArtist, error) {
-	c, err := Client.CurrentUsersTopArtists(ctx(), spotify.Limit(topTracksLimit))
+	c, err := Client.CurrentUsersTopArtists(ctx, spotify.Limit(topTracksLimit))
 	if c != nil {
 		return c.Artists, err
 	} else {
@@ -269,15 +269,15 @@ func GetTopArtists() ([]spotify.FullArtist, error) {
 }
 
 func GetArtistTopTracks(artistID spotify.ID) ([]spotify.FullTrack, error) {
-	c, err := Client.CurrentUser(ctx())
+	c, err := Client.CurrentUser(ctx)
 	if err != nil {
 		return []spotify.FullTrack{}, err
 	}
-	return Client.GetArtistsTopTracks(ctx(), artistID, c.Country)
+	return Client.GetArtistsTopTracks(ctx, artistID, c.Country)
 }
 
 func GetArtistAlbums(artistID spotify.ID) ([]spotify.SimpleAlbum, error) {
-	c, err := Client.GetArtistAlbums(ctx(), artistID, albumtypes)
+	c, err := Client.GetArtistAlbums(ctx, artistID, albumtypes)
 	if err != nil {
 		return []spotify.SimpleAlbum{}, err
 	}
@@ -285,7 +285,7 @@ func GetArtistAlbums(artistID spotify.ID) ([]spotify.SimpleAlbum, error) {
 }
 
 func Search(s string) (*spotify.SearchResult, error) {
-	return Client.Search(ctx(), s,
+	return Client.Search(ctx, s,
 		spotify.SearchTypePlaylist|
 			spotify.SearchTypeAlbum|
 			spotify.SearchTypeTrack|
@@ -293,7 +293,7 @@ func Search(s string) (*spotify.SearchResult, error) {
 }
 
 func UserDevices() ([]spotify.PlayerDevice, error) {
-	return Client.PlayerDevices(ctx())
+	return Client.PlayerDevices(ctx)
 }
 
 func TransferPlayback(deviceId spotify.ID) error {
@@ -301,10 +301,10 @@ func TransferPlayback(deviceId spotify.ID) error {
 	if err != nil {
 		return errors.New("Unable to get Current Player State!")
 	}
-	err = Client.PauseOpt(ctx(), &spotify.PlayOptions{DeviceID: &s.Device.ID})
-	return Client.TransferPlayback(ctx(), deviceId, true)
+	err = Client.PauseOpt(ctx, &spotify.PlayOptions{DeviceID: &s.Device.ID})
+	return Client.TransferPlayback(ctx, deviceId, true)
 }
 
 func GetFullPlaylist(id spotify.ID) (*spotify.FullPlaylist, error) {
-	return Client.GetPlaylist(ctx(), id)
+	return Client.GetPlaylist(ctx, id)
 }
