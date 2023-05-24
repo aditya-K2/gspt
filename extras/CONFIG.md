@@ -92,20 +92,10 @@ hide_image: false
 rounded_corners: false
 use_icons: false
 mappings:
-    recently_played_view:
-        normal:
-            add_to_playlist: "a"
-        visual:
-            add_to_playlist: "a"
-    top_tracks_view:
+    artists_view:
         normal:
             play_entry: "ctrl-p"
-    liked_songs_view:
-        normal:
-            add_to_playlist: "a"
-        visual:
-            add_to_playlist: "a"
-    artists_view:
+    artist_view:
         normal:
             play_entry: "ctrl-p"
     album_view:
@@ -118,61 +108,71 @@ mappings:
             play_entry: "ctrl-p"
     global:
         normal:
+            increase_image_height: "J"
             focus_playlists: "2"
             open_current_track_artist: "O"
-            next: "n"
             previous: "p"
-            move_image_up: "ctrl-k"
-            increase_image_height: "J"
-            shuffle: "z"
-            choose_device: "d"
-            focus_nav: "1"
-            focus_search: "?"
+            open_entry: "ctrl-m"
+            move_image_down: "ctrl-j"
+            move_image_right: "ctrl-l"
+            decrease_image_width: "H"
+            repeat: "r"
             open_current_track_album: "o"
+            next: "n"
             open_current_context: "ctrl-o"
             move_image_left: "backspace"
-            move_image_down: "ctrl-j"
-            repeat: "r"
-            toggle_playback: " "
-            open_entry: "ctrl-m"
-            decrease_image_width: "H"
-            decrease_image_height: "K"
-            save_config: "ctrl-s"
-            focus_main_view: "3"
-            move_image_right: "ctrl-l"
             increase_image_width: "L"
+            save_config: "ctrl-s"
+            shuffle: "z"
+            focus_main_view: "3"
+            focus_search: "?"
+            move_image_up: "ctrl-k"
+            choose_device: "d"
+            focus_nav: "1"
+            toggle_playback: " "
+            decrease_image_height: "K"
     playlist_nav:
         normal:
             play_entry: "ctrl-p"
+    liked_songs_view:
+        normal:
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
+    albums_view:
+        normal:
+            play_entry: "ctrl-p"
+            queue_entry: "q"
+    recently_played_view:
+        normal:
+            add_to_playlist: "a"
+        visual:
+            add_to_playlist: "a"
     playlist_view:
         normal:
             add_to_playlist: "a"
         visual:
             add_to_playlist: "a"
-    artist_view:
+    top_tracks_view:
         normal:
             play_entry: "ctrl-p"
-    albums_view:
-        normal:
-            play_entry: "ctrl-p"
-            queue_entry: "q"
 ```
 ## Keys available to map
 |||
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>%, +, {, \|#, }, *, >, /, ., [, @, ^, &, (, ), ,, ], ', -, _, !, $, <, \, :,  , =, ?, ;, "</kbd> | <kbd>up_left</kbd> |
-| <kbd>pause</kbd> | <kbd>down_left</kbd> |
-| <kbd>pgdn</kbd> | <kbd>cancel</kbd> |
-| <kbd>left</kbd> | <kbd>up_right</kbd> |
-| <kbd>print</kbd> | <kbd>esc</kbd> |
-| <kbd>enter</kbd> | <kbd>right</kbd> |
-| <kbd>delete</kbd> | <kbd>backtab</kbd> |
-| <kbd>up</kbd> | <kbd>exit</kbd> |
-| <kbd>backspace2</kbd> | <kbd>down_right</kbd> |
-| <kbd>escape</kbd> | <kbd>pgup</kbd> |
-| <kbd>down</kbd> | <kbd>end</kbd> |
-| <kbd>help</kbd> | <kbd>insert</kbd> |
-| <kbd>home</kbd> | <kbd>tab</kbd> |
-| <kbd>center</kbd> | <kbd>clear</kbd> |
+| <kbd>[, ], \|;, ', ", %, =, ?,  , }, !, @, #, <, >, \, $, ), _, /, {, ^, *, ., -, ,, &, (, +, :</kbd> | <kbd>pgdn</kbd> |
+| <kbd>tab</kbd> | <kbd>esc</kbd> |
+| <kbd>cancel</kbd> | <kbd>print</kbd> |
+| <kbd>down</kbd> | <kbd>enter</kbd> |
+| <kbd>up</kbd> | <kbd>end</kbd> |
+| <kbd>backspace2</kbd> | <kbd>home</kbd> |
+| <kbd>clear</kbd> | <kbd>up_left</kbd> |
+| <kbd>escape</kbd> | <kbd>help</kbd> |
+| <kbd>down_left</kbd> | <kbd>backtab</kbd> |
+| <kbd>up_right</kbd> | <kbd>insert</kbd> |
+| <kbd>delete</kbd> | <kbd>left</kbd> |
+| <kbd>center</kbd> | <kbd>pgup</kbd> |
+| <kbd>exit</kbd> | <kbd>right</kbd> |
+| <kbd>down_right</kbd> | <kbd>pause</kbd> |
