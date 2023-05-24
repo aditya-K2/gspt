@@ -11,7 +11,7 @@ BUILD := ${GC} build ${GOFLAGS} ${LDFLAGS} ${VERBOSE}
 
 .PHONY: gspt install linux-arm64 linux-amd64 darwin-amd64 darwin-arm64 windows-amd64
 
-all: linux-amd64 linux-arm64 linux-arm darwin-amd64 darwin-arm64 windows-amd64.exe
+all: linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64.exe
 
 install: gspt
 	install bin/gspt -t "/usr/bin/"
@@ -26,10 +26,6 @@ linux-amd64:
 linux-arm64:
 	GOOS=linux GOARCH=arm64 \
 	${BUILD} -o bin/gspt-linux-arm64
-
-linux-arm:
-	GOOS=linux GOARCH=arm \
-	${BUILD} -o bin/gspt-linux-arm
 
 darwin-amd64:
 	GOOS=darwin GOARCH=amd64 \

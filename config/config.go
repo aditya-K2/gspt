@@ -47,7 +47,7 @@ func ReadConfig() {
 	parseFlags()
 
 	if Flags.Version {
-		fmt.Printf("gspt %s \nBuild Date: %s\n", Version, BuildDate)
+		fmt.Printf("gspt: %s \nBuild Date: %s\n", Version, BuildDate)
 		os.Exit(0)
 	}
 
