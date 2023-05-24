@@ -65,12 +65,10 @@ func (a *AlbumView) AddToPlaylist() {
 }
 
 func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
-	tracks := make([]spotify.ID, 0)
-	sTracks := (*(*a.currentFullAlbum).Tracks)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, sTracks[k].ID)
-	}
-	addToPlaylist(tracks)
+	addToPlaylist(Map((*(*a.currentFullAlbum).Tracks)[start:end+1],
+		func(s spotify.SimpleTrack) spotify.ID {
+			return s.ID
+		}))
 	return nil
 }
 

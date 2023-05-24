@@ -53,11 +53,10 @@ func (l *LikedSongsView) AddToPlaylist() {
 }
 
 func (l *LikedSongsView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
-	tracks := make([]spotify.ID, 0)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, (*l.likedSongs)[k].ID)
-	}
-	addToPlaylist(tracks)
+	addToPlaylist(Map((*l.likedSongs)[start:end+1],
+		func(s spotify.SavedTrack) spotify.ID {
+			return s.ID
+		}))
 	return nil
 }
 

@@ -131,3 +131,10 @@ func artistName(s []spotify.SimpleArtist) string {
 func wrap(args ...interface{}) []interface{} {
 	return args
 }
+
+func Map[K any, V any](a []K, f func(K) V) (res []V) {
+	for _, v := range a {
+		res = append(res, f(v))
+	}
+	return
+}

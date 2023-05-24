@@ -42,11 +42,10 @@ func (r *RecentlyPlayedView) AddToPlaylist() {
 }
 
 func (r *RecentlyPlayedView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
-	tracks := make([]spotify.ID, 0)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, r.recentlyPlayed[k].Track.ID)
-	}
-	addToPlaylist(tracks)
+	addToPlaylist(Map(r.recentlyPlayed[start:end+1],
+		func(r spotify.RecentlyPlayedItem) spotify.ID {
+			return r.Track.ID
+		}))
 	return nil
 }
 
