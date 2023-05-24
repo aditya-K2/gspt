@@ -1,12 +1,13 @@
 COUNT := $(shell git rev-list --count HEAD)
 SHORT := $(shell git rev-parse --short HEAD)
 VERSION := $(shell printf "r%s.%s\n" ${COUNT} ${SHORT})
-DATE := $(shell date +%s)
+DATE := $(shell date "+%a%d%b_%I.%M.%S")
 REPO := aditya-K2/gspt
 GC := go
 VERBOSE =
+GOFLAGS := -buildmode=pie -trimpath -mod=readonly -modcacherw
 LDFLAGS := -ldflags="-X github.com/${REPO}/config.Version=${VERSION} -X github.com/${REPO}/config.BuildDate=${DATE}"
-BUILD := ${GC} build ${LDFLAGS} ${VERBOSE}
+BUILD := ${GC} build ${GOFLAGS} ${LDFLAGS} ${VERBOSE}
 
 .PHONY: gspt install linux-arm64 linux-amd64 darwin-amd64 darwin-arm64 windows-amd64
 
