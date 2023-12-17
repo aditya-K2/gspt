@@ -370,6 +370,7 @@ func NewApplication() *tview.Application {
 	// Visual Actions
 	albumView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": albumView.AddToPlaylistVisual,
+		"queue_entry":     albumView.QueueSongsVisual,
 	})
 	recentlyPlayedView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": recentlyPlayedView.AddToPlaylistVisual,
