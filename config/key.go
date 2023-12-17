@@ -82,6 +82,7 @@ var (
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 		},
 		"artists_view": {

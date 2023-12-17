@@ -60,6 +60,22 @@ func (l *LikedSongsView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) 
 	return nil
 }
 
+func (l *LikedSongsView) QueueSongsVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	tracks := (*l.likedSongs)[start : end+1]
+	msg := SendNotificationWithChan(fmt.Sprintf("Queueing %d tracks...", len(tracks)))
+	go func() {
+		err := spt.QueueTracks(Map(tracks,
+			func(s spotify.SavedTrack) spotify.ID {
+				return s.ID
+			})...)
+		if err != nil {
+			msg <- err.Error()
+		}
+		msg <- fmt.Sprintf("Queued %d tracks!", len(tracks))
+	}()
+	return nil
+}
+
 func (l *LikedSongsView) OpenEntry() {
 	r, _ := Main.GetSelection()
 	if err := spt.PlaySong((*l.likedSongs)[r].URI); err != nil {

@@ -382,6 +382,7 @@ func NewApplication() *tview.Application {
 	})
 	likedSongsView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": likedSongsView.AddToPlaylistVisual,
+		"queue_entry":     likedSongsView.QueueSongsVisual,
 	})
 
 	mappings := config.GenerateMappings()
