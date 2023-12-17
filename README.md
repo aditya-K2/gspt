@@ -107,6 +107,7 @@ $ gspt
 1. `?` Search
 1. `v` Toggle Visual Mode (Only works in some views)
 1. `a` Add to Playlist (Only works in some views)
+1. `q` Queue Songs or Contexts (Only works in some views)
 1. `ctrl-p` Start playing the entry under the cursor in some views (PlaylistNavigator, Albums, etc.)
 1. ` ` Toggle Playback (Space)
 1. `o` Open the Current Track's Album
