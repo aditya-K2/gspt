@@ -31,14 +31,14 @@ func (p *PlaylistView) Content() func() [][]Content {
 		c := make([][]Content, 0)
 		if p.currentPlaylist != nil {
 			if p.currentUserFullPlaylist == nil {
-				msg := SendNotificationWithChan("Loading %s....", p.currentPlaylist.Name)
+				msg := SendNotificationWithChan("Fetching %s....", p.currentPlaylist.Name)
 				pf, ch := spt.GetPlaylist(p.currentPlaylist.ID)
 				go func() {
 					err := <-ch
 					if err != nil {
 						msg <- err.Error()
 					} else {
-						msg <- "Playlist Loaded Succesfully!"
+						msg <- "Playlist Fetched Succesfully!"
 					}
 				}()
 				p.currentUserFullPlaylist = pf

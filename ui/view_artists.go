@@ -21,7 +21,7 @@ func (a *ArtistsView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
 		if a.followedArtists == nil {
-			msg := SendNotificationWithChan("Loading Artists from your Library...")
+			msg := SendNotificationWithChan("Fetching Artists from your Library...")
 			fa, ch := spt.CurrentUserFollowedArtists()
 			go func() {
 				err := <-ch

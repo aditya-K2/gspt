@@ -25,13 +25,13 @@ func (p *LikedSongsView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
 		if p.likedSongs == nil {
-			msg := SendNotificationWithChan("Loading Liked Songs...")
+			msg := SendNotificationWithChan("Fetching Liked Songs...")
 			p.refreshState(func(err error) {
 				if err != nil {
 					msg <- err.Error()
 					return
 				}
-				msg <- "Liked Songs Loaded Succesfully!"
+				msg <- "Liked Songs Fetched Succesfully!"
 			})
 		}
 		if p.likedSongs != nil {

@@ -33,14 +33,14 @@ func (a *AlbumView) Content() func() [][]Content {
 
 		if a.currentAlbumID != nil {
 			if a.currentFullAlbum == nil {
-				msg := SendNotificationWithChan("Loading %s....", a.currentAlbumName)
+				msg := SendNotificationWithChan("Fetching %s....", a.currentAlbumName)
 				al, ch := spt.GetAlbum(*a.currentAlbumID)
 				go func() {
 					err := <-ch
 					if err != nil {
 						msg <- err.Error()
 					} else {
-						msg <- "Album Loaded Succesfully!"
+						msg <- "Album Fetched Succesfully!"
 					}
 				}()
 				a.currentFullAlbum = al

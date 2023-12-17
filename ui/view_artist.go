@@ -32,7 +32,7 @@ func (a *ArtistView) SetArtist(id *spotify.ID) {
 }
 
 func (a *ArtistView) RefreshState() {
-	msg := SendNotificationWithChan("Loading Artist!")
+	msg := SendNotificationWithChan("Fetching Artist....")
 	topTracks, err := spt.GetArtistTopTracks(*a.artistID)
 	if err != nil {
 		msg <- ("Error retrieving Artist Top Tracks: " + err.Error())
@@ -45,7 +45,7 @@ func (a *ArtistView) RefreshState() {
 		return
 	}
 	a.albums = albums
-	msg <- "Artist Loaded Succesfully!"
+	msg <- "Artist Fetched Succesfully!"
 }
 
 func (a *ArtistView) Content() func() [][]Content {
