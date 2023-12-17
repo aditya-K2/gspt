@@ -349,6 +349,10 @@ func NewApplication() *tview.Application {
 			artistView.PlayEntry()
 			return nil
 		}, progressBar),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			artistView.QueueEntry()
+			return nil
+		}, nil),
 	}))
 	albumsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {

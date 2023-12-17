@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/zmb3/spotify/v2"
 )
@@ -101,7 +103,22 @@ func (a *ArtistView) OpenEntry() {
 	})
 }
 
-func (a *ArtistsView) QueueEntry() {
+func (a *ArtistView) QueueEntry() {
+	a.handle(func(r int) {
+		msg := SendNotificationWithChan(fmt.Sprintf("Queueing %s...", a.albums[r].Name))
+		go func() {
+			if err := spt.QueueAlbum(a.albums[r].ID); err != nil {
+				msg <- err.Error()
+			}
+			msg <- fmt.Sprintf("%s queued succesfully!", a.albums[r].Name)
+		}()
+	}, func(r int) {
+		msg := fmt.Sprintf("%s queued succesfully!", a.topTracks[r].Name)
+		if err := spt.QueueTracks(a.topTracks[r].ID); err != nil {
+			msg = err.Error()
+		}
+		SendNotification(msg)
+	})
 }
 
 func (a *ArtistView) Name() string { return "AlbumsView" }

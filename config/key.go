@@ -93,6 +93,7 @@ var (
 		"artist_view": {
 			"normal": {
 				{K: tcell.KeyCtrlP}: "play_entry",
+				{R: 'q'}:            "queue_entry",
 			},
 		},
 		"albums_view": {
