@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -62,6 +64,16 @@ func (a *AlbumView) AddToPlaylist() {
 	r, _ := Main.GetSelection()
 	track := (*(*a.currentFullAlbum).Tracks)[r]
 	addToPlaylist([]spotify.ID{track.ID})
+}
+
+func (a *AlbumView) QueueEntry() {
+	r, _ := Main.GetSelection()
+	track := (*(*a.currentFullAlbum).Tracks)[r]
+	msg := fmt.Sprintf("%s queued succesfully!", track.Name)
+	if err := spt.QueueTracks(track.ID); err != nil {
+		msg = err.Error()
+	}
+	SendNotification(msg)
 }
 
 func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
