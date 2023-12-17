@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -33,14 +35,14 @@ func (a *AlbumView) Content() func() [][]Content {
 
 		if a.currentAlbumID != nil {
 			if a.currentFullAlbum == nil {
-				msg := SendNotificationWithChan("Loading %s....", a.currentAlbumName)
+				msg := SendNotificationWithChan("Fetching %s....", a.currentAlbumName)
 				al, ch := spt.GetAlbum(*a.currentAlbumID)
 				go func() {
 					err := <-ch
 					if err != nil {
 						msg <- err.Error()
 					} else {
-						msg <- "Album Loaded Succesfully!"
+						msg <- "Album Fetched Succesfully!"
 					}
 				}()
 				a.currentFullAlbum = al
@@ -64,13 +66,30 @@ func (a *AlbumView) AddToPlaylist() {
 	addToPlaylist([]spotify.ID{track.ID})
 }
 
-func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
-	tracks := make([]spotify.ID, 0)
-	sTracks := (*(*a.currentFullAlbum).Tracks)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, sTracks[k].ID)
+func (a *AlbumView) QueueEntry() {
+	r, _ := Main.GetSelection()
+	track := (*(*a.currentFullAlbum).Tracks)[r]
+	msg := fmt.Sprintf("%s queued succesfully!", track.Name)
+	if err := spt.QueueTracks(track.ID); err != nil {
+		msg = err.Error()
 	}
-	addToPlaylist(tracks)
+	SendNotification(msg)
+}
+
+func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	addToPlaylist(Map((*(*a.currentFullAlbum).Tracks)[start:end+1],
+		func(s spotify.SimpleTrack) spotify.ID {
+			return s.ID
+		}))
+	return nil
+}
+
+func (a *AlbumView) QueueSongsVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	tracks := (*(*a.currentFullAlbum).Tracks)[start : end+1]
+	queueSongs(Map(tracks,
+		func(s spotify.SimpleTrack) spotify.ID {
+			return s.ID
+		}))
 	return nil
 }
 

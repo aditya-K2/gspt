@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -23,13 +25,13 @@ func (p *LikedSongsView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
 		if p.likedSongs == nil {
-			msg := SendNotificationWithChan("Loading Liked Songs...")
+			msg := SendNotificationWithChan("Fetching Liked Songs...")
 			p.refreshState(func(err error) {
 				if err != nil {
 					msg <- err.Error()
 					return
 				}
-				msg <- "Liked Songs Loaded Succesfully!"
+				msg <- "Liked Songs Fetched Succesfully!"
 			})
 		}
 		if p.likedSongs != nil {
@@ -51,11 +53,19 @@ func (l *LikedSongsView) AddToPlaylist() {
 }
 
 func (l *LikedSongsView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
-	tracks := make([]spotify.ID, 0)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, (*l.likedSongs)[k].ID)
-	}
-	addToPlaylist(tracks)
+	addToPlaylist(Map((*l.likedSongs)[start:end+1],
+		func(s spotify.SavedTrack) spotify.ID {
+			return s.ID
+		}))
+	return nil
+}
+
+func (l *LikedSongsView) QueueSongsVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	tracks := (*l.likedSongs)[start : end+1]
+	queueSongs(Map(tracks,
+		func(s spotify.SavedTrack) spotify.ID {
+			return s.ID
+		}))
 	return nil
 }
 
@@ -64,6 +74,16 @@ func (l *LikedSongsView) OpenEntry() {
 	if err := spt.PlaySong((*l.likedSongs)[r].URI); err != nil {
 		SendNotification(err.Error())
 	}
+}
+
+func (l *LikedSongsView) QueueEntry() {
+	r, _ := Main.GetSelection()
+	track := (*l.likedSongs)[r]
+	msg := fmt.Sprintf("%s Queued Succesfully!", track.Name)
+	if err := spt.QueueTracks(track.ID); err != nil {
+		msg = err.Error()
+	}
+	SendNotification(msg)
 }
 
 func (l *LikedSongsView) Name() string { return "LikedSongsView" }

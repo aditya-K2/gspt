@@ -71,6 +71,17 @@ func addToPlaylist(tracks []spotify.ID) {
 	})
 }
 
+func queueSongs(tracks []spotify.ID) {
+	msg := SendNotificationWithChan(fmt.Sprintf("Queueing %d tracks...", len(tracks)))
+	go func() {
+		err := spt.QueueTracks(tracks...)
+		if err != nil {
+			msg <- err.Error()
+		}
+		msg <- fmt.Sprintf("Queued %d tracks!", len(tracks))
+	}()
+}
+
 func fileName(a spotify.SimpleAlbum) string {
 	return fmt.Sprintf(filepath.Join(cfg.CacheDir, "%s.jpg"), a.ID)
 }
@@ -130,4 +141,11 @@ func artistName(s []spotify.SimpleArtist) string {
 
 func wrap(args ...interface{}) []interface{} {
 	return args
+}
+
+func Map[K any, V any](a []K, f func(K) V) (res []V) {
+	for _, v := range a {
+		res = append(res, f(v))
+	}
+	return
 }

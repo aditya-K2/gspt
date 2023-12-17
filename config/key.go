@@ -14,9 +14,11 @@ var (
 		"recently_played_view": {
 			"normal": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 		},
 		"search_view": {
@@ -54,27 +56,33 @@ var (
 		"playlist_nav": {
 			"normal": {
 				{K: tcell.KeyCtrlP}: "play_entry",
+				{R: 'q'}:            "queue_entry",
 			},
 		},
 		"playlist_view": {
 			"normal": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 		},
 		"top_tracks_view": {
 			"normal": {
 				{K: tcell.KeyCtrlP}: "play_entry",
+				{R: 'q'}:            "queue_entry",
 			},
 		},
 		"liked_songs_view": {
 			"normal": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 		},
 		"artists_view": {
@@ -96,9 +104,11 @@ var (
 		"album_view": {
 			"normal": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 		},
 		"nav_menu": {},

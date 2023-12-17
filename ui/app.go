@@ -286,6 +286,7 @@ func NewApplication() *tview.Application {
 			App.SetFocus(Main)
 			return nil
 		}, nil),
+		"queue_entry": NewAction(playlistNav.QueueEntry, nil),
 	}))
 	navMenu.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"open_entry": NewAction(navMenu.OpenEntry,
@@ -296,22 +297,38 @@ func NewApplication() *tview.Application {
 			playlistView.AddToPlaylist()
 			return nil
 		}, nil),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			playlistView.QueueEntry()
+			return nil
+		}, nil),
 	}))
 	recentlyPlayedView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			recentlyPlayedView.AddToPlaylist()
 			return nil
 		}, nil),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			recentlyPlayedView.QueueEntry()
+			return nil
+		}, nil),
 	}))
 	topTracksView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"play_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			topTracksView.PlaySelectedEntry()
+			topTracksView.PlayEntry()
 			return nil
 		}, progressBar),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			topTracksView.QueueEntry()
+			return nil
+		}, nil),
 	}))
 	likedSongsView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			likedSongsView.AddToPlaylist()
+			return nil
+		}, nil),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			likedSongsView.QueueEntry()
 			return nil
 		}, nil),
 	}))
@@ -339,13 +356,17 @@ func NewApplication() *tview.Application {
 			return nil
 		}, progressBar),
 		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
-			albumsView.QueueSelectEntry()
+			albumsView.QueueEntry()
 			return nil
-		}, progressBar),
+		}, nil),
 	}))
 	albumView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
 			albumView.AddToPlaylist()
+			return nil
+		}, nil),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			albumView.QueueEntry()
 			return nil
 		}, nil),
 	}))
@@ -353,15 +374,19 @@ func NewApplication() *tview.Application {
 	// Visual Actions
 	albumView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": albumView.AddToPlaylistVisual,
+		"queue_entry":     albumView.QueueSongsVisual,
 	})
 	recentlyPlayedView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": recentlyPlayedView.AddToPlaylistVisual,
+		"queue_entry":     recentlyPlayedView.QueueSongsVisual,
 	})
 	playlistView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": playlistView.AddToPlaylistVisual,
+		"queue_entry":     playlistView.QueueSongsVisual,
 	})
 	likedSongsView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": likedSongsView.AddToPlaylistVisual,
+		"queue_entry":     likedSongsView.QueueSongsVisual,
 	})
 
 	mappings := config.GenerateMappings()

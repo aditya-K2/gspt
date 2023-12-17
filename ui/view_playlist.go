@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -31,14 +33,14 @@ func (p *PlaylistView) Content() func() [][]Content {
 		c := make([][]Content, 0)
 		if p.currentPlaylist != nil {
 			if p.currentUserFullPlaylist == nil {
-				msg := SendNotificationWithChan("Loading %s....", p.currentPlaylist.Name)
+				msg := SendNotificationWithChan("Fetching %s....", p.currentPlaylist.Name)
 				pf, ch := spt.GetPlaylist(p.currentPlaylist.ID)
 				go func() {
 					err := <-ch
 					if err != nil {
 						msg <- err.Error()
 					} else {
-						msg <- "Playlist Loaded Succesfully!"
+						msg <- "Playlist Fetched Succesfully!"
 					}
 				}()
 				p.currentUserFullPlaylist = pf
@@ -63,12 +65,19 @@ func (p *PlaylistView) AddToPlaylist() {
 }
 
 func (p *PlaylistView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
-	tracks := make([]spotify.ID, 0)
-	sTracks := (*(*p.currentUserFullPlaylist).Tracks)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, sTracks[k].Track.ID)
-	}
-	addToPlaylist(tracks)
+	addToPlaylist(Map((*(*p.currentUserFullPlaylist).Tracks)[start:end+1],
+		func(s spotify.PlaylistTrack) spotify.ID {
+			return s.Track.ID
+		}))
+	return nil
+}
+
+func (p *PlaylistView) QueueSongsVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	tracks := (*(*p.currentUserFullPlaylist).Tracks)[start : end+1]
+	queueSongs(Map(tracks,
+		func(s spotify.PlaylistTrack) spotify.ID {
+			return s.Track.ID
+		}))
 	return nil
 }
 
@@ -77,6 +86,16 @@ func (p *PlaylistView) OpenEntry() {
 	if err := spt.PlaySongWithContext(p.currentPlaylist.URI, r); err != nil {
 		SendNotification(err.Error())
 	}
+}
+
+func (p *PlaylistView) QueueEntry() {
+	r, _ := Main.GetSelection()
+	track := (*(*p.currentUserFullPlaylist).Tracks)[r].Track
+	msg := fmt.Sprintf("%s Queued Succesfully!", track.Name)
+	if err := spt.QueueTracks(track.ID); err != nil {
+		msg = err.Error()
+	}
+	SendNotification(msg)
 }
 
 func (p *PlaylistView) Name() string { return "PlaylistView" }

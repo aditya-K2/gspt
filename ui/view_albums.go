@@ -21,7 +21,7 @@ func (a *AlbumsView) Content() func() [][]Content {
 	return func() [][]Content {
 		c := make([][]Content, 0)
 		if a.savedAlbums == nil {
-			msg := SendNotificationWithChan("Loading Albums from your Library...")
+			msg := SendNotificationWithChan("Fetching Albums from your Library...")
 			sa, ch := spt.CurrentUserSavedAlbums()
 			go func() {
 				err := <-ch
@@ -59,16 +59,16 @@ func (a *AlbumsView) PlayEntry() {
 	}
 }
 
-func (a *AlbumsView) QueueSelectEntry() {
+func (a *AlbumsView) QueueEntry() {
 	r, _ := Main.GetSelection()
 	alb := (*a.savedAlbums)[r]
 	msg := SendNotificationWithChan("Queueing " + alb.Name + "...")
 	go func() {
 		if err := spt.QueueAlbum(alb.ID); err != nil {
 			msg <- err.Error()
-		} else {
-			msg <- (alb.Name) + " queued succesfully!"
+			return
 		}
+		msg <- (alb.Name) + " queued succesfully!"
 	}()
 }
 

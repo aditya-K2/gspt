@@ -83,6 +83,21 @@ func (v *PlaylistNav) PlayEntry(e *tcell.EventKey) *tcell.EventKey {
 	return nil
 }
 
+func (v *PlaylistNav) QueueEntry(e *tcell.EventKey) *tcell.EventKey {
+	r, _ := v.Table.GetSelection()
+	playlist := (*v.Playlists)[r]
+	msg := SendNotificationWithChan("Queueing %s...", playlist.Name)
+	go func() {
+		if err := spt.QueuePlaylist(playlist.ID); err != nil {
+			msg <- err.Error()
+			return
+		}
+		msg <- playlist.Name + " Queued Succesfully!"
+	}()
+
+	return nil
+}
+
 func (v *PlaylistNav) RefreshState() {
 	p, ch := spt.CurrentUserPlaylists()
 	go func() {

@@ -8,7 +8,7 @@ import (
 )
 
 func play(options *spotify.PlayOptions) error {
-	return Client.PlayOpt(ctx(), options)
+	return Client.PlayOpt(ctx, options)
 }
 
 func PlaySong(uri spotify.URI) error {
@@ -38,16 +38,16 @@ func PlayContext(context spotify.URI) error {
 }
 
 func TogglePlayback() error {
-	p, err := Client.PlayerCurrentlyPlaying(ctx())
+	p, err := Client.PlayerCurrentlyPlaying(ctx)
 	if err != nil {
 		return err
 	}
 	if p.Playing {
-		if err := Client.Pause(ctx()); err != nil {
+		if err := Client.Pause(ctx); err != nil {
 			return err
 		}
 	} else {
-		if err := Client.Play(ctx()); err != nil {
+		if err := Client.Play(ctx); err != nil {
 			return err
 		}
 	}
@@ -63,11 +63,11 @@ func UriToID(uri spotify.URI) (spotify.ID, error) {
 }
 
 func Next() error {
-	return Client.Next(ctx())
+	return Client.Next(ctx)
 }
 
 func Previous() error {
-	return Client.Previous(ctx())
+	return Client.Previous(ctx)
 }
 
 func Shuffle() error {
@@ -77,7 +77,7 @@ func Shuffle() error {
 		return err
 	}
 
-	return Client.Shuffle(ctx(), !s.ShuffleState)
+	return Client.Shuffle(ctx, !s.ShuffleState)
 }
 
 func Repeat() error {
@@ -92,5 +92,5 @@ func Repeat() error {
 		return err
 	}
 
-	return Client.Repeat(ctx(), next[s.RepeatState])
+	return Client.Repeat(ctx, next[s.RepeatState])
 }

@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/aditya-K2/utils"
 	"github.com/gdamore/tcell/v2"
@@ -40,11 +42,19 @@ func (r *RecentlyPlayedView) AddToPlaylist() {
 }
 
 func (r *RecentlyPlayedView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
-	tracks := make([]spotify.ID, 0)
-	for k := start; k <= end; k++ {
-		tracks = append(tracks, r.recentlyPlayed[k].Track.ID)
-	}
-	addToPlaylist(tracks)
+	addToPlaylist(Map(r.recentlyPlayed[start:end+1],
+		func(r spotify.RecentlyPlayedItem) spotify.ID {
+			return r.Track.ID
+		}))
+	return nil
+}
+
+func (r *RecentlyPlayedView) QueueSongsVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
+	tracks := r.recentlyPlayed[start : end+1]
+	queueSongs(Map(tracks,
+		func(s spotify.RecentlyPlayedItem) spotify.ID {
+			return s.Track.ID
+		}))
 	return nil
 }
 
@@ -72,4 +82,14 @@ func (re *RecentlyPlayedView) OpenEntry() {
 			SendNotification(err.Error())
 		}
 	}
+}
+
+func (re *RecentlyPlayedView) QueueEntry() {
+	r, _ := Main.GetSelection()
+	track := re.recentlyPlayed[r].Track
+	msg := fmt.Sprintf("%s Queued Succesfully!", track.Name)
+	if err := spt.QueueTracks(track.ID); err != nil {
+		msg = err.Error()
+	}
+	SendNotification(msg)
 }
