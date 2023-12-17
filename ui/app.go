@@ -297,6 +297,10 @@ func NewApplication() *tview.Application {
 			playlistView.AddToPlaylist()
 			return nil
 		}, nil),
+		"queue_entry": NewAction(func(e *tcell.EventKey) *tcell.EventKey {
+			playlistView.QueueEntry()
+			return nil
+		}, nil),
 	}))
 	recentlyPlayedView.SetActions(utils.MergeMaps(globalActions, map[string]*Action{
 		"add_to_playlist": NewAction(func(e *tcell.EventKey) *tcell.EventKey {

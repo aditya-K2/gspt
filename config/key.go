@@ -61,6 +61,7 @@ var (
 		"playlist_view": {
 			"normal": {
 				{R: 'a'}: "add_to_playlist",
+				{R: 'q'}: "queue_entry",
 			},
 			"visual": {
 				{R: 'a'}: "add_to_playlist",
