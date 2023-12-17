@@ -378,6 +378,7 @@ func NewApplication() *tview.Application {
 	})
 	playlistView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": playlistView.AddToPlaylistVisual,
+		"queue_entry":     playlistView.QueueSongsVisual,
 	})
 	likedSongsView.SetVisualActions(map[string]func(start, end int, e *tcell.EventKey) *tcell.EventKey{
 		"add_to_playlist": likedSongsView.AddToPlaylistVisual,
