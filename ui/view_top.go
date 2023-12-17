@@ -98,7 +98,7 @@ func (a *TopTracksView) OpenEntry() {
 
 func (a *TopTracksView) QueueEntry() {
 	a.handle(func(r int) {
-		msg := fmt.Sprintf("%s Queued Succesfully!", a.topTracks[r].Name)
+		msg := fmt.Sprintf("%s queued succesfully!", a.topTracks[r].Name)
 		if err := spt.QueueTracks(a.topTracks[r].ID); err != nil {
 			msg = err.Error()
 		}

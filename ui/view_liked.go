@@ -79,7 +79,7 @@ func (l *LikedSongsView) OpenEntry() {
 func (l *LikedSongsView) QueueEntry() {
 	r, _ := Main.GetSelection()
 	track := (*l.likedSongs)[r]
-	msg := fmt.Sprintf("%s Queued Succesfully!", track.Name)
+	msg := fmt.Sprintf("%s queued succesfully!", track.Name)
 	if err := spt.QueueTracks(track.ID); err != nil {
 		msg = err.Error()
 	}

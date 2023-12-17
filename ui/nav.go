@@ -92,7 +92,7 @@ func (v *PlaylistNav) QueueEntry(e *tcell.EventKey) *tcell.EventKey {
 			msg <- err.Error()
 			return
 		}
-		msg <- playlist.Name + " Queued Succesfully!"
+		msg <- playlist.Name + " queued succesfully!"
 	}()
 
 	return nil

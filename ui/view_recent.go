@@ -87,7 +87,7 @@ func (re *RecentlyPlayedView) OpenEntry() {
 func (re *RecentlyPlayedView) QueueEntry() {
 	r, _ := Main.GetSelection()
 	track := re.recentlyPlayed[r].Track
-	msg := fmt.Sprintf("%s Queued Succesfully!", track.Name)
+	msg := fmt.Sprintf("%s queued succesfully!", track.Name)
 	if err := spt.QueueTracks(track.ID); err != nil {
 		msg = err.Error()
 	}
