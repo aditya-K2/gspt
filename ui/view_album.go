@@ -1,8 +1,6 @@
 package ui
 
 import (
-	"fmt"
-
 	"github.com/aditya-K2/gspt/spt"
 	"github.com/gdamore/tcell/v2"
 	"github.com/zmb3/spotify/v2"
@@ -76,17 +74,10 @@ func (a *AlbumView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *tcel
 
 func (a *AlbumView) QueueSongsVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
 	tracks := (*(*a.currentFullAlbum).Tracks)[start : end+1]
-	msg := SendNotificationWithChan(fmt.Sprintf("Queueing %d tracks...", len(tracks)))
-	go func() {
-		err := spt.QueueTracks(Map(tracks,
-			func(s spotify.SimpleTrack) spotify.ID {
-				return s.ID
-			})...)
-		if err != nil {
-			msg <- err.Error()
-		}
-		msg <- fmt.Sprintf("Queued %d tracks!", len(tracks))
-	}()
+	queueSongs(Map(tracks,
+		func(s spotify.SimpleTrack) spotify.ID {
+			return s.ID
+		}))
 	return nil
 }
 

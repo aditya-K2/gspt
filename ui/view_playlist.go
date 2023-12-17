@@ -74,17 +74,10 @@ func (p *PlaylistView) AddToPlaylistVisual(start, end int, e *tcell.EventKey) *t
 
 func (p *PlaylistView) QueueSongsVisual(start, end int, e *tcell.EventKey) *tcell.EventKey {
 	tracks := (*(*p.currentUserFullPlaylist).Tracks)[start : end+1]
-	msg := SendNotificationWithChan(fmt.Sprintf("Queueing %d tracks...", len(tracks)))
-	go func() {
-		err := spt.QueueTracks(Map(tracks,
-			func(s spotify.PlaylistTrack) spotify.ID {
-				return s.Track.ID
-			})...)
-		if err != nil {
-			msg <- err.Error()
-		}
-		msg <- fmt.Sprintf("Queued %d tracks!", len(tracks))
-	}()
+	queueSongs(Map(tracks,
+		func(s spotify.PlaylistTrack) spotify.ID {
+			return s.Track.ID
+		}))
 	return nil
 }
 
