@@ -6,7 +6,7 @@ REPO := aditya-K2/gspt
 GC := go
 VERBOSE =
 GOFLAGS := -buildmode=pie -trimpath -mod=readonly -modcacherw
-LDFLAGS := -ldflags="-X github.com/${REPO}/config.Version=${VERSION} -X github.com/${REPO}/config.BuildDate=${DATE}"
+LDFLAGS := -ldflags="-X github.com/${REPO}/config.version=${VERSION} -X github.com/${REPO}/config.buildDate=${DATE}"
 BUILD := ${GC} build ${GOFLAGS} ${LDFLAGS} ${VERBOSE}
 
 .PHONY: gspt install linux-arm64 linux-amd64 darwin-amd64 darwin-arm64 windows-amd64

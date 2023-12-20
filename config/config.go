@@ -13,14 +13,14 @@ import (
 var (
 	configDir, configErr   = os.UserConfigDir()
 	userCacheDir, cacheErr = os.UserCacheDir()
-	UserConfigPath         = filepath.Join(configDir, "gspt")
-	Config                 = NewConfigS()
+	userConfigPath         = filepath.Join(configDir, "gspt")
+	Config                 = newConfigS()
 	OnConfigChange         func()
-	Version                = "unknown"
-	BuildDate              = "unknown"
+	version                = "unknown"
+	buildDate              = "unknown"
 )
 
-type ConfigS struct {
+type configS struct {
 	CacheDir           string  `yaml:"cache_dir" mapstructure:"cache_dir"`
 	RedrawInterval     int     `yaml:"redraw_interval" mapstructure:"redraw_interval"`
 	Colors             *Colors `mapstructure:"colors"`
@@ -34,8 +34,8 @@ type ConfigS struct {
 	UseIcons           bool    `yaml:"use_icons" mapstructure:"use_icons"`
 }
 
-func NewConfigS() *ConfigS {
-	return &ConfigS{
+func newConfigS() *configS {
+	return &configS{
 		CacheDir:       utils.CheckDirectoryFmt(userCacheDir),
 		RedrawInterval: 500,
 		Colors:         NewColors(),
@@ -47,13 +47,13 @@ func ReadConfig() {
 	parseFlags()
 
 	if Flags.Version {
-		fmt.Printf("gspt: %s \nBuild Date: %s\n", Version, BuildDate)
+		fmt.Printf("gspt: %s \nBuild Date: %s\n", version, buildDate)
 		os.Exit(0)
 	}
 
 	// If config path is provided through command-line use that
 	if Flags.ConfigPath != "" {
-		UserConfigPath = Flags.ConfigPath
+		userConfigPath = Flags.ConfigPath
 	}
 
 	if configErr != nil {
@@ -67,7 +67,7 @@ func ReadConfig() {
 	}
 
 	viper.SetConfigName("config")
-	viper.AddConfigPath(utils.ExpandHomeDir(UserConfigPath))
+	viper.AddConfigPath(utils.ExpandHomeDir(userConfigPath))
 
 	if err := viper.ReadInConfig(); err != nil {
 		utils.Print("RED", "Could Not Read Config file.\n")

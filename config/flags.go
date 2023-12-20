@@ -17,7 +17,7 @@ type Flag struct {
 }
 
 func parseFlags() {
-	flag.StringVar(&Flags.ConfigPath, "c", UserConfigPath,
+	flag.StringVar(&Flags.ConfigPath, "c", userConfigPath,
 		"Specify The Directory to check for config.yml file.")
 	flag.BoolVar(&Flags.HideImage, "hide-image", Config.HideImage,
 		"Do not display the cover art image.")
