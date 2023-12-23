@@ -281,4 +281,4 @@ by pressing <kbd>ctrl-s</kbd>
 
 ---
 
-### Special thanks to [spotify-tui](https://github.com/Rigellute/spotify-tui)
+##### Inspired from [spotify-tui](https://github.com/Rigellute/spotify-tui)
