@@ -98,7 +98,7 @@ func InitClient() error {
 		token = payload.Token
 	}
 
-	Client = spotify.New(auth.Client(context.Background(), token))
+	client = spotify.New(auth.Client(context.Background(), token))
 	return nil
 }
 

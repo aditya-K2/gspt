@@ -8,7 +8,7 @@ import (
 )
 
 func AddTracksToPlaylist(playlistId spotify.ID, t ...spotify.ID) error {
-	_, err := Client.AddTracksToPlaylist(ctx, playlistId, t...)
+	_, err := client.AddTracksToPlaylist(ctx, playlistId, t...)
 	return err
 }
 
@@ -16,7 +16,7 @@ func QueueTracks(ids ...spotify.ID) error {
 	count := 0
 	_ctx := ctx
 	for _, id := range ids {
-		if err := Client.QueueSong(_ctx, id); err != nil {
+		if err := client.QueueSong(_ctx, id); err != nil {
 			return errors.New(fmt.Sprintf("%s | Tracks Queued: %d", err.Error(), count))
 		}
 	}
