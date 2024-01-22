@@ -1,12 +1,13 @@
 package ui
 
 import (
+	"github.com/aditya-K2/gspt/config"
 	"github.com/aditya-K2/tview"
 )
 
 var (
-	borders = map[bool]map[string]rune{
-		true: {
+	borders = map[string]map[string]rune{
+		config.CornersRounded: {
 			"TopLeft":          '╭',
 			"TopRight":         '╮',
 			"BottomRight":      '╯',
@@ -20,7 +21,7 @@ var (
 			"VerticalFocus":    '│',
 			"HorizontalFocus":  '─',
 		},
-		false: {
+		config.CornersDefault: {
 			"TopLeft":          tview.Borders.TopLeft,
 			"TopRight":         tview.Borders.TopRight,
 			"BottomRight":      tview.Borders.BottomRight,
@@ -38,18 +39,18 @@ var (
 )
 
 func setBorderRunes() {
-	tview.Borders.TopLeft = borders[cfg.RoundedCorners]["TopLeft"]
-	tview.Borders.TopRight = borders[cfg.RoundedCorners]["TopRight"]
-	tview.Borders.BottomRight = borders[cfg.RoundedCorners]["BottomRight"]
-	tview.Borders.BottomLeft = borders[cfg.RoundedCorners]["BottomLeft"]
-	tview.Borders.Vertical = borders[cfg.RoundedCorners]["Vertical"]
-	tview.Borders.Horizontal = borders[cfg.RoundedCorners]["Horizontal"]
-	tview.Borders.TopLeftFocus = borders[cfg.RoundedCorners]["TopLeftFocus"]
-	tview.Borders.TopRightFocus = borders[cfg.RoundedCorners]["TopRightFocus"]
-	tview.Borders.BottomRightFocus = borders[cfg.RoundedCorners]["BottomRightFocus"]
-	tview.Borders.BottomLeftFocus = borders[cfg.RoundedCorners]["BottomLeftFocus"]
-	tview.Borders.VerticalFocus = borders[cfg.RoundedCorners]["VerticalFocus"]
-	tview.Borders.HorizontalFocus = borders[cfg.RoundedCorners]["HorizontalFocus"]
+	tview.Borders.TopLeft = borders[cfg.Corners]["TopLeft"]
+	tview.Borders.TopRight = borders[cfg.Corners]["TopRight"]
+	tview.Borders.BottomRight = borders[cfg.Corners]["BottomRight"]
+	tview.Borders.BottomLeft = borders[cfg.Corners]["BottomLeft"]
+	tview.Borders.Vertical = borders[cfg.Corners]["Vertical"]
+	tview.Borders.Horizontal = borders[cfg.Corners]["Horizontal"]
+	tview.Borders.TopLeftFocus = borders[cfg.Corners]["TopLeftFocus"]
+	tview.Borders.TopRightFocus = borders[cfg.Corners]["TopRightFocus"]
+	tview.Borders.BottomRightFocus = borders[cfg.Corners]["BottomRightFocus"]
+	tview.Borders.BottomLeftFocus = borders[cfg.Corners]["BottomLeftFocus"]
+	tview.Borders.VerticalFocus = borders[cfg.Corners]["VerticalFocus"]
+	tview.Borders.HorizontalFocus = borders[cfg.Corners]["HorizontalFocus"]
 }
 
 func setStyles() {

@@ -7,7 +7,9 @@ import (
 )
 
 func main() {
-	config.ReadConfig()
+	if err := config.ReadConfig(); err != nil {
+		panic(err)
+	}
 	if err := spt.InitClient(); err != nil {
 		panic(err)
 	}

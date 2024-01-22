@@ -44,7 +44,7 @@ func onConfigChange() {
 	setStyles()
 	setIcons()
 	setBorderRunes()
-	if coverArt != nil && !cfg.HideImage {
+	if coverArt != nil && cfg.Image == config.ImageShow {
 		coverArt.RefreshState()
 	}
 }
@@ -272,7 +272,7 @@ func NewApplication() *tview.Application {
 		}, coverArt),
 	}
 
-	if !cfg.HideImage {
+	if cfg.Image == config.ImageShow {
 		globalActions = utils.MergeMaps(globalActions, imageActions)
 	}
 
@@ -415,7 +415,7 @@ func NewApplication() *tview.Application {
 		AddItem(navMenu, 6, 3, false).
 		AddItem(playlistNav, 0, 6, false)
 
-	if !cfg.HideImage {
+	if cfg.Image == config.ImageShow {
 		navFlex.AddItem(coverArt, 9, 3, false)
 	}
 
@@ -438,7 +438,7 @@ func NewApplication() *tview.Application {
 
 	// Start Routines
 	InitNotifier()
-	if !cfg.HideImage {
+	if cfg.Image == config.ImageShow {
 		go rectWatcher()
 	} else {
 		// Start Progress Routine directly

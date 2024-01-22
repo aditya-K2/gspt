@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"errors"
+
 	"github.com/aditya-K2/utils"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -20,6 +22,13 @@ var (
 	buildDate              = "unknown"
 )
 
+const (
+	ImageHidden    string = "hidden"
+	ImageShow      string = "show"
+	CornersRounded string = "rounded"
+	CornersDefault string = "default"
+)
+
 type configS struct {
 	CacheDir           string  `yaml:"cache_dir" mapstructure:"cache_dir"`
 	RedrawInterval     int     `yaml:"redraw_interval" mapstructure:"redraw_interval"`
@@ -29,8 +38,8 @@ type configS struct {
 	AdditionalPaddingY int     `yaml:"additional_padding_y" mapstructure:"additional_padding_y"`
 	ImageWidthExtraX   int     `yaml:"image_width_extra_x" mapstructure:"image_width_extra_x"`
 	ImageWidthExtraY   int     `yaml:"image_width_extra_y" mapstructure:"image_width_extra_y"`
-	HideImage          bool    `yaml:"hide_image" mapstructure:"hide_image"`
-	RoundedCorners     bool    `yaml:"rounded_corners" mapstructure:"rounded_corners"`
+	Image              string  `yaml:"image" mapstructure:"image"`
+	Corners            string  `yaml:"corners" mapstructure:"corners"`
 	UseIcons           bool    `yaml:"use_icons" mapstructure:"use_icons"`
 }
 
@@ -40,10 +49,12 @@ func newConfigS() *configS {
 		RedrawInterval: 500,
 		Colors:         NewColors(),
 		Icons:          NewIcons(),
+		Corners:        CornersDefault,
+		Image:          ImageShow,
 	}
 }
 
-func ReadConfig() {
+func ReadConfig() error {
 	parseFlags()
 
 	if Flags.Version {
@@ -58,12 +69,12 @@ func ReadConfig() {
 
 	if configErr != nil {
 		utils.Print("RED", "Couldn't get $XDG_CONFIG!")
-		panic(configErr)
+		return configErr
 	}
 
 	if cacheErr != nil {
 		utils.Print("RED", "Couldn't get CACHE DIR!")
-		panic(cacheErr)
+		return cacheErr
 	}
 
 	viper.SetConfigName("config")
@@ -80,19 +91,29 @@ func ReadConfig() {
 		Config.CacheDir = utils.ExpandHomeDir(Config.CacheDir)
 	}
 
-	// Flags have precedence over config values
-	useFlags := func() {
-		if Flags.HideImage != false {
-			Config.HideImage = Flags.HideImage
+	if Flags.Image != "" {
+		if Flags.Image == ImageHidden || Flags.Image == ImageShow {
+			fmt.Println(Flags.Image)
+			fmt.Println("Here")
+			Config.Image = Flags.Image
+		} else {
+			return errors.New(fmt.Sprintf("Undefined value provided to --image flag: '%s' ( accepted: %s | %s )", Flags.Image, ImageHidden, ImageShow))
 		}
-		if Flags.RoundedCorners != false {
-			Config.RoundedCorners = Flags.RoundedCorners
-		}
-		if Flags.UseIcons != false {
-			Config.UseIcons = Flags.UseIcons
-		}
+		fmt.Println(Config.Image)
 	}
-	useFlags()
+
+	if Flags.Corners != "" {
+		if Flags.Corners == CornersRounded || Flags.Corners == CornersDefault {
+			Config.Corners = Flags.Corners
+		} else {
+			return errors.New(fmt.Sprintf("Undefined value provided to --corners flag: '%s' ( accepted: %s | %s )", Flags.Corners, CornersRounded, CornersDefault))
+		}
+		Config.Corners = Flags.Corners
+	}
+
+	if Flags.UseIcons != false {
+		Config.UseIcons = Flags.UseIcons
+	}
 
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		viper.Unmarshal(Config)
@@ -104,6 +125,7 @@ func ReadConfig() {
 	viper.WatchConfig()
 
 	expandHome()
+	return nil
 }
 
 func GenerateMappings() map[string]map[string]map[Key]string {
