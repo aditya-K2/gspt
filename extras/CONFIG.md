@@ -88,10 +88,49 @@ additional_padding_x: 0
 additional_padding_y: 0
 image_width_extra_x: 0
 image_width_extra_y: 0
-hide_image: false
-rounded_corners: false
+image: show
+corners: default
 use_icons: false
 mappings:
+    global:
+        normal:
+            focus_main_view: "3"
+            move_image_right: "ctrl-l"
+            decrease_image_width: "H"
+            decrease_image_height: "K"
+            focus_search: "?"
+            open_current_track_album: "o"
+            increase_image_width: "L"
+            shuffle: "z"
+            repeat: "r"
+            focus_nav: "1"
+            toggle_playback: " "
+            next: "n"
+            open_entry: "enter"
+            move_image_up: "ctrl-k"
+            increase_image_height: "J"
+            save_config: "ctrl-s"
+            choose_device: "d"
+            focus_playlists: "2"
+            open_current_track_artist: "O"
+            previous: "p"
+            open_current_context: "ctrl-o"
+            move_image_left: "backspace"
+            move_image_down: "ctrl-j"
+    top_tracks_view:
+        normal:
+            queue_entry: "q"
+            play_entry: "ctrl-p"
+    liked_songs_view:
+        normal:
+            add_to_playlist: "a"
+            queue_entry: "q"
+        visual:
+            add_to_playlist: "a"
+            queue_entry: "q"
+    artists_view:
+        normal:
+            play_entry: "ctrl-p"
     artist_view:
         normal:
             play_entry: "ctrl-p"
@@ -103,44 +142,6 @@ mappings:
         visual:
             add_to_playlist: "a"
             queue_entry: "q"
-    search_view:
-        normal:
-            play_entry: "ctrl-p"
-    global:
-        normal:
-            open_entry: "ctrl-m"
-            move_image_left: "backspace"
-            decrease_image_width: "H"
-            increase_image_height: "J"
-            decrease_image_height: "K"
-            save_config: "ctrl-s"
-            focus_playlists: "2"
-            focus_main_view: "3"
-            open_current_track_album: "o"
-            open_current_track_artist: "O"
-            move_image_down: "ctrl-j"
-            move_image_up: "ctrl-k"
-            focus_nav: "1"
-            focus_search: "?"
-            toggle_playback: " "
-            next: "n"
-            previous: "p"
-            repeat: "r"
-            choose_device: "d"
-            open_current_context: "ctrl-o"
-            move_image_right: "ctrl-l"
-            increase_image_width: "L"
-            shuffle: "z"
-    liked_songs_view:
-        normal:
-            add_to_playlist: "a"
-            queue_entry: "q"
-        visual:
-            add_to_playlist: "a"
-            queue_entry: "q"
-    artists_view:
-        normal:
-            play_entry: "ctrl-p"
     playlist_nav:
         normal:
             play_entry: "ctrl-p"
@@ -151,10 +152,6 @@ mappings:
             queue_entry: "q"
         visual:
             add_to_playlist: "a"
-            queue_entry: "q"
-    top_tracks_view:
-        normal:
-            play_entry: "ctrl-p"
             queue_entry: "q"
     albums_view:
         normal:
@@ -167,23 +164,26 @@ mappings:
         visual:
             add_to_playlist: "a"
             queue_entry: "q"
+    search_view:
+        normal:
+            play_entry: "ctrl-p"
 ```
 ## Keys available to map
 |||
 |--|--|
 | <kbd>a-z</kbd> | <kbd>A-Z</kbd> |
 | <kbd>ctrl-a - ctrl-z</kbd> | <kbd>0-9</kbd> |
-| <kbd>[, ', $, ., *, +, ,, @, #, =, _, <, ], }, :, &, ), \| , %, (, ;, ", >, \, !, {, /, ?, ^, -</kbd> | <kbd>center</kbd> |
-| <kbd>clear</kbd> | <kbd>enter</kbd> |
-| <kbd>end</kbd> | <kbd>escape</kbd> |
-| <kbd>up_left</kbd> | <kbd>pgdn</kbd> |
-| <kbd>delete</kbd> | <kbd>help</kbd> |
-| <kbd>backspace</kbd> | <kbd>print</kbd> |
-| <kbd>pgup</kbd> | <kbd>esc</kbd> |
-| <kbd>backspace2</kbd> | <kbd>down</kbd> |
-| <kbd>down_right</kbd> | <kbd>tab</kbd> |
-| <kbd>left</kbd> | <kbd>down_left</kbd> |
-| <kbd>pause</kbd> | <kbd>cancel</kbd> |
-| <kbd>up</kbd> | <kbd>insert</kbd> |
-| <kbd>exit</kbd> | <kbd>up_right</kbd> |
-| <kbd>backtab</kbd> | <kbd>right</kbd> |
+| <kbd>&, ^, /, \|;, (, ., >, ?, :, -, {, }, ', \,  , *, ), +, <, ], %, ", #, _, [, !, @, $, =, ,</kbd> | <kbd>escape</kbd> |
+| <kbd>down</kbd> | <kbd>end</kbd> |
+| <kbd>up_left</kbd> | <kbd>center</kbd> |
+| <kbd>exit</kbd> | <kbd>down_left</kbd> |
+| <kbd>print</kbd> | <kbd>up</kbd> |
+| <kbd>esc</kbd> | <kbd>backspace2</kbd> |
+| <kbd>cancel</kbd> | <kbd>clear</kbd> |
+| <kbd>pgdn</kbd> | <kbd>home</kbd> |
+| <kbd>insert</kbd> | <kbd>down_right</kbd> |
+| <kbd>left</kbd> | <kbd>up_right</kbd> |
+| <kbd>enter</kbd> | <kbd>right</kbd> |
+| <kbd>pgup</kbd> | <kbd>delete</kbd> |
+| <kbd>pause</kbd> | <kbd>tab</kbd> |
+| <kbd>help</kbd> | <kbd>backspace</kbd> |
