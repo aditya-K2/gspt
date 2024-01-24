@@ -121,15 +121,18 @@ $ gspt
 ```
 NOTE: Command-line flags take priority over config values.
 
-Usage of gspt:
+Usage of ./gspt:
   -c string
         Specify The Directory to check for config.yml file. (default "$XDG_CONFIG_HOME/gspt")
-  -hide-image
-        Do not display the cover art image.
+  -corners string
+        Enable or disable Rounded Corners ( 'rounded' | 'default' )
   -icons
         Use Icons
-  -rounded-corners
-        Enable Rounded Corners
+  -image string
+        Show or Hide Image ( 'show' | 'hidden' )
+  -v    Do not display the cover art image.
+  -version
+        Do not display the cover art image.
 ```
 
 ## Configuration
