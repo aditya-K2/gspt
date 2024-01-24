@@ -38,3 +38,6 @@ darwin-arm64:
 windows-amd64.exe:
 	GOOS=windows GOARCH=amd64 \
 	${BUILD} -o bin/gspt-windows-amd64.exe
+
+docs:
+	go run extras/generate.go
