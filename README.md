@@ -130,9 +130,9 @@ Usage of ./gspt:
         Use Icons
   -image string
         Show or Hide Image ( 'show' | 'hidden' )
-  -v    Do not display the cover art image.
+  -v    Output version information and exit
   -version
-        Do not display the cover art image.
+        Output version information and exit
 ```
 
 ## Configuration

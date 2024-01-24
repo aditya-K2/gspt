@@ -18,9 +18,9 @@ type Flag struct {
 
 func parseFlags() {
 	flag.BoolVar(&Flags.Version, "v", false,
-		"Do not display the cover art image.")
+		"Output version information and exit")
 	flag.BoolVar(&Flags.Version, "version", false,
-		"Do not display the cover art image.")
+		"Output version information and exit")
 	flag.BoolVar(&Flags.UseIcons, "icons", Config.UseIcons,
 		"Use Icons")
 	flag.StringVar(&Flags.ConfigPath, "c", userConfigPath,
