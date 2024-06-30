@@ -8,7 +8,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 
 	_auth "github.com/zmb3/spotify/v2/auth"
 	"golang.org/x/oauth2"
@@ -16,6 +18,24 @@ import (
 	"github.com/aditya-K2/utils"
 	"github.com/zmb3/spotify/v2"
 )
+
+// Taken from: https://gist.github.com/hyg/9c4afcd91fe24316cbf0l
+func openbrowser(url string) error {
+	var err error
+
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+
+	return err
+}
 
 var (
 	redirectURI = "http://localhost:8080/callback"
@@ -85,8 +105,11 @@ func InitClient() error {
 		}()
 		url := auth.AuthURL(state)
 
-		fmt.Println("Please log in to Spotify by visiting the following page in your browser: ")
-		fmt.Println(url)
+		fmt.Println("Please log in to Spotify through the browser.")
+		if err := openbrowser(url); err != nil {
+			fmt.Printf("Error opening the default browsers: %s\nPlease open the following link Manually:\n", err.Error())
+			fmt.Println(url)
+		}
 
 		// wait for auth to complete
 		payload := <-ch
