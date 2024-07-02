@@ -93,13 +93,10 @@ func ReadConfig() error {
 
 	if Flags.Image != "" {
 		if Flags.Image == ImageHidden || Flags.Image == ImageShow {
-			fmt.Println(Flags.Image)
-			fmt.Println("Here")
 			Config.Image = Flags.Image
 		} else {
 			return errors.New(fmt.Sprintf("Undefined value provided to --image flag: '%s' ( accepted: %s | %s )", Flags.Image, ImageHidden, ImageShow))
 		}
-		fmt.Println(Config.Image)
 	}
 
 	if Flags.Corners != "" {
