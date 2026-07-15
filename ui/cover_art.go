@@ -75,14 +75,14 @@ func (c *CoverArt) RefreshState() {
 			defer f.Close()
 			if err != nil {
 				go func() {
-					msg <- fmt.Sprintf("Following error occured while creating file: %s", err.Error())
+					msg <- fmt.Sprintf("Following error occurred while creating file: %s", err.Error())
 				}()
 				return
 			}
 			err = state.Item.Album.Images[0].Download(f)
 			if err != nil {
 				go func() {
-					msg <- fmt.Sprintf("Following error occured while downloading the image: %s", err.Error())
+					msg <- fmt.Sprintf("Following error occurred while downloading the image: %s", err.Error())
 				}()
 				return
 			}
